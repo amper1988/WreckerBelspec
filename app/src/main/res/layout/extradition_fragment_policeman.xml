@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/llSearch">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/llOrganizationWrecker">
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <AutoCompleteTextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/organization"
+                    android:id="@+id/actvOrganization"/>
+
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <AutoCompleteTextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/wrecker"
+                    android:id="@+id/actvWrecker"
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/llPoliceData">
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/police_department"
+                    android:id="@+id/actvPoliceDepartment"
+                    style="@style/MyMaterialTheme.MyEditText"/>
+            </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+                <AutoCompleteTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/policeman"
+                    android:id="@+id/actvPoliceman"
+                    style="@style/MyMaterialTheme.MyEditText"/>
+            </android.support.design.widget.TextInputLayout>
+
+
+        </LinearLayout>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/car_id"
+                android:id="@+id/edtCarID"
+                style="@style/MyMaterialTheme.MyEditText"/>
+        </android.support.design.widget.TextInputLayout>
+        <Button
+            style="@style/MyMaterialTheme.MyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/find_detection"
+            android:id="@+id/btnFindDetection"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        style="@style/MyMaterialTheme.MyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rvCarOnEvacuationList">
+
+    </android.support.v7.widget.RecyclerView>
+    <ImageView
+        android:background="@drawable/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imvLoading"
+        android:layout_gravity="center"
+        android:contentDescription="@string/loading" />
+</LinearLayout>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/side_nav_bar"
+    android:layout_margin="10dp">
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tilLastName">
+        <EditText
+            style="@style/MyMaterialTheme.MyEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/first_last_name"
+            android:id="@+id/edtLastName"/>
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tilAddress"
+        android:layout_below="@id/tilLastName">
+        <EditText
+            style="@style/MyMaterialTheme.MyEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/address"
+            android:id="@+id/edtAddress"/>
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tilAddress"
+        android:id="@+id/tilContact">
+        <EditText
+            style="@style/MyMaterialTheme.MyEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/contact"
+            android:id="@+id/edtContact"/>
+
+    </android.support.design.widget.TextInputLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tilContact"
+        android:id="@+id/llSignature">
+        <include layout="@layout/signature_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"        />
+    </LinearLayout>
+    <Button
+        style = "@style/MyMaterialTheme.MyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnOk"
+        android:text="@string/register"
+        android:layout_below="@id/llSignature"
+        android:layout_alignParentRight="true"/>
+
+
+
+</RelativeLayout>

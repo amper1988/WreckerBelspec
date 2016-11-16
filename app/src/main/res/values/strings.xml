@@ -1,0 +1,65 @@
+<resources>
+    <string name="app_name">Wrecker</string>
+    <string name="name">Логин</string>
+    <string name="detection">Обнаружение</string>
+    <string name="manufacture">Марка</string>
+    <string name="model">Модель</string>
+    <string name="car_id">Рег. знак</string>
+    <string name="color">Цвет</string>
+    <string name="vin">VIN</string>
+    <string name="type_vehicle">Тип транспортного средства(легковое = OFF)</string>
+    <string name="police_department">ГАИ</string>
+    <string name="register">ОК</string>
+    <string name="contractor">Район</string>
+    <string name="street">Улица</string>
+    <string name="addImage">Фото</string>
+    <string name="find_detection">Найти</string>
+    <string name="evacuation">Эвакуация</string>
+    <string name="image">Фото</string>
+    <string name="doc_id">№ док.</string>
+    <string name="date_detection">Обн.</string>
+    <string name="evacuation_order">Основание эвакуации</string>
+    <string name="sw_evac_title">Не приняты меры по устанению неисправностей</string>
+    <string name="parking_title">Стоянка</string>
+    <string name="photo">Фото</string>
+    <string name="login">Вход</string>
+    <string name="logout">Выход</string>
+    <string name="pwd">Password</string>
+    <string name="no_car_id">Отсут. рег. знак</string>
+    <string name="no_owner">Влад. не уст.</string>
+    <string name="no_action">Нет мер</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="account">Аккаунт</string>
+    <string name="search">Поиск</string>
+    <string name="statusDoc">Status</string>
+    <string name="save">Сохранить</string>
+    <string name="loading">Loading...</string>
+    <string name="car_type_strong">Полная погрузка</string>
+    <string name="car_type_light">Частичная погрузка</string>
+    <string name="clause">Статья</string>
+    <string name="wrecker">Водитель эвакуатора</string>
+    <string name="policeman">Сотрудник</string>
+    <string name="organization">Организация</string>
+    <string name="evacuationDate">Дата эвакуации</string>
+    <string name="extradution">Съем</string>
+    <string name="code">Код подтверждения</string>
+    <string name="contact">Контакт</string>
+    <string name="reg_sertifacate">Техпаспорт</string>
+    <string name="Number">№</string>
+    <string name="series">Серия</string>
+    <string name="address">Адрес</string>
+    <string name="first_last_name">ФИО</string>
+    <string name="driverLicense">Водительское удостоверение</string>
+    <string name="copy">Скопировать</string>
+    <string name="carData">Данные авто</string>
+    <string name="signature">Подпись</string>
+    <string name="clear">Очистить</string>
+    <string name="witness">Понятые</string>
+    <string name="input_witness">+</string>
+    <string name="inspection_result">Результаты осмотра</string>
+    <string name="input_signature">Введите подпись в форму...</string>
+    <string name="policeman_signature">Подпись сотрудника ГАИ</string>
+
+
+</resources>
