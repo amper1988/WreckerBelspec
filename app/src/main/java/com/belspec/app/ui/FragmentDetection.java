@@ -64,6 +64,7 @@ import retrofit2.Response;
 public class FragmentDetection extends Fragment implements View.OnClickListener, ResponseListener, TextView.OnEditorActionListener, NetworkDataUpdate {
     AutoCompleteTextView actvManufacture;
     AutoCompleteTextView actvModel;
+    AutoCompleteTextView actvColor;
     Spinner spnOrganization;
     Spinner spnWrecker;
     Spinner spnPoliceDepartment;
@@ -71,7 +72,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     ScrollView svMain;
     Spinner spnClause;
     EditText edtCarID;
-    EditText edtColor;
+
     EditText edtStreet;
     RadioGroup rgCarType;
     RadioButton rbCarTypeStrong;
@@ -93,6 +94,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     Button btnRegistrate;
     Button btnAddWitness1;
     Button btnAddWitness2;
+    Button btnRefreshStreet;
     RecyclerView rvImageList;
     Button btnAddImage;
     View mView;
@@ -169,6 +171,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         btnAddWitness1.setOnClickListener(this);
         btnAddWitness2 = (Button) mView.findViewById(R.id.btnAddWitness2);
         btnAddWitness2.setOnClickListener(this);
+        btnRefreshStreet = (Button)mView.findViewById(R.id.btnRefreshStreet);
+        btnRefreshStreet.setOnClickListener(this);
         txvWtns1LastName = (TextView) mView.findViewById(R.id.txvWtns1Name);
         txvWtns1Address = (TextView) mView.findViewById(R.id.txvWtns1Address);
         txvWtns1Contact = (TextView) mView.findViewById(R.id.txvWtns1Contact);
@@ -183,7 +187,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         edtRevisionResult = (EditText) mView.findViewById(R.id.edtResultInspection);
         rbCarTypeLight = (RadioButton) mView.findViewById(R.id.rbCarTypeLight);
         rbCarTypeStrong = (RadioButton) mView.findViewById(R.id.rbCarTypeStrong);
-        edtColor = (EditText) mView.findViewById(R.id.edtColor);
+        actvColor = (AutoCompleteTextView) mView.findViewById(R.id.actvColor);
         rvImageList = (RecyclerView) mView.findViewById(R.id.rvImageList);
         btnAddImage = (Button) mView.findViewById(R.id.btnAddImage);
         svMain = (ScrollView) mView.findViewById(R.id.svDetection);
@@ -224,7 +228,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             imageListAdapter = new ImageListAdapter();
             actvModel.setText("");
             actvManufacture.setText("");
-            edtColor.setText("");
+            actvColor.setText("");
             edtCarID.setText("");
             edtCode.setText("");
             edtStreet.setText(Utils.getAdress(getContext()));
@@ -327,14 +331,14 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             actvManufacture.getText().toString(),
                                             actvModel.getText().toString(),
                                             edtCarID.getText().toString(),
-                                            edtColor.getText().toString(),
+                                            actvColor.getText().toString(),
                                             photo1, photo2, photo3, photo4,
                                             edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
                                             UserManager.getInstanse().getOrganization(), UserManager.getInstanse().getmFullName(),
                                             spnWrecker.getSelectedItem().toString(),
                                             spnOrganization.getSelectedItem().toString(),
                                             ((rbCarTypeStrong.isChecked()) ? 1 : 2),
-                                            UserManager.getInstanse().getUserType(), Build.DEVICE + " " + Build.SERIAL, code,
+                                            UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.DEVICE + " " + Build.SERIAL, code,
                                             txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature,
                                             txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature,
                                             policemanSinature, edtRevisionResult.getText().toString()
@@ -352,14 +356,14 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             actvManufacture.getText().toString(),
                                             actvModel.getText().toString(),
                                             edtCarID.getText().toString(),
-                                            edtColor.getText().toString(),
+                                            actvColor.getText().toString(),
                                             photo1, photo2, photo3, photo4,
                                             edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
                                             spnPoliceDepartment.getSelectedItem().toString(), spnPoliceman.getSelectedItem().toString(),
                                             UserManager.getInstanse().getmLogin(),
                                             UserManager.getInstanse().getOrganization(),
                                             ((rbCarTypeStrong.isChecked()) ? 1 : 2),
-                                            UserManager.getInstanse().getUserType(), Build.DEVICE + " " + Build.SERIAL, code,
+                                            UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.MODEL + " " + Build.SERIAL, code,
                                             txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature,
                                             txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature,
                                             policemanSinature, edtRevisionResult.getText().toString()
@@ -377,14 +381,14 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             actvManufacture.getText().toString(),
                                             actvModel.getText().toString(),
                                             edtCarID.getText().toString(),
-                                            edtColor.getText().toString(),
+                                            actvColor.getText().toString(),
                                             photo1, photo2, photo3, photo4,
                                             edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
                                             spnPoliceDepartment.getSelectedItem().toString(), spnPoliceman.getSelectedItem().toString(),
                                             spnWrecker.getSelectedItem().toString(),
                                             spnOrganization.getSelectedItem().toString(),
                                             ((rbCarTypeStrong.isChecked()) ? 1 : 2),
-                                            UserManager.getInstanse().getUserType(), Build.DEVICE + " " + Build.SERIAL, code,
+                                            UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " +  Build.DEVICE + " " + Build.SERIAL, code,
                                             txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature,
                                             txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature,
                                             policemanSinature, edtRevisionResult.getText().toString()
@@ -446,6 +450,9 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 PolicemanSignatureDialogFragment policemanSignatureDialogFragment = new PolicemanSignatureDialogFragment();
                 policemanSignatureDialogFragment.setTargetFragment(this, REQUEST_CODE_POLICEMAN_SIGNATURE);
                 policemanSignatureDialogFragment.show(getFragmentManager(), policemanSignatureDialogFragment.getClass().toString());
+                break;
+            case (R.id.btnRefreshStreet):
+                edtStreet.setText(Utils.getAdress(getActivity()));
                 break;
         }
 
@@ -778,11 +785,14 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 }
             });
 
-
+            //configure actvColor
+            ArrayAdapter<String> arrayAdapterColor = new ArrayAdapter<>(this.getActivity(), R.layout.spinner_item, netDataManager.getColorListAsString());
+            actvColor.setThreshold(1);
+            actvColor.setAdapter(arrayAdapterColor);
             setLoading(false);
         } else
             networkDataManager = new NetworkDataManager(this);
-//                netDataManager.getDefaultData();
+          setLoading(false);
     }
 
 }

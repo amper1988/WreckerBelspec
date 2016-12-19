@@ -23,131 +23,232 @@
             android:layout_height="125dp"
             android:layout_below="@+id/txvProtocol"
             android:id="@+id/rvImageList">
-
         </android.support.v7.widget.RecyclerView>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_marginBottom="@dimen/margin_small"
             android:id="@+id/llManufModel"
             android:layout_below="@+id/rvImageList">
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/manufacture"
-                android:id="@+id/txvManufacture"
-                android:layout_weight="1"/>
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/manufacture"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/model"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvModel"
-                android:hint="@string/model"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/manufacture"
+                    android:id="@+id/txvManufacture"
+                    android:layout_weight="1"/>
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvModel"
+                    android:hint="@string/model"
+                    android:layout_weight="1"/>
+            </LinearLayout>
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_marginBottom="@dimen/margin_small"
             android:id="@+id/llCarIDColor"
             android:layout_below="@+id/llManufModel">
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvCarId"
-                android:hint="@string/car_id"
-                android:layout_weight="1"/>
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/car_id"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/color"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvColor"
-                android:hint="@string/color"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content">
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvCarId"
+                    android:hint="@string/car_id"
+                    android:layout_weight="1"/>
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvColor"
+                    android:hint="@string/color"
+                    android:layout_weight="1"/>
+            </LinearLayout>
         </LinearLayout>
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_marginBottom="@dimen/margin_small"
             android:id="@+id/llPoliceData"
             android:layout_below="@id/llCarIDColor">
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvPoliceDepartment"
-                android:hint="@string/police_department"
-                android:layout_weight="1"/>
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/police_department"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/policeman"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvPoliceman"
-                android:hint="@string/policeman"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvPoliceDepartment"
+                    android:hint="@string/police_department"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvPoliceman"
+                    android:hint="@string/policeman"
+                    android:layout_weight="1"/>
+            </LinearLayout>
         </LinearLayout>
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_marginBottom="@dimen/margin_small"
             android:id="@+id/llOrganizData"
             android:layout_below="@id/llPoliceData">
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvOrganization"
-                android:hint="@string/organization"
-                android:layout_weight="1"/>
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/organization"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/wrecker"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvWrecker"
-                android:hint="@string/wrecker"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvOrganization"
+                    android:hint="@string/organization"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvWrecker"
+                    android:hint="@string/wrecker"
+                    android:layout_weight="1"/>
+            </LinearLayout>
         </LinearLayout>
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginTop="@dimen/margin_small"
             android:layout_marginBottom="@dimen/margin_small"
             android:id="@+id/llEvacuationData"
             android:layout_below="@id/llOrganizData">
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvClause"
-                android:hint="@string/clause"
-                android:layout_weight="1"/>
-            <TextView
-                style="@style/MyMaterialTheme.MyEditText"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/clause"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/evacuationDate"
+                    android:textSize="12sp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/txvEvacuationDate"
-                android:hint="@string/evacuationDate"
-                android:layout_weight="1"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvClause"
+                    android:hint="@string/clause"
+                    android:layout_weight="1"/>
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/txvEvacuationDate"
+                    android:hint="@string/evacuationDate"
+                    android:layout_weight="1"/>
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
-
 </android.support.v7.widget.CardView>

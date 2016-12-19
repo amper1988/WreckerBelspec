@@ -135,11 +135,10 @@
                             android:layout_weight="3">
                             <EditText
                                 style="@style/MyMaterialTheme.MyEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
                                 android:hint="@string/series"
                                 android:id="@+id/edtSeriesRC"
-                                android:inputType="textCapCharacters" />
+                                android:inputType="textCapCharacters"
+                                android:imeOptions="actionNext" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -149,11 +148,10 @@
                             android:layout_weight="1">
                             <EditText
                                 style="@style/MyMaterialTheme.MyEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
                                 android:hint="@string/Number"
                                 android:id="@+id/edtNumberRC"
-                                android:inputType="textCapCharacters" />
+                                android:inputType="textCapCharacters"
+                                android:imeOptions="actionNext" />
                         </android.support.design.widget.TextInputLayout>
 
 
@@ -165,11 +163,10 @@
                         android:id="@+id/tilLastNameRC">
                         <EditText
                             style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
                             android:hint="@string/first_last_name"
                             android:id="@+id/edtLastNameRC"
-                            android:inputType="textCapCharacters" />
+                            android:inputType="textCapWords"
+                            android:imeOptions="actionNext" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -179,11 +176,10 @@
                         android:id="@+id/tilAddressRC">
                         <EditText
                             style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
                             android:hint="@string/address"
                             android:id="@+id/edtAddressRC"
-                            android:inputType="textCapCharacters" />
+                            android:inputType="textCapWords"
+                            android:imeOptions="actionNext" />
                     </android.support.design.widget.TextInputLayout>
                 </RelativeLayout>
             </RelativeLayout>
@@ -230,13 +226,13 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/tilSeriesDL"
                             android:layout_weight="3">
+
                             <EditText
                                 style="@style/MyMaterialTheme.MyEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
                                 android:hint="@string/series"
                                 android:id="@+id/edtSeriesDL"
-                                android:inputType="textCapCharacters" />
+                                android:inputType="textCapCharacters"
+                                android:imeOptions="actionNext" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -246,11 +242,10 @@
                             android:layout_weight="1">
                             <EditText
                                 style="@style/MyMaterialTheme.MyEditText"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
                                 android:hint="@string/Number"
                                 android:id="@+id/edtNumberDL"
-                                android:inputType="textCapCharacters" />
+                                android:inputType="textCapCharacters"
+                                android:imeOptions="actionNext" />
                         </android.support.design.widget.TextInputLayout>
 
 
@@ -262,11 +257,10 @@
                         android:id="@+id/tilLastNameDL">
                         <EditText
                             style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
                             android:hint="@string/first_last_name"
                             android:id="@+id/edtLastNameDL"
-                            android:inputType="textCapCharacters" />
+                            android:inputType="textCapWords"
+                            android:imeOptions="actionNext" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -276,11 +270,10 @@
                         android:layout_below="@id/tilLastNameDL">
                         <EditText
                             style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
                             android:hint="@string/address"
                             android:id="@+id/edtAddressDL"
-                            android:inputType="textCapCharacters" />
+                            android:inputType="textCapWords"
+                            android:imeOptions="actionNext" />
                     </android.support.design.widget.TextInputLayout>
 
                 </RelativeLayout>
@@ -292,11 +285,11 @@
                 android:layout_below="@id/rllDriverLicense">
                 <EditText
                     style="@style/MyMaterialTheme.MyEditText"
-                    android:layout_width="match_parent"
                     android:hint="@string/contact"
                     android:layout_height="match_parent"
                     android:id="@+id/edtContact"
-                    android:inputType="number" />
+                    android:inputType="phone"
+                    android:imeOptions="actionNext" />
 
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
@@ -306,11 +299,10 @@
                 android:layout_below="@id/tilContact">
                 <EditText
                     style="@style/MyMaterialTheme.MyEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:hint="@string/code"
                     android:id="@+id/edtCode"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:imeOptions="actionGo" />
             </android.support.design.widget.TextInputLayout>
 
             <Button

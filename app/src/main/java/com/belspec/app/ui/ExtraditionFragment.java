@@ -6,6 +6,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +41,8 @@ import com.belspec.app.utils.NetworkDataManager;
 import com.belspec.app.utils.UserManager;
 import com.belspec.app.utils.Utils;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import retrofit2.Response;
@@ -48,22 +51,28 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
     View mView;
     ImageView imvLoading;
     RecyclerView rvListCarOnEvacuation;
-    LinearLayout llSearch;
+    TextInputLayout tilCarID;
+    LinearLayout llPoliceData;
+    LinearLayout llOrganizationWrecker;
     AutoCompleteTextView actvOrganization;
     AutoCompleteTextView actvWrecker;
     AutoCompleteTextView actvPoliceDepartment;
     AutoCompleteTextView actvPoliceman;
     TextView edtCarId;
     Button btnFind;
+    Button btnHide;
+    Button btnShow;
     NetworkDataManager networkDataManager;
     CarOnEvacuationAdapter carOnEvacuationAdapter;
     List<EvacuationData> evacuationDataList;
+    boolean srchHiden;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.extradition_fragment_policeman, container, false);
         initViews(savedInstanceState);
+        srchHiden = false;
         return  mView;
     }
 
@@ -92,7 +101,14 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
         edtCarId = (EditText)mView.findViewById(R.id.edtCarID);
         btnFind = (Button)mView.findViewById(R.id.btnFindDetection);
         btnFind.setOnClickListener(this);
-        llSearch = (LinearLayout)mView.findViewById(R.id.llSearch);
+        btnHide = (Button)mView.findViewById(R.id.btnHide);
+        btnHide.setOnClickListener(this);
+        btnShow = (Button)mView.findViewById(R.id.btnShow);
+        btnShow.setOnClickListener(this);
+        llPoliceData = (LinearLayout)mView.findViewById(R.id.llPoliceData);
+        llOrganizationWrecker = (LinearLayout)mView.findViewById(R.id.llOrganizationWrecker);
+        tilCarID = (TextInputLayout)mView.findViewById(R.id.tilCarID);
+        showHide();
         int userType = UserManager.getInstanse().getUserType();
         RetrofitService retrofitService = Api.createRetrofitService();
         MyCallback<GetCarOnEvacuationResponseEnvelope> call = new MyCallback<>();
@@ -132,11 +148,34 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
 
     }
 
+    private void showHide(){
+        if (srchHiden){
+            btnHide.setVisibility(View.GONE);
+            btnShow.setVisibility(View.VISIBLE);
+            llOrganizationWrecker.setVisibility(View.GONE);
+            llPoliceData.setVisibility(View.GONE);
+            tilCarID.setVisibility(View.GONE);
+            btnFind.setVisibility(View.GONE);
+        }else{
+            btnHide.setVisibility(View.VISIBLE);
+            btnShow.setVisibility(View.GONE);
+            llOrganizationWrecker.setVisibility(View.VISIBLE);
+            llPoliceData.setVisibility(View.VISIBLE);
+            tilCarID.setVisibility(View.VISIBLE);
+            btnFind.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setLoading(Boolean bool) {
         AnimationDrawable animation = (AnimationDrawable) imvLoading.getBackground();
         if(bool){
-            llSearch.setVisibility(View.GONE);
+            llOrganizationWrecker.setVisibility(View.GONE);
+            llPoliceData.setVisibility(View.GONE);
+            tilCarID.setVisibility(View.GONE);
+            btnFind.setVisibility(View.GONE);
             imvLoading.setVisibility(View.VISIBLE);
+            btnHide.setVisibility(View.GONE);
+            btnShow.setVisibility(View.GONE);
             animation.start();
             rvListCarOnEvacuation.setVisibility(View.GONE);
         }else{
@@ -144,9 +183,11 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
             animation.stop();
 
             rvListCarOnEvacuation.setVisibility(View.VISIBLE);
-                llSearch.setVisibility(View.VISIBLE);
-
-
+            llOrganizationWrecker.setVisibility(View.VISIBLE);
+            llPoliceData.setVisibility(View.VISIBLE);
+            tilCarID.setVisibility(View.VISIBLE);
+            btnFind.setVisibility(View.VISIBLE);
+            showHide();
         }
     }
 
@@ -170,11 +211,17 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    actvPoliceman.setEnabled(!actvPoliceDepartment.getText().toString().equals(""));
-                    actvPoliceman.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, networkDataManager.getPolicemanListAsString(editable.toString())));
+                    boolean empty = actvPoliceDepartment.getText().toString().equals("");
+                    actvPoliceman.setEnabled(!empty);
+                    if (empty){
+                        actvPoliceman.setText("");
+                    }else{
+                        actvPoliceman.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, networkDataManager.getPolicemanListAsString(editable.toString())));
+                    }
+
+
                 }
             });
-            actvPoliceman.setAdapter(new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getPolicemanListAsString(actvPoliceDepartment.getText().toString())));
 
             ArrayAdapter<String> arrayAdapterOrganization = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, networkDataManager.getOrganizationListAsString());
             actvOrganization.setAdapter(arrayAdapterOrganization);
@@ -191,12 +238,17 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    actvWrecker.setEnabled(!actvOrganization.getText().toString().equals(""));
-                    actvWrecker.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, networkDataManager.getWreckerListAsStirng(actvOrganization.getText().toString())));
+                    boolean empty = actvOrganization.getText().toString().equals("");
+                    actvWrecker.setEnabled(!empty);
+                    if (empty){
+                        actvWrecker.setText("");
+                    }else{
+                        actvWrecker.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, networkDataManager.getWreckerListAsStirng(actvOrganization.getText().toString())));
+                    }
+
                 }
             });
-            actvWrecker.setAdapter(new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getWreckerListAsStirng(actvOrganization.getText().toString())));
-
+            actvWrecker.setEnabled(!actvOrganization.getText().toString().equals(""));
             setLoading(false);
         }
     }
@@ -223,46 +275,60 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
 
     @Override
     public void onClick(View view) {
-        if(carOnEvacuationAdapter!=null) {
-            carOnEvacuationAdapter.clear();
+        switch (view.getId()){
+            case R.id.btnFindDetection:
+                if(carOnEvacuationAdapter!=null) {
+                    carOnEvacuationAdapter.clear();
+                }
+                Utils.hideKeyboard(getActivity());
+                RetrofitService retrofitService = Api.createRetrofitService();
+                MyCallback<GetCarOnEvacuationResponseEnvelope> call = new MyCallback<>();
+                call.addResponseListener(this);
+                String polDep = actvPoliceDepartment.getText().toString();
+                String policeman = actvPoliceman.getText().toString();
+                String organization = actvOrganization.getText().toString();
+                String wrecker = actvWrecker.getText().toString();
+                String carId = edtCarId.getText().toString();
+                switch (UserManager.getInstanse().getUserType()){
+                    case 1:
+                        polDep = "";
+                        policeman = UserManager.getInstanse().getmLogin();
+                        break;
+
+                    case 2:
+                        organization = "";
+                        wrecker = UserManager.getInstanse().getmLogin();
+                        break;
+
+                    case 3:
+                        break;
+                }
+                retrofitService.executeGetCarOnEvacuation(
+                        Encode.getBasicAuthTemplate(
+                                UserManager.getInstanse().getmLogin(),
+                                UserManager.getInstanse().getmPassword()
+                        ),
+                        new GetCarOnEvacuationRequestEnvelope(
+
+                                UserManager.getInstanse().getUserType(),
+                                polDep,
+                                policeman,
+                                organization,
+                                wrecker,
+                                carId)
+                ).enqueue(call);
+                setLoading(true);
+                onClick(btnHide);
+                break;
+            case R.id.btnHide:
+                srchHiden = true;
+                showHide();
+                break;
+            case R.id.btnShow:
+                srchHiden = false;
+                showHide();
+                break;
         }
-        Utils.hideKeyboard(getActivity());
-        RetrofitService retrofitService = Api.createRetrofitService();
-        MyCallback<GetCarOnEvacuationResponseEnvelope> call = new MyCallback<>();
-        call.addResponseListener(this);
-        String polDep = actvPoliceDepartment.getText().toString();
-        String policeman = actvPoliceman.getText().toString();
-        String organization = actvOrganization.getText().toString();
-        String wrecker = actvWrecker.getText().toString();
-        String carId = edtCarId.getText().toString();
-        switch (UserManager.getInstanse().getUserType()){
-            case 1:
-                polDep = "";
-                policeman = UserManager.getInstanse().getmLogin();
-                break;
 
-            case 2:
-                organization = "";
-                wrecker = UserManager.getInstanse().getmLogin();
-                break;
-
-            case 3:
-                break;
-        }
-        retrofitService.executeGetCarOnEvacuation(
-                Encode.getBasicAuthTemplate(
-                        UserManager.getInstanse().getmLogin(),
-                        UserManager.getInstanse().getmPassword()
-                ),
-                new GetCarOnEvacuationRequestEnvelope(
-
-                        UserManager.getInstanse().getUserType(),
-                        polDep,
-                        policeman,
-                        organization,
-                        wrecker,
-                        carId)
-        ).enqueue(call);
-        setLoading(true);
     }
 }

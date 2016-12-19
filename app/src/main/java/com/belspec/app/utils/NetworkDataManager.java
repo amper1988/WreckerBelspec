@@ -6,6 +6,7 @@ import com.belspec.app.interfaces.ResponseListener;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
 import com.belspec.app.retrofit.model.getDefaultData.Clause;
+import com.belspec.app.retrofit.model.getDefaultData.Color;
 import com.belspec.app.retrofit.model.getDefaultData.Manufacture;
 import com.belspec.app.retrofit.model.getDefaultData.Model;
 import com.belspec.app.retrofit.model.getDefaultData.ModelItem;
@@ -32,6 +33,7 @@ public class NetworkDataManager implements ResponseListener {
     private List<Manufacture> manufactureList = new ArrayList<>();
     private List<Clause> clauseList = new ArrayList<>();
     private List<Organization> organizationList = new ArrayList<>();
+    private List<Color> colorList = new ArrayList<>();
     private NetworkDataUpdate listener;
 
     public NetworkDataManager(NetworkDataUpdate ndu){
@@ -235,6 +237,23 @@ public class NetworkDataManager implements ResponseListener {
         return arrayList;
     }
 
+    public List<Color> getColorList(){
+        return this.colorList;
+    }
+
+    public List<String> getColorListAsString(){
+        if(this.colorList != null){
+            ArrayList<String> arrayList = new ArrayList<>();
+            for(Color color: colorList){
+                arrayList.add(color.getName());
+            }
+            return arrayList;
+        }
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("");
+        return arrayList;
+    }
+
     @Override
     public void AuthorizationOK(Response response) {
         GetDefaultDataResponseEnvelope responseEnvelope = (GetDefaultDataResponseEnvelope)response.body();
@@ -243,6 +262,7 @@ public class NetworkDataManager implements ResponseListener {
         this.parkingList = responseEnvelope.getBody().getParkingList();
         this.clauseList = responseEnvelope.getBody().getClauseList();
         this.organizationList = responseEnvelope.getBody().getOrganizationList();
+        this.colorList = responseEnvelope.getBody().getColorList();
         if (listener!= null) {
             listener.onNetworkDataUpdate(this);
         }

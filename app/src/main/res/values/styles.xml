@@ -15,6 +15,8 @@
 
     </style>
     <style name="MyMaterialTheme.MyEditText">
+        <item name="android:layout_height">35dp</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:layout_margin">@dimen/margin_small</item>
         <item name="android:textColor">@android:color/primary_text_dark</item>
@@ -36,14 +38,15 @@
         <item name="android:padding">10dp</item>
     </style>
     <style name="MyMaterialTheme.MySpinner">
-        <!--<item name="android:layout_margin">@dimen/margin_small</item>-->
         <item name="android:textSize">@dimen/text_size_normal</item>
         <item name="android:paddingRight">10dp</item>
-        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginTop">0dp</item>
         <item name="android:layout_marginBottom">10dp</item>
         <item name="listPreferredItemPaddingLeft">10dp</item>
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
         <item name="android:dropDownSelector">@android:color/darker_gray</item>
+        <item name="android:layout_width">match_parent</item>
+
     </style>
 
     <style name="MyMaterialTheme.MySwitch">

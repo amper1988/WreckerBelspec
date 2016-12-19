@@ -6,7 +6,7 @@
     <com.belspec.app.views.DrawingView
         style="@style/MyMaterialTheme.MyDrawingView"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:id="@+id/viewDrawer"/>
     <TextView
         android:textColor="@color/cardview_shadow_start_color"

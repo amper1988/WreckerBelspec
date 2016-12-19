@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="@drawable/side_nav_bar">
@@ -30,25 +31,21 @@
                     <AutoCompleteTextView
                         style="@style/MyMaterialTheme.MyEditText"
                         android:hint="@string/manufacture"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/actvManufacture"
-                        android:inputType="textCapCharacters" />
+                        android:inputType="textCapCharacters|textMultiLine"
+                        android:imeOptions="actionNext" />
                 </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tilModel"
                     android:layout_weight="1">
-
                     <AutoCompleteTextView
                         style="@style/MyMaterialTheme.MyEditText"
                         android:hint="@string/model"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/actvModel"
-                        android:inputType="textCapCharacters" />
-
+                        android:inputType="textCapCharacters|textMultiLine"
+                        android:imeOptions="actionNext" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
 
@@ -65,23 +62,21 @@
                     <EditText
                         style="@style/MyMaterialTheme.MyEditText"
                         android:hint="@string/car_id"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/edtCarID"
-                        android:inputType="textCapCharacters" />
+                        android:inputType="textCapCharacters|textMultiLine"
+                        android:imeOptions="actionNext" />
                 </android.support.design.widget.TextInputLayout>
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tilColor"
                     android:layout_weight="1">
-                    <EditText
+                    <AutoCompleteTextView
                         style="@style/MyMaterialTheme.MyEditText"
                         android:hint="@string/color"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/edtColor"
-                        android:inputType="textCapCharacters" />
+                        android:id="@+id/actvColor"
+                        android:inputType="textCapCharacters|textMultiLine"
+                        android:imeOptions="actionNext" />
 
 
                 </android.support.design.widget.TextInputLayout>
@@ -93,6 +88,36 @@
                 android:id="@+id/llClauseStreet"
                 android:layout_below="@+id/llCarIDColor">
                 <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <Button
+                        style="@style/MyMaterialTheme.MyButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="20dp"
+                        android:padding="0dp"
+                        android:layout_marginBottom="1dp"
+                        android:text="@string/refresh_street"
+                        android:id="@+id/btnRefreshStreet"/>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/tilStreet"
+                        >
+                        <EditText
+                            style="@style/MyMaterialTheme.MyEditText"
+                            android:layout_marginTop="1dp"
+
+                            android:layout_height="wrap_content"
+                            android:hint="@string/street"
+                            android:id="@+id/edtStreet"
+                            android:imeOptions="actionNext"
+                            android:inputType="textCapCharacters|textMultiLine"
+                            />
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -101,29 +126,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/clause"
-                        android:textSize="8sp"/>
+                        android:layout_marginBottom="0dp"
+                        android:textSize="12sp"/>
                     <Spinner
                         style="@style/MyMaterialTheme.MySpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:layout_margin="0dp"
                         android:id="@+id/spnClause"
-                        />
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/tilStreet"
-                    android:layout_weight="1">
-                    <EditText
-                        style="@style/MyMaterialTheme.MyEditText"
-                        android:hint="@string/street"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/edtStreet"/>
 
-                </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
 
@@ -142,14 +154,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/police_department"
-                        android:textSize="8sp"
+                        android:textSize="12sp"
                         android:id="@+id/txvPoliceDepartment"/>
                     <Spinner
                         style="@style/MyMaterialTheme.MySpinner"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:layout_margin="0dp"
-                        android:id="@+id/spnPoliceDepartment"/>
+                        android:id="@+id/spnPoliceDepartment"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -160,14 +172,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/policeman"
-                        android:textSize="8sp"
+                        android:textSize="12sp"
                         android:id="@+id/txvPoliceman"/>
                     <Spinner
                         style="@style/MyMaterialTheme.MySpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:layout_margin="0dp"
-                        android:id="@+id/spnPoliceman"/>
+                        android:id="@+id/spnPoliceman"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -181,19 +192,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
+                    android:layout_marginBottom="10dp"
                     android:layout_weight="1">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/organization"
-                        android:textSize="8sp"
+                        android:textSize="12sp"
                         android:id="@+id/txvOrganization"/>
                     <Spinner
                         style="@style/MyMaterialTheme.MySpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/spnOrganization"
-                        android:layout_margin="0dp"/>
+                        android:layout_margin="0dp"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -204,14 +215,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/wrecker"
-                        android:textSize="8sp"
+                        android:textSize="12sp"
                         android:id="@+id/txvWrecker"/>
                     <Spinner
                         style="@style/MyMaterialTheme.MySpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
                         android:id="@+id/spnWrecker"
-                        android:layout_margin="0dp"/>
+                        android:layout_margin="0dp"
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
 
 
@@ -223,7 +233,8 @@
                 android:id="@+id/rgType"
                 android:checkedButton="@+id/rbCarTypeLight"
                 android:layout_below="@+id/llSpinersOrganization"
-                android:layout_centerHorizontal="true">
+                android:layout_centerHorizontal="true"
+                android:visibility="gone">
                 <RadioButton
                     style="@style/MyMaterialTheme.MyRadioButton"
                     android:id="@+id/rbCarTypeStrong"
@@ -339,11 +350,11 @@
                 android:layout_below="@id/llWitness">
                 <EditText
                     style="@style/MyMaterialTheme.MyEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
                     android:hint="@string/inspection_result"
                     android:id="@+id/edtResultInspection"
-                    android:layout_below="@id/llWitness"/>
+                    android:layout_below="@id/llWitness"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:imeOptions="actionNext" />
             </android.support.design.widget.TextInputLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -402,7 +413,8 @@
                     android:layout_height="match_parent"
                     android:id="@+id/edtCode"
                     android:hint="@string/code"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:imeOptions="actionGo" />
 
             </android.support.design.widget.TextInputLayout>
             <Button

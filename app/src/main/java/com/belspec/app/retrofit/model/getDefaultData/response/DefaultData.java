@@ -2,6 +2,8 @@ package com.belspec.app.retrofit.model.getDefaultData.response;
 
 import com.belspec.app.retrofit.model.getDefaultData.Clause;
 import com.belspec.app.retrofit.model.getDefaultData.ClauseItem;
+import com.belspec.app.retrofit.model.getDefaultData.Color;
+import com.belspec.app.retrofit.model.getDefaultData.ColorItem;
 import com.belspec.app.retrofit.model.getDefaultData.Manufacture;
 import com.belspec.app.retrofit.model.getDefaultData.ManufactureItem;
 import com.belspec.app.retrofit.model.getDefaultData.Model;
@@ -41,6 +43,9 @@ public class DefaultData {
     @Element(name = "ParkingList", required = false)
     private ParkingItem parkingList;
 
+    @Element(name = "ColorList", required = false)
+    private ColorItem colorItem;
+
     public List<Manufacture> getManufactureList() {
         return manufactureList.getManufactureList();
     }
@@ -61,5 +66,7 @@ public class DefaultData {
         return parkingList.getParkingList();
     }
 
-
+    public List<Color> getColorList(){
+        return this.colorItem.getColorList();
+    }
 }

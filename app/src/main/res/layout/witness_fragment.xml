@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@drawable/side_nav_bar"
     android:layout_margin="10dp">
@@ -9,10 +11,9 @@
         android:id="@+id/tilLastName">
         <EditText
             style="@style/MyMaterialTheme.MyEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:hint="@string/first_last_name"
-            android:id="@+id/edtLastName"/>
+            android:id="@+id/edtLastName"
+            android:inputType="textCapWords" />
 
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
@@ -22,10 +23,9 @@
         android:layout_below="@id/tilLastName">
         <EditText
             style="@style/MyMaterialTheme.MyEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:hint="@string/address"
-            android:id="@+id/edtAddress"/>
+            android:id="@+id/edtAddress"
+            android:inputType="textCapWords|textCapSentences" />
 
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
@@ -35,10 +35,9 @@
         android:id="@+id/tilContact">
         <EditText
             style="@style/MyMaterialTheme.MyEditText"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:hint="@string/contact"
-            android:id="@+id/edtContact"/>
+            android:id="@+id/edtContact"
+            android:inputType="number|phone" />
 
     </android.support.design.widget.TextInputLayout>
     <LinearLayout

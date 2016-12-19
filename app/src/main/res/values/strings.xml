@@ -1,4 +1,5 @@
 <resources>
+    <string name="show">Показать параметры поиска</string>
     <string name="app_name">Wrecker</string>
     <string name="name">Логин</string>
     <string name="detection">Обнаружение</string>
@@ -58,8 +59,10 @@
     <string name="witness">Понятые</string>
     <string name="input_witness">+</string>
     <string name="inspection_result">Результаты осмотра</string>
-    <string name="input_signature">Введите подпись в форму...</string>
+    <string name="input_signature">Введите подпись в форму</string>
     <string name="policeman_signature">Подпись сотрудника ГАИ</string>
+    <string name="hide">Спрятать параменты поиска</string>
+    <string name="refresh_street">Обновить местоположение</string>
 
 
 </resources>
