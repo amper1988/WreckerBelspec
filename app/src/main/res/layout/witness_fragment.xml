@@ -4,7 +4,8 @@
     android:fitsSystemWindows="true"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@drawable/side_nav_bar"
-    android:layout_margin="10dp">
+    android:layout_margin="5dp"
+    >
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,23 +41,63 @@
             android:inputType="number|phone" />
 
     </android.support.design.widget.TextInputLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/tilContact"
+        android:id="@+id/rlPlea">
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chbPlea"
+            android:layout_marginTop="12dp"
+            android:paddingTop="10dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/chbPlea"
+            android:layout_toRightOf="@+id/chbPlea"
+            android:text="@string/plea"
+            android:id="@+id/tvPlea"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="15dp"/>
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/tilPlea"
+            android:layout_toEndOf="@+id/chbPlea"
+            android:layout_toRightOf="@+id/chbPlea"
+            android:visibility="invisible">
+            <EditText
+                style="@style/MyMaterialTheme.MyEditText"
+                android:id="@+id/edtPlea"
+                android:hint="@string/plea"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tilContact"
+        android:layout_below="@id/rlPlea"
+        android:orientation="vertical"
         android:id="@+id/llSignature">
         <include layout="@layout/signature_activity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"        />
+        <Button
+            style = "@style/MyMaterialTheme.MyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_margin="0dp"
+            android:padding="1dp"
+            android:id="@+id/btnOk"
+            android:text="@string/register"
+            android:layout_gravity="center"/>
     </LinearLayout>
-    <Button
-        style = "@style/MyMaterialTheme.MyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnOk"
-        android:text="@string/register"
-        android:layout_below="@id/llSignature"
-        android:layout_alignParentRight="true"/>
+
 
 
 

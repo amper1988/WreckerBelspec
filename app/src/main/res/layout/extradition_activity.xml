@@ -6,17 +6,35 @@
     android:fitsSystemWindows="true"
     android:background="@drawable/side_nav_bar">
     <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/llBottomContainer"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+        <Button
+            style="@style/MyMaterialTheme.MyButton"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+            android:layout_height="wrap_content"
+            android:id="@id/btnRegister"
+            android:text="@string/extradution"
+            />
+    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_above="@id/llBottomContainer"
         android:id="@+id/svMain"
-        android:layout_below="@id/toolbar">
+        android:padding="3dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -26,84 +44,100 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/rllCarData">
-                <TextView
-                    style="@style/MyMaterialTheme.MyEditText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/carData"
-                    android:id="@+id/txvcarData"/>
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:layout_below="@id/txvcarData">
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/llManuf">
-                        <TextView
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/manufacture"/>
-                        <TextView
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/manufacture"
-                            android:id="@+id/txvManufacture"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/llModel"
-                        android:layout_below="@id/llManuf">
-                        <TextView
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/model"/>
-                        <TextView
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/model"
-                            android:id="@+id/txvModel"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/llCarId"
-                        android:layout_below="@id/llModel">
-                        <TextView
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/car_id"/>
-                        <TextView
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/car_id"
-                            android:id="@+id/txvCarId"/>
-                    </LinearLayout>
-
-                </RelativeLayout>
                 <ImageView
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_margin="5dp"
                     android:minHeight="120dp"
                     android:minWidth="12dp"
                     android:maxHeight="120dp"
                     android:maxWidth="120dp"
-                    android:id="@+id/imvPhoto"/>
+                    android:id="@+id/imvPhoto"
+                    android:contentDescription="@string/image"/>
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_toStartOf="@id/imvPhoto"
+                    android:layout_toLeftOf="@id/imvPhoto"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:text="@string/carData"
+                    android:id="@+id/txvcarData"/>
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manufacture"
+                    android:id="@+id/txvManufactureTitle"
+                    android:layout_below="@id/txvcarData"
+                    />
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/manufacture"
+                    android:id="@+id/txvManufacture"
+                    android:layout_below="@id/txvcarData"
+                    android:layout_toRightOf="@id/txvManufactureTitle"
+                    android:layout_toEndOf="@id/txvManufactureTitle"
+                    android:layout_toStartOf="@id/imvPhoto"
+                    android:layout_toLeftOf="@id/imvPhoto"
+                    android:ellipsize="marquee"
+                    android:textColor="@color/textColorPrimary"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"/>
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txvManufactureTitle"
+                    android:id="@+id/txvModelTitle"
+                    android:text="@string/model" />
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txvManufactureTitle"
+                    android:layout_toRightOf="@id/txvModelTitle"
+                    android:layout_toEndOf="@id/txvModelTitle"
+                    android:layout_toStartOf="@id/imvPhoto"
+                    android:layout_toLeftOf="@id/imvPhoto"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:textColor="@color/textColorPrimary"
+                    android:singleLine="true"
+                    android:text="@string/model"
+                    android:id="@+id/txvModel"/>
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txvCarIdTitle"
+                    android:layout_below="@id/txvModelTitle"
+                    android:text="@string/car_id"/>
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txvModelTitle"
+                    android:layout_toRightOf="@id/txvCarIdTitle"
+                    android:layout_toEndOf="@id/txvCarIdTitle"
+                    android:layout_toStartOf="@id/imvPhoto"
+                    android:layout_toLeftOf="@id/imvPhoto"
+                    android:ellipsize="marquee"
+                    android:textColor="@color/textColorPrimary"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:scrollHorizontally="true"
+                    android:singleLine="true"
+                    android:text="@string/car_id"
+                    android:id="@+id/txvCarId"/>
+
             </RelativeLayout>
 
             <RelativeLayout
@@ -116,72 +150,60 @@
                     style="@style/MyMaterialTheme.MyEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:text="@string/reg_sertifacate"
                     android:id="@+id/txvRegCertificate"/>
-                <RelativeLayout
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txvRegCertificate"
+                    android:id="@+id/tilSeriesRC">
+                    <EditText
+                        style="@style/MyMaterialTheme.MyEditText"
+                        android:hint="@string/series"
+                        android:id="@+id/edtSeriesRC"
+                        android:inputType="textCapCharacters"
+                        android:imeOptions="actionNext" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_below="@id/txvRegCertificate"
+                    android:layout_toEndOf="@id/tilSeriesRC"
+                    android:layout_toRightOf="@id/tilSeriesRC"
+                    android:id="@+id/tilNumberRC">
+                    <EditText
+                        style="@style/MyMaterialTheme.MyEditText"
+                        android:hint="@string/Number"
+                        android:id="@+id/edtNumberRC"
+                        android:inputType="textCapCharacters"
+                        android:imeOptions="actionNext" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tilNumberRC"
+                    android:id="@+id/tilLastNameRC">
+                    <EditText
+                        style="@style/MyMaterialTheme.MyEditText"
+                        android:hint="@string/first_last_name"
+                        android:id="@+id/edtLastNameRC"
+                        android:inputType="textCapWords"
+                        android:imeOptions="actionNext" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tilLastNameRC"
                     android:layout_marginBottom="10dp"
-                    android:layout_below="@id/txvRegCertificate">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/llSeriesNumber">
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tilSeriesRC"
-                            android:layout_weight="3">
-                            <EditText
-                                style="@style/MyMaterialTheme.MyEditText"
-                                android:hint="@string/series"
-                                android:id="@+id/edtSeriesRC"
-                                android:inputType="textCapCharacters"
-                                android:imeOptions="actionNext" />
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tilNumberRC"
-                            android:layout_weight="1">
-                            <EditText
-                                style="@style/MyMaterialTheme.MyEditText"
-                                android:hint="@string/Number"
-                                android:id="@+id/edtNumberRC"
-                                android:inputType="textCapCharacters"
-                                android:imeOptions="actionNext" />
-                        </android.support.design.widget.TextInputLayout>
-
-
-                    </LinearLayout>
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/llSeriesNumber"
-                        android:id="@+id/tilLastNameRC">
-                        <EditText
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:hint="@string/first_last_name"
-                            android:id="@+id/edtLastNameRC"
-                            android:inputType="textCapWords"
-                            android:imeOptions="actionNext" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/tilLastNameRC"
-                        android:id="@+id/tilAddressRC">
-                        <EditText
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:hint="@string/address"
-                            android:id="@+id/edtAddressRC"
-                            android:inputType="textCapWords"
-                            android:imeOptions="actionNext" />
-                    </android.support.design.widget.TextInputLayout>
-                </RelativeLayout>
+                    android:id="@+id/tilAddressRC">
+                    <EditText
+                        style="@style/MyMaterialTheme.MyEditText"
+                        android:hint="@string/address"
+                        android:id="@+id/edtAddressRC"
+                        android:inputType="textCapWords"
+                        android:imeOptions="actionNext" />
+                </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
 
             <RelativeLayout
@@ -190,93 +212,74 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rllRegCertificate"
                 android:id="@+id/rllDriverLicense">
-                <LinearLayout
+                <TextView
+                    style="@style/MyMaterialTheme.MyEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/driverLicense"
+                    android:id="@+id/txvDriverLisense"/>
+                <Button
+                    style="@style/MyMaterialTheme.MyButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_margin="2dp"
+                    android:layout_toRightOf="@id/txvDriverLisense"
+                    android:layout_toEndOf="@id/txvDriverLisense"
+                    android:padding="1dp"
+                    android:text="@string/copy"
+                    android:id="@+id/btnCopy"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txvDriverLisense"
+                    android:id="@+id/tilSeriesDL">
+                    <EditText
+                        style="@style/MyMaterialTheme.MyEditText"
+                        android:hint="@string/series"
+                        android:id="@+id/edtSeriesDL"
+                        android:inputType="textCapCharacters"
+                        android:imeOptions="actionNext" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/llEdtButton">
-                    <TextView
+                    android:layout_toEndOf="@id/tilSeriesDL"
+                    android:layout_toRightOf="@id/tilSeriesDL"
+                    android:layout_below="@id/txvDriverLisense"
+                    android:id="@+id/tilNumberDL">
+                    <EditText
                         style="@style/MyMaterialTheme.MyEditText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/driverLicense"
-                        android:id="@+id/txvDriverLisense"/>
-                    <Button
-                        style="@style/MyMaterialTheme.MyButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="20dp"
-                        android:layout_margin="2dp"
-                        android:padding="1dp"
-                        android:text="@string/copy"
-                        android:id="@+id/btnCopy"/>
-
-                </LinearLayout>
-
-                <RelativeLayout
+                        android:hint="@string/Number"
+                        android:id="@+id/edtNumberDL"
+                        android:inputType="textCapCharacters"
+                        android:imeOptions="actionNext" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tilNumberDL"
+                    android:id="@+id/tilLastNameDL">
+                    <EditText
+                        style="@style/MyMaterialTheme.MyEditText"
+                        android:hint="@string/first_last_name"
+                        android:id="@+id/edtLastNameDL"
+                        android:inputType="textCapWords"
+                        android:imeOptions="actionNext" />
+                </android.support.design.widget.TextInputLayout>
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:layout_below="@id/llEdtButton">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:id="@+id/llSeriesNumberDL">
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tilSeriesDL"
-                            android:layout_weight="3">
-
-                            <EditText
-                                style="@style/MyMaterialTheme.MyEditText"
-                                android:hint="@string/series"
-                                android:id="@+id/edtSeriesDL"
-                                android:inputType="textCapCharacters"
-                                android:imeOptions="actionNext" />
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tilNumberDL"
-                            android:layout_weight="1">
-                            <EditText
-                                style="@style/MyMaterialTheme.MyEditText"
-                                android:hint="@string/Number"
-                                android:id="@+id/edtNumberDL"
-                                android:inputType="textCapCharacters"
-                                android:imeOptions="actionNext" />
-                        </android.support.design.widget.TextInputLayout>
-
-
-                    </LinearLayout>
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/llSeriesNumberDL"
-                        android:id="@+id/tilLastNameDL">
-                        <EditText
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:hint="@string/first_last_name"
-                            android:id="@+id/edtLastNameDL"
-                            android:inputType="textCapWords"
-                            android:imeOptions="actionNext" />
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tilAddressDL"
-                        android:layout_below="@id/tilLastNameDL">
-                        <EditText
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:hint="@string/address"
-                            android:id="@+id/edtAddressDL"
-                            android:inputType="textCapWords"
-                            android:imeOptions="actionNext" />
-                    </android.support.design.widget.TextInputLayout>
-
-                </RelativeLayout>
+                    android:id="@+id/tilAddressDL"
+                    android:layout_below="@id/tilLastNameDL">
+                    <EditText
+                        style="@style/MyMaterialTheme.MyEditText"
+                        android:hint="@string/address"
+                        android:id="@+id/edtAddressDL"
+                        android:inputType="textCapWords"
+                        android:imeOptions="actionNext" />
+                </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -286,7 +289,6 @@
                 <EditText
                     style="@style/MyMaterialTheme.MyEditText"
                     android:hint="@string/contact"
-                    android:layout_height="match_parent"
                     android:id="@+id/edtContact"
                     android:inputType="phone"
                     android:imeOptions="actionNext" />
@@ -296,6 +298,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tilCode"
+                android:layout_marginBottom="10dp"
                 android:layout_below="@id/tilContact">
                 <EditText
                     style="@style/MyMaterialTheme.MyEditText"
@@ -304,26 +307,19 @@
                     android:inputType="textPassword"
                     android:imeOptions="actionGo" />
             </android.support.design.widget.TextInputLayout>
-
-            <Button
-                style="@style/MyMaterialTheme.MyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@id/btnRegister"
-                android:text="@string/extradution"
-                android:layout_below="@id/tilCode"/>
-
-
         </RelativeLayout>
-
     </ScrollView>
+
+
+
     <ImageView
-        android:layout_below="@id/svDetection"
         android:background="@drawable/pb_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imvLoading"
-        android:layout_gravity="center"
         android:contentDescription="@string/loading"
         android:layout_centerInParent="true" />
+
 </RelativeLayout>
+
+

@@ -34,7 +34,7 @@ public class Api {
                 .connectTimeout(120,  TimeUnit.SECONDS);
         httpClientBuilder.addInterceptor(interceptor);
         Retrofit restAdapter = new Retrofit.Builder()
-                .baseUrl("")
+                .baseUrl("http://185.66.70.44:10101/TestUchet/")
                 .client(httpClientBuilder.build())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build();

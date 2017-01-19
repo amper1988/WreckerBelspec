@@ -21,7 +21,8 @@ xmlns:tools="http://schemas.android.com/tools"
             android:layout_height="wrap_content"
             android:text=""
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -29,7 +30,8 @@ xmlns:tools="http://schemas.android.com/tools"
             android:layout_margin="2dp"
             android:id="@+id/tilLogin"
             android:layout_below="@+id/response"
-            android:layout_alignLeft="@+id/response">
+            android:layout_alignLeft="@+id/response"
+            android:layout_alignStart="@+id/response">
             <EditText
                 style="@style/MyMaterialTheme.MyEditText"
                 android:inputType="textPersonName"
@@ -45,6 +47,7 @@ xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/tilPwd"
             android:layout_below="@+id/tilLogin"
             android:layout_alignLeft="@+id/tilLogin"
+            android:layout_alignStart="@+id/tilLogin"
             android:layout_marginBottom="10dp">
             <EditText
                 style="@style/MyMaterialTheme.MyEditText"

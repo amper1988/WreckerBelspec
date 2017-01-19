@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.belspec.app.R;
@@ -27,16 +28,19 @@ public class WitnessDialogFragment extends DialogFragment {
     TextInputLayout tilLastName;
     TextInputLayout tilContact;
     TextInputLayout tilAddress;
+    TextInputLayout tilPlea;
+    EditText edtPlea;
     EditText edtLastName;
     EditText edtAddress;
     EditText edtContact;
+    CheckBox chbPlea;
     DrawingView dvSignature;
     Button btnClear;
     Button btnOK;
     int buttonID;
-    String lastName = new String();
-    String address = new String();
-    String contact = new String();
+    String lastName;
+    String address ;
+    String contact;
     Bitmap bm;
 
     @NonNull
@@ -50,6 +54,20 @@ public class WitnessDialogFragment extends DialogFragment {
         tilContact.setErrorEnabled(false);
         tilAddress = (TextInputLayout) mView.findViewById(R.id.tilAddress);
         tilAddress.setErrorEnabled(false);
+        tilPlea = (TextInputLayout)mView.findViewById(R.id.tilPlea);
+        tilPlea.setErrorEnabled(false);
+        chbPlea = (CheckBox)mView.findViewById(R.id.chbPlea);
+        chbPlea.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chbPlea.isChecked()){
+                    tilPlea.setVisibility(View.VISIBLE);
+                }else{
+                    tilPlea.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+        edtPlea = (EditText)mView.findViewById(R.id.edtPlea);
         edtLastName = (EditText) mView.findViewById(R.id.edtLastName);
         edtAddress = (EditText) mView.findViewById(R.id.edtAddress);
         edtContact = (EditText) mView.findViewById(R.id.edtContact);
@@ -78,6 +96,7 @@ public class WitnessDialogFragment extends DialogFragment {
                     intent.putExtra("lastName", edtLastName.getText().toString());
                     intent.putExtra("address", edtAddress.getText().toString());
                     intent.putExtra("contact", edtContact.getText().toString());
+                    intent.putExtra("plea", edtPlea.getText().toString());
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
                     dvSignature.getmBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -99,6 +118,11 @@ public class WitnessDialogFragment extends DialogFragment {
                         tilAddress.setErrorEnabled(true);
                         tilAddress.setError("Input address");
                     }
+                    if(chbPlea.isChecked()&&edtPlea.getText().toString().equals("")){
+                        tilPlea.setErrorEnabled(true);
+                        tilPlea.setError("Input plea");
+                    }
+
                 }
             }
         });
@@ -115,6 +139,9 @@ public class WitnessDialogFragment extends DialogFragment {
             return false;
         }
         if(edtAddress.getText().toString().equals("")){
+            return false;
+        }
+        if(chbPlea.isChecked()&&edtPlea.getText().toString().equals("")){
             return false;
         }
         return true;

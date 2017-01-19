@@ -113,6 +113,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     int policemanPos;
     NetworkDataManager networkDataManager;
     String adress;
+    String plea1;
+    String plea2;
     final int REQUEST_CODE_PHOTO = 1;
     final int REQUEST_CODE_WITNESS_SIGNATURE = 0;
     final int REQUEST_CODE_POLICEMAN_SIGNATURE = 2;
@@ -247,6 +249,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             wreckerPos = 0;
             policemanPos = 0;
             policeDepartmentPos = 0;
+            plea1 = "";
+            plea2 = "";
         } else {
             edtStreet.setText(savedInstanceState.getString("adress"));
             clausePos = savedInstanceState.getInt("clausePos");
@@ -255,6 +259,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             wreckerPos = savedInstanceState.getInt("wreckerPos");
             policeDepartmentPos = savedInstanceState.getInt("policeDepartmentPos");
             policemanPos = savedInstanceState.getInt("policemanPos");
+            plea1 = savedInstanceState.getString("plea1");
+            plea2 = savedInstanceState.getString("plea2");
         }
         networkDataManager = new NetworkDataManager(this);
         networkDataManager.getDefaultData();
@@ -276,6 +282,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         outState.putInt("wreckerPos", wreckerPos);
         outState.putInt("policeDepartmentPos", policeDepartmentPos);
         outState.putInt("policemanPos", policemanPos);
+        outState.putString("plea1", plea1);
+        outState.putString("plea2", plea2);
     }
 
     @Override
@@ -339,8 +347,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             spnOrganization.getSelectedItem().toString(),
                                             ((rbCarTypeStrong.isChecked()) ? 1 : 2),
                                             UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.DEVICE + " " + Build.SERIAL, code,
-                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature,
-                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature,
+                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
+                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
                                             policemanSinature, edtRevisionResult.getText().toString()
                                     )
                             ).enqueue(createDataCall);
@@ -364,8 +372,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             UserManager.getInstanse().getOrganization(),
                                             ((rbCarTypeStrong.isChecked()) ? 1 : 2),
                                             UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.MODEL + " " + Build.SERIAL, code,
-                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature,
-                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature,
+                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
+                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
                                             policemanSinature, edtRevisionResult.getText().toString()
                                     )
                             ).enqueue(createDataCall);
@@ -389,8 +397,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             spnOrganization.getSelectedItem().toString(),
                                             ((rbCarTypeStrong.isChecked()) ? 1 : 2),
                                             UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " +  Build.DEVICE + " " + Build.SERIAL, code,
-                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature,
-                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature,
+                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
+                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
                                             policemanSinature, edtRevisionResult.getText().toString()
                                     )
                             ).enqueue(createDataCall);
@@ -402,6 +410,9 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
             case (R.id.btnAddImage):
                 Utils.hideKeyboard(getActivity());
+                btnAddImage.setFocusableInTouchMode(true);
+                btnAddImage.requestFocus();
+                btnAddImage.setFocusableInTouchMode(false);
                 if (imageListAdapter.getItemCount() < 4) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -425,6 +436,10 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
 
             case (R.id.btnAddWitness1):
+                Utils.hideKeyboard(getActivity());
+                btnAddWitness1.setFocusableInTouchMode(true);
+                btnAddWitness1.requestFocus();
+                btnAddWitness1.setFocusableInTouchMode(false);
                 WitnessDialogFragment witnessDialogFragment = new WitnessDialogFragment();
                 witnessDialogFragment.buttonID = 1;
                 witnessDialogFragment.address = txvWtns1Address.getText().toString();
@@ -436,6 +451,10 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
 
             case (R.id.btnAddWitness2):
+                Utils.hideKeyboard(getActivity());
+                btnAddWitness2.setFocusableInTouchMode(true);
+                btnAddWitness2.requestFocus();
+                btnAddWitness2.setFocusableInTouchMode(false);
                 WitnessDialogFragment witnessDialogFragment2 = new WitnessDialogFragment();
                 witnessDialogFragment2.buttonID = 2;
                 witnessDialogFragment2.address = txvWtns2Address.getText().toString();
@@ -447,11 +466,19 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
 
             case (R.id.btnPolicemanSignature):
+                Utils.hideKeyboard(getActivity());
+                btnPolicemanSignature.setFocusableInTouchMode(true);
+                btnPolicemanSignature.requestFocus();
+                btnPolicemanSignature.setFocusableInTouchMode(false);
                 PolicemanSignatureDialogFragment policemanSignatureDialogFragment = new PolicemanSignatureDialogFragment();
                 policemanSignatureDialogFragment.setTargetFragment(this, REQUEST_CODE_POLICEMAN_SIGNATURE);
                 policemanSignatureDialogFragment.show(getFragmentManager(), policemanSignatureDialogFragment.getClass().toString());
                 break;
             case (R.id.btnRefreshStreet):
+                Utils.hideKeyboard(getActivity());
+                btnRefreshStreet.setFocusableInTouchMode(true);
+                btnRefreshStreet.requestFocus();
+                btnRefreshStreet.setFocusableInTouchMode(false);
                 edtStreet.setText(Utils.getAdress(getActivity()));
                 break;
         }
@@ -487,6 +514,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                         txvWtns1LastName.setText(intent.getStringExtra("lastName"));
                         txvWtns1Address.setText(intent.getStringExtra("address"));
                         txvWtns1Contact.setText(intent.getStringExtra("contact"));
+                        plea1 = intent.getStringExtra("plea");
                         byte[] byteArray = intent.getByteArrayExtra("signature");
                         imvWtns1Signature.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
                         break;
@@ -495,6 +523,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                         txvWtns2LastName.setText(intent.getStringExtra("lastName"));
                         txvWtns2Address.setText(intent.getStringExtra("address"));
                         txvWtns2Contact.setText(intent.getStringExtra("contact"));
+                        plea2 = intent.getStringExtra("plea");
                         byte[] byteArray2 = intent.getByteArrayExtra("signature");
                         imvWtns2Signature.setImageBitmap(BitmapFactory.decodeByteArray(byteArray2, 0, byteArray2.length));
                         break;
@@ -626,8 +655,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             Toast.makeText(getActivity(), "Понятой 2 не подписал документ", Toast.LENGTH_LONG).show();
             return false;
         }else{
-            if (Utils.DrawableIsEmptyInImageView(imvWtns1Signature)){
-                Toast.makeText(getActivity(), "Понятой 1 не подписал документ", Toast.LENGTH_LONG).show();
+            if (Utils.DrawableIsEmptyInImageView(imvWtns2Signature)){
+                Toast.makeText(getActivity(), "Понятой 2 не подписал документ", Toast.LENGTH_LONG).show();
                 return false;
             }
         }
@@ -673,6 +702,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     clausePos = adapterView.getSelectedItemPosition();
+                    Utils.hideKeyboard(getActivity());
                 }
 
                 @Override
@@ -695,11 +725,12 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                             policemanPos = adapterView.getSelectedItemPosition();
+                            Utils.hideKeyboard(getActivity());
                         }
 
                         @Override
                         public void onNothingSelected(AdapterView<?> adapterView) {
-
+                            Utils.hideKeyboard(getActivity());
                         }
 
                     });
@@ -714,6 +745,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             policemanPos = adapterView.getSelectedItemPosition();
+                            Utils.hideKeyboard(getActivity());
                         }
                     });
                 }
@@ -726,6 +758,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     policemanPos = adapterView.getSelectedItemPosition();
+                    Utils.hideKeyboard(getActivity());
                 }
 
                 @Override
@@ -747,6 +780,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                             wreckerPos = adapterView.getSelectedItemPosition();
+                            Utils.hideKeyboard(getActivity());
                         }
 
                         @Override
@@ -766,6 +800,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             wreckerPos = adapterView.getSelectedItemPosition();
+                            Utils.hideKeyboard(getActivity());
                         }
                     });
                 }
@@ -778,6 +813,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     wreckerPos = adapterView.getSelectedItemPosition();
+                    Utils.hideKeyboard(getActivity());
                 }
 
                 @Override

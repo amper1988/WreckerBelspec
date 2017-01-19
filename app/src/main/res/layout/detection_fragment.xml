@@ -7,6 +7,7 @@
     <ScrollView
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/svDetection"
@@ -18,10 +19,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
             <LinearLayout
+                android:baselineAligned="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/llManufModel"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true">
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -50,6 +53,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:baselineAligned="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/llCarIDColor"
@@ -83,6 +87,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:baselineAligned="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/llClauseStreet"
@@ -103,13 +108,10 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:id="@+id/tilStreet"
-                        >
+                        android:id="@+id/tilStreet">
                         <EditText
                             style="@style/MyMaterialTheme.MyEditText"
                             android:layout_marginTop="1dp"
-
-                            android:layout_height="wrap_content"
                             android:hint="@string/street"
                             android:id="@+id/edtStreet"
                             android:imeOptions="actionNext"
@@ -140,6 +142,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:baselineAligned="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -183,6 +186,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:baselineAligned="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -257,6 +261,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/witness"/>
                 <LinearLayout
+                    android:baselineAligned="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -297,6 +302,7 @@
                         <ImageView
                             android:layout_width="120dp"
                             android:layout_height="120dp"
+                            android:contentDescription="@string/signature"
                             android:id="@+id/imvWtns1Signature"/>
 
                     </LinearLayout>
@@ -338,6 +344,7 @@
                     <ImageView
                         android:layout_width="120dp"
                         android:layout_height="120dp"
+                        android:contentDescription="@string/signature"
                         android:id="@+id/imvWtns2Signature"/>
 
                 </LinearLayout>
@@ -376,6 +383,7 @@
                         android:maxHeight="120dp"
                         android:maxWidth="120dp"
                         android:id="@+id/imvPolicemanSignature"
+                        android:contentDescription="@string/signature"
                         android:layout_weight="1"/>
                     <Button
                         style="@style/MyMaterialTheme.MyButton"
@@ -383,34 +391,19 @@
                         android:layout_height="25dp"
                         android:padding="1dp"
                         android:layout_margin="10dp"
-                        android:text="Подписать"
+                        android:text="@string/signature"
                         android:id="@+id/btnPolicemanSignature"
                         android:layout_gravity="center"
                         android:layout_weight="1"/>
-
                 </LinearLayout>
-
-
             </LinearLayout>
-            <Button
-                style="@style/MyMaterialTheme.MyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btnAddImage"
-                android:text="@string/addImage"
-                android:layout_below="@id/llPolicemanSignature"
-                android:layout_alignParentLeft="true" />
             <android.support.design.widget.TextInputLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tilCode"
-                android:layout_below="@id/llPolicemanSignature"
-                android:layout_toLeftOf="@+id/btnRegister"
-                android:layout_toRightOf="@+id/btnAddImage">
+                android:layout_below="@id/llPolicemanSignature">
                 <EditText
                     style="@style/MyMaterialTheme.MyEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:id="@+id/edtCode"
                     android:hint="@string/code"
                     android:inputType="textPassword"
@@ -421,10 +414,21 @@
                 style="@style/MyMaterialTheme.MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:id="@+id/btnAddImage"
+                android:text="@string/addImage"
+                android:layout_below="@id/tilCode"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"/>
+
+            <Button
+                style="@style/MyMaterialTheme.MyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/register"
                 android:id="@+id/btnRegister"
-                android:layout_below="@+id/llPolicemanSignature"
-                android:layout_alignParentRight="true" />
+                android:layout_below="@+id/tilCode"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
             <android.support.v7.widget.RecyclerView
                 style="@style/MyMaterialTheme.MyRecyclerView"
                 android:id="@+id/rvImageList"

@@ -62,7 +62,18 @@ public class CreateEvacuationRequestData {
     private String policemanSignature;
     @Element(name = "tes:RevisionResult")
     private String revisionResult;
+    @Element(name = "tes:Plea1")
+    private String plea1;
+    @Element(name = "tes:Plea2")
+    private String plea2;
 
+    public void setPlea2(String plea2) {
+        this.plea2 = plea2;
+    }
+
+    public void setPlea1(String plea1) {
+        this.plea1 = plea1;
+    }
     public void setWitness1Name(String witness1Name) {
         this.witness1Name = witness1Name;
     }
@@ -227,6 +238,8 @@ public class CreateEvacuationRequestData {
 
         this.policemanSignature = "";
         this.revisionResult = "";
+        this.plea1 ="";
+        this.plea2 = "";
     }
 
     public CreateEvacuationRequestData(String manufacture, String model, String carId,
@@ -234,8 +247,8 @@ public class CreateEvacuationRequestData {
                                        String photo3, String photo4, String address,
                                        String clause, String policeDepartment, String policeman,
                                        String wrecker, String organization, int evacuationType, int userType, String regDevice, String code,
-                                       String witness1Name, String witness1Address, String witness1Contact, String witness1Signature,
-                                       String witness2Name, String witness2Address, String witness2Contact, String witness2Signature,
+                                       String witness1Name, String witness1Address, String witness1Contact, String witness1Signature, String plea1,
+                                       String witness2Name, String witness2Address, String witness2Contact, String witness2Signature, String plea2,
                                        String policemanSignature, String revisionResult){
         this.manufacture = manufacture;
         this.model = model;
@@ -269,5 +282,8 @@ public class CreateEvacuationRequestData {
 
         this.policemanSignature = policemanSignature;
         this.revisionResult = revisionResult;
+
+        this.plea1 = plea1;
+        this.plea2 = plea2;
     }
 }

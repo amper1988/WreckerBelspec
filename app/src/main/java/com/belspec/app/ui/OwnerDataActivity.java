@@ -2,6 +2,7 @@ package com.belspec.app.ui;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -79,8 +80,11 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     private void initViews(){
         svMain = (ScrollView)findViewById(R.id.svMain);
         txvManufacture = (TextView) findViewById(R.id.txvManufacture);
+        txvManufacture.setSelected(true);
         txvModel = (TextView)findViewById(R.id.txvModel);
+        txvModel.setSelected(true);
         txvCarId = (TextView)findViewById(R.id.txvCarId);
+        txvCarId.setSelected(true);
         edtSeriesRC = (EditText)findViewById(R.id.edtSeriesRC);
         edtNumberRC = (EditText)findViewById(R.id.edtNumberRC);
         edtAddressRC = (EditText) findViewById(R.id.edtAddressRC);

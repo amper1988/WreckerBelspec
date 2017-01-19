@@ -63,6 +63,7 @@
     <string name="policeman_signature">Подпись сотрудника ГАИ</string>
     <string name="hide">Спрятать параменты поиска</string>
     <string name="refresh_street">Обновить местоположение</string>
+    <string name="plea">Замечания</string>
 
 
 </resources>
