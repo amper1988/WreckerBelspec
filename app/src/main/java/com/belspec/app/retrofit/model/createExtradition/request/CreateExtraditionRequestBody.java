@@ -12,9 +12,9 @@ public class CreateExtraditionRequestBody {
 
     public CreateExtraditionRequestBody(int docId, String seriesRc, String numberRc, String lastNameRc, String addressRc,
                                         String seriesDl, String numberDl, String lastNameDl, String addressDl, String contact,
-                                        String code, int userType, String policeman){
+                                        String code, int userType, String policeman, boolean printPhoto){
         this.data = new CreateExtraditionRequestData(docId,seriesRc, numberRc,lastNameRc, addressRc,
                 seriesDl,numberDl,lastNameDl, addressDl, contact,
-                code,userType, policeman);
+                code,userType, policeman, printPhoto);
     }
 }

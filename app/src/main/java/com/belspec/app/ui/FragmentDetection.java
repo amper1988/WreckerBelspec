@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -69,10 +70,11 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     Spinner spnWrecker;
     Spinner spnPoliceDepartment;
     Spinner spnPoliceman;
+    Spinner spnParking;
     ScrollView svMain;
     Spinner spnClause;
     EditText edtCarID;
-
+    CheckBox chbWithoutEvacuation;
     EditText edtStreet;
     RadioGroup rgCarType;
     RadioButton rbCarTypeStrong;
@@ -111,6 +113,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     int wreckerPos;
     int policeDepartmentPos;
     int policemanPos;
+    int parkingPos;
     NetworkDataManager networkDataManager;
     String adress;
     String plea1;
@@ -129,6 +132,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     private void initViews(Bundle savedInstanceState) {
 
         //init default value
+        chbWithoutEvacuation = (CheckBox)mView.findViewById(R.id.chbWithoutEvacuation);
         actvManufacture = (AutoCompleteTextView) mView.findViewById(R.id.actvManufacture);
         edtCode = (EditText) mView.findViewById(R.id.edtCode);
         actvModel = (AutoCompleteTextView) mView.findViewById(R.id.actvModel);
@@ -162,6 +166,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         spnClause = (Spinner) mView.findViewById(R.id.spnClause);
         txvOrganization = (TextView) mView.findViewById(R.id.txvOrganization);
         spnOrganization = (Spinner) mView.findViewById(R.id.spnOrganization);
+        spnParking = (Spinner)mView.findViewById(R.id.spnParking);
         txvWrecker = (TextView) mView.findViewById(R.id.txvWrecker);
         spnWrecker = (Spinner) mView.findViewById(R.id.spnWrecker);
         txvPoliceDepartment = (TextView) mView.findViewById(R.id.txvPoliceDepartment);
@@ -249,6 +254,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             wreckerPos = 0;
             policemanPos = 0;
             policeDepartmentPos = 0;
+            parkingPos = 0;
+            chbWithoutEvacuation.setChecked(false);
             plea1 = "";
             plea2 = "";
         } else {
@@ -259,17 +266,24 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             wreckerPos = savedInstanceState.getInt("wreckerPos");
             policeDepartmentPos = savedInstanceState.getInt("policeDepartmentPos");
             policemanPos = savedInstanceState.getInt("policemanPos");
+            parkingPos = savedInstanceState.getInt("parkingPos");
             plea1 = savedInstanceState.getString("plea1");
             plea2 = savedInstanceState.getString("plea2");
+            chbWithoutEvacuation.setChecked(savedInstanceState.getBoolean("withoutEvacuation"));
         }
-        networkDataManager = new NetworkDataManager(this);
+        networkDataManager = NetworkDataManager.getInstance();
+        networkDataManager.setListener(this);
         networkDataManager.getDefaultData();
+
+
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvImageList.setLayoutManager(llm);
         rvImageList.setAdapter(imageListAdapter);
         btnAddImage.setOnClickListener(this);
         btnRegistrate.setOnClickListener(this);
+        chbWithoutEvacuation.setOnClickListener(this);
+        showHideOrganizationWrecker();
     }
 
     @Override
@@ -284,6 +298,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         outState.putInt("policemanPos", policemanPos);
         outState.putString("plea1", plea1);
         outState.putString("plea2", plea2);
+        outState.putBoolean("withouEvacuation", chbWithoutEvacuation.isChecked());
+        outState.putInt("parkingPos", parkingPos);
     }
 
     @Override
@@ -349,7 +365,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.DEVICE + " " + Build.SERIAL, code,
                                             txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
                                             txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
-                                            policemanSinature, edtRevisionResult.getText().toString()
+                                            policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString()
                                     )
                             ).enqueue(createDataCall);
                             break;
@@ -374,7 +390,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.MODEL + " " + Build.SERIAL, code,
                                             txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
                                             txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
-                                            policemanSinature, edtRevisionResult.getText().toString()
+                                            policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString()
                                     )
                             ).enqueue(createDataCall);
                             break;
@@ -399,7 +415,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                                             UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " +  Build.DEVICE + " " + Build.SERIAL, code,
                                             txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
                                             txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
-                                            policemanSinature, edtRevisionResult.getText().toString()
+                                            policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString()
                                     )
                             ).enqueue(createDataCall);
                             break;
@@ -481,6 +497,24 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 btnRefreshStreet.setFocusableInTouchMode(false);
                 edtStreet.setText(Utils.getAdress(getActivity()));
                 break;
+            case (R.id.chbWithoutEvacuation):
+                showHideOrganizationWrecker();
+                break;
+        }
+
+    }
+
+    private void showHideOrganizationWrecker(){
+        if(chbWithoutEvacuation.isChecked()){
+            spnOrganization.setVisibility(View.GONE);
+            spnWrecker.setVisibility(View.GONE);
+            txvOrganization.setVisibility(View.GONE);
+            txvWrecker.setVisibility(View.GONE);
+        }else{
+            spnOrganization.setVisibility(View.VISIBLE);
+            spnWrecker.setVisibility(View.VISIBLE);
+            txvOrganization.setVisibility(View.VISIBLE);
+            txvWrecker.setVisibility(View.VISIBLE);
         }
 
     }
@@ -738,16 +772,16 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    policeDepartmentPos = 0;
-                    ArrayAdapter<String> arrayAdapterPoliceman = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getPolicemanListAsStirng(policeDepartmentPos));
-                    spnPoliceman.setAdapter(arrayAdapterPoliceman);
-                    spnPoliceman.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            policemanPos = adapterView.getSelectedItemPosition();
-                            Utils.hideKeyboard(getActivity());
-                        }
-                    });
+//                    policeDepartmentPos = 0;
+//                    ArrayAdapter<String> arrayAdapterPoliceman = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getPolicemanListAsStirng(policeDepartmentPos));
+//                    spnPoliceman.setAdapter(arrayAdapterPoliceman);
+//                    spnPoliceman.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                            policemanPos = adapterView.getSelectedItemPosition();
+//                            Utils.hideKeyboard(getActivity());
+//                        }
+//                    });
                 }
             });
 
@@ -765,7 +799,21 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 public void onNothingSelected(AdapterView<?> adapterView) {
                 }
             });
+            //configure spnParking
+            ArrayAdapter<String> arrayAdapterParking = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getParkingListAsString());
+            spnParking.setAdapter(arrayAdapterParking);
+            spnParking.setSelection(parkingPos);
+            spnParking.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    parkingPos = spnParking.getSelectedItemPosition();
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
             //configure spnOrganization
             ArrayAdapter<String> arrayAdapterOrganization = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getOrganizationListAsString());
             spnOrganization.setAdapter(arrayAdapterOrganization);
@@ -793,16 +841,16 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    organizationPos = 0;
-                    ArrayAdapter<String> arrayAdapterWrecker = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getWreckerListAsStirng(organizationPos));
-                    spnWrecker.setAdapter(arrayAdapterWrecker);
-                    spnWrecker.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            wreckerPos = adapterView.getSelectedItemPosition();
-                            Utils.hideKeyboard(getActivity());
-                        }
-                    });
+//                    organizationPos = 0;
+//                    ArrayAdapter<String> arrayAdapterWrecker = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getWreckerListAsStirng(organizationPos));
+//                    spnWrecker.setAdapter(arrayAdapterWrecker);
+//                    spnWrecker.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                            wreckerPos = adapterView.getSelectedItemPosition();
+//                            Utils.hideKeyboard(getActivity());
+//                        }
+//                    });
                 }
             });
 
@@ -826,9 +874,10 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             actvColor.setThreshold(1);
             actvColor.setAdapter(arrayAdapterColor);
             setLoading(false);
-        } else
-            networkDataManager = new NetworkDataManager(this);
-          setLoading(false);
+        } else {
+            networkDataManager.getDefaultData();
+            setLoading(false);
+        }
     }
 
 }

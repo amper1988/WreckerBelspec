@@ -16,7 +16,7 @@ public class CreateExtraditionRequestEnvelope {
 
     public CreateExtraditionRequestEnvelope(int docId, String seriesRc, String numberRc, String lastNameRc, String addressRc,
                                             String seriesDl, String numberDl, String lastNameDl, String addressDl, String contact,
-                                            String code, int userType, String policeman){
-        body = new CreateExtraditionRequestBody(docId, seriesRc, numberRc, lastNameRc, addressRc, seriesDl, numberDl, lastNameDl, addressDl, contact, code,userType,policeman);
+                                            String code, int userType, String policeman, boolean printPhoto){
+        body = new CreateExtraditionRequestBody(docId, seriesRc, numberRc, lastNameRc, addressRc, seriesDl, numberDl, lastNameDl, addressDl, contact, code,userType,policeman, printPhoto);
     }
 }

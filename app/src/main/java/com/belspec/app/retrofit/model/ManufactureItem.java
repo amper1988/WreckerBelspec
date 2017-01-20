@@ -1,6 +1,7 @@
-package com.belspec.app.retrofit.model.getDefaultData;
+package com.belspec.app.retrofit.model;
 
-import org.simpleframework.xml.Element;
+import com.belspec.app.retrofit.model.Manufacture;
+
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 

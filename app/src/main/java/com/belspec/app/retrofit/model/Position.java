@@ -1,13 +1,12 @@
-package com.belspec.app.retrofit.model.getDefaultData;
-
+package com.belspec.app.retrofit.model;
 
 import org.simpleframework.xml.Element;
 
-public class Color {
+public class Position {
     @Element(name = "Name")
     private String name;
 
     public String getName(){
-        return this.name;
+        return name;
     }
 }

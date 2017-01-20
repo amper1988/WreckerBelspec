@@ -64,6 +64,9 @@
     <string name="hide">Спрятать параменты поиска</string>
     <string name="refresh_street">Обновить местоположение</string>
     <string name="plea">Замечания</string>
+    <string name="without_evacuation">Свой ход</string>
+    <string name="photo_print">Печатать фото</string>
+    <string name="refresh">Обновить данные</string>
 
 
 </resources>

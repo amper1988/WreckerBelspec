@@ -1,4 +1,6 @@
-package com.belspec.app.retrofit.model.getDefaultData;
+package com.belspec.app.retrofit.model;
+
+import com.belspec.app.retrofit.model.Parking;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;

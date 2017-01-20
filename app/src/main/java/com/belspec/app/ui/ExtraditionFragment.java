@@ -62,10 +62,10 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
     Button btnFind;
     Button btnHide;
     Button btnShow;
-    NetworkDataManager networkDataManager;
     CarOnEvacuationAdapter carOnEvacuationAdapter;
     List<EvacuationData> evacuationDataList;
     boolean srchHiden;
+    private NetworkDataManager networkDataManager;
 
     @Nullable
     @Override
@@ -80,7 +80,6 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
         imvLoading = (ImageView)mView.findViewById(R.id.imvLoading);
         rvListCarOnEvacuation = (RecyclerView) mView.findViewById(R.id.rvCarOnEvacuationList);
         carOnEvacuationAdapter = new CarOnEvacuationAdapter();
-        networkDataManager = new NetworkDataManager(this);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rvListCarOnEvacuation.setLayoutManager(llm);
         rvListCarOnEvacuation.setAdapter(carOnEvacuationAdapter);
@@ -142,10 +141,9 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
                 setLoading(true);
                 break;
         }
+        networkDataManager = NetworkDataManager.getInstance();
+        networkDataManager.setListener(this);
         networkDataManager.getDefaultData();
-
-
-
     }
 
     private void showHide(){
@@ -193,8 +191,9 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
 
     @Override
     public void onNetworkDataUpdate(final NetworkDataManager netDataManager) {
-        if(netDataManager!=null) {
-            this.networkDataManager = netDataManager;
+        this.networkDataManager = netDataManager;
+        if(networkDataManager!=null) {
+
             ArrayAdapter<String> arrayAdapterPoliceDepartment = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, networkDataManager.getPoliceDepartmentListAsStirng());
             actvPoliceDepartment.setAdapter(arrayAdapterPoliceDepartment);
             actvPoliceman.setEnabled(!actvPoliceDepartment.getText().toString().equals(""));

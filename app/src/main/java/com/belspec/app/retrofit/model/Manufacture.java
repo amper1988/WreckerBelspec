@@ -1,10 +1,7 @@
-package com.belspec.app.retrofit.model.getDefaultData;
+package com.belspec.app.retrofit.model;
 
 
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
-
-import java.util.List;
 
 public class Manufacture {
     @Element(name = "Name", required = false)

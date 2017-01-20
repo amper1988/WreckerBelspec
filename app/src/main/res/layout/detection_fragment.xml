@@ -124,6 +124,12 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_weight="1" >
+                    <CheckBox
+                        android:id="@+id/chbWithoutEvacuation"
+                        android:textColor="@color/textColorPrimary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/without_evacuation"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -397,11 +403,24 @@
                         android:layout_weight="1"/>
                 </LinearLayout>
             </LinearLayout>
+            <TextView
+                android:id="@+id/txvParkingTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llPolicemanSignature"
+                android:text="@string/parking_title"/>
+            <Spinner
+                android:id="@+id/spnParking"
+                android:layout_below="@id/txvParkingTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </Spinner>
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tilCode"
-                android:layout_below="@id/llPolicemanSignature">
+                android:layout_below="@id/spnParking">
                 <EditText
                     style="@style/MyMaterialTheme.MyEditText"
                     android:id="@+id/edtCode"

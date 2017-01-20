@@ -14,8 +14,10 @@ import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -55,6 +57,8 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     EditText edtContact;
     EditText edtCode;
     ScrollView svMain;
+    CheckBox chbPrintPhoto;
+    LinearLayout llBottomContent;
     TextInputLayout tilSeriesRC;
     TextInputLayout tilNumberRC;
     TextInputLayout tilAddressRC;
@@ -85,6 +89,8 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
         txvModel.setSelected(true);
         txvCarId = (TextView)findViewById(R.id.txvCarId);
         txvCarId.setSelected(true);
+        llBottomContent = (LinearLayout)findViewById(R.id.llBottomContainer);
+        chbPrintPhoto = (CheckBox)findViewById(R.id.chbPrintPhoto);
         edtSeriesRC = (EditText)findViewById(R.id.edtSeriesRC);
         edtNumberRC = (EditText)findViewById(R.id.edtNumberRC);
         edtAddressRC = (EditText) findViewById(R.id.edtAddressRC);
@@ -161,7 +167,7 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
                     ),
                             new CreateExtraditionRequestEnvelope(evacuationData.getId(), edtSeriesRC.getText().toString(), edtNumberRC.getText().toString(), edtLastNameRC.getText().toString(), edtAddressRC.getText().toString(),
                                                                 edtSeriesDL.getText().toString(), edtNumberDL.getText().toString(), edtLastNameDL.getText().toString(), edtAddressDL.getText().toString(), edtContact.getText().toString(),
-                                                                code, UserManager.getInstanse().getUserType(), UserManager.getInstanse().getmLogin())
+                                                                code, UserManager.getInstanse().getUserType(), UserManager.getInstanse().getmLogin(), chbPrintPhoto.isChecked())
                     ).enqueue(createDataCall);
                 }
                 break;
@@ -231,10 +237,13 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
             imvLoading.setVisibility(View.VISIBLE);
             animation.start();
             svMain.setVisibility(View.GONE);
+            llBottomContent.setVisibility(View.GONE);
+
         } else {
             imvLoading.setVisibility(View.GONE);
             animation.stop();
             svMain.setVisibility(View.VISIBLE);
+            llBottomContent.setVisibility(View.VISIBLE);
 
         }
     }

@@ -1,5 +1,7 @@
-package com.belspec.app.retrofit.model.getDefaultData;
+package com.belspec.app.retrofit.model;
 
+
+import com.belspec.app.retrofit.model.Color;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;

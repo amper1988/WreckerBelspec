@@ -1,9 +1,10 @@
-package com.belspec.app.retrofit.model.getDefaultData;
+package com.belspec.app.retrofit.model;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
 
-
-public class Wrecker {
+@Root(name = "ModelItem")
+public class Model {
     @Element(name = "Name", required = false)
     private String name;
 

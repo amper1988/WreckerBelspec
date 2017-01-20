@@ -31,6 +31,8 @@ public class CreateExtraditionRequestData {
     private int userType;
     @Element(name = "tes:Policeman")
     private String policeman;
+    @Element(name = "tes:PrintPhoto")
+    private boolean printPhoto;
 
     public CreateExtraditionRequestData(){
         this.docId = 0;
@@ -46,10 +48,14 @@ public class CreateExtraditionRequestData {
         this.code = "";
         this.userType = 0;
         this.policeman = "";
+        this.printPhoto = false;
     }
+
+
+
     public CreateExtraditionRequestData(int docId, String seriesRc, String numberRc, String lastNameRc, String addressRc,
                                         String seriesDl, String numberDl, String lastNameDl, String addressDl, String contact,
-                                        String code, int userType, String policeman){
+                                        String code, int userType, String policeman, boolean printPhoto){
         this.docId = docId;
         this.seriesRc = seriesRc;
         this.numberRc = numberRc;
@@ -63,7 +69,12 @@ public class CreateExtraditionRequestData {
         this.code = code;
         this.userType = userType;
         this.policeman = policeman;
+        this.printPhoto = printPhoto;
 
+
+    }
+    public void setPrintPhoto(boolean printPhoto) {
+        this.printPhoto = printPhoto;
     }
     public void setDocId(int docId) {
         this.docId = docId;

@@ -1,7 +1,8 @@
-package com.belspec.app.retrofit.model.getDefaultData;
+package com.belspec.app.retrofit.model;
+
+import com.belspec.app.retrofit.model.Policeman;
 
 import org.simpleframework.xml.ElementList;
-import org.simpleframework.xml.Root;
 
 import java.util.List;
 

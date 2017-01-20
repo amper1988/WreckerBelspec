@@ -66,6 +66,22 @@ public class CreateEvacuationRequestData {
     private String plea1;
     @Element(name = "tes:Plea2")
     private String plea2;
+    @Element(name = "tes:WithoutEvacuation")
+    private boolean withoutEvacuation;
+    @Element(name = "tes:Parking")
+    private String parking;
+
+    public void setWithoutEvacuation(boolean withoutEvacuation) {
+        this.withoutEvacuation = withoutEvacuation;
+    }
+
+    public void setParking(String parking) {
+        this.parking = parking;
+    }
+
+    public void setWithouEvacuation(boolean withoutEvacuation) {
+        this.withoutEvacuation = withoutEvacuation;
+    }
 
     public void setPlea2(String plea2) {
         this.plea2 = plea2;
@@ -240,6 +256,9 @@ public class CreateEvacuationRequestData {
         this.revisionResult = "";
         this.plea1 ="";
         this.plea2 = "";
+
+        this.withoutEvacuation = false;
+        this.parking = "";
     }
 
     public CreateEvacuationRequestData(String manufacture, String model, String carId,
@@ -249,7 +268,7 @@ public class CreateEvacuationRequestData {
                                        String wrecker, String organization, int evacuationType, int userType, String regDevice, String code,
                                        String witness1Name, String witness1Address, String witness1Contact, String witness1Signature, String plea1,
                                        String witness2Name, String witness2Address, String witness2Contact, String witness2Signature, String plea2,
-                                       String policemanSignature, String revisionResult){
+                                       String policemanSignature, String revisionResult, boolean withoutEvacuation, String parking){
         this.manufacture = manufacture;
         this.model = model;
         this.carId = carId;
@@ -285,5 +304,8 @@ public class CreateEvacuationRequestData {
 
         this.plea1 = plea1;
         this.plea2 = plea2;
+
+        this.withoutEvacuation = withoutEvacuation;
+        this.parking = parking;
     }
 }

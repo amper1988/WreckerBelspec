@@ -20,12 +20,20 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true">
+        <CheckBox
+            android:id="@+id/chbPrintPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/photo_print"
+            android:textColor="@color/textColorPrimary"
+            android:layout_weight="0.5"/>
         <Button
             style="@style/MyMaterialTheme.MyButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@id/btnRegister"
             android:text="@string/extradution"
+            android:layout_weight="0.5"
             />
     </LinearLayout>
     <ScrollView

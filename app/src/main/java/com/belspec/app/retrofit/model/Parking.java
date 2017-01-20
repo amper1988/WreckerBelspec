@@ -1,4 +1,4 @@
-package com.belspec.app.retrofit.model.getDefaultData;
+package com.belspec.app.retrofit.model;
 
 import org.simpleframework.xml.Element;
 

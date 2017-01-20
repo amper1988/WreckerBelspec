@@ -1,29 +1,21 @@
 package com.belspec.app.retrofit.model.getDefaultData.response;
 
-import com.belspec.app.retrofit.model.getDefaultData.Clause;
-import com.belspec.app.retrofit.model.getDefaultData.ClauseItem;
-import com.belspec.app.retrofit.model.getDefaultData.Color;
-import com.belspec.app.retrofit.model.getDefaultData.ColorItem;
-import com.belspec.app.retrofit.model.getDefaultData.Manufacture;
-import com.belspec.app.retrofit.model.getDefaultData.ManufactureItem;
-import com.belspec.app.retrofit.model.getDefaultData.Model;
-import com.belspec.app.retrofit.model.getDefaultData.ModelItem;
-import com.belspec.app.retrofit.model.getDefaultData.Organization;
-import com.belspec.app.retrofit.model.getDefaultData.OrganizationItem;
-import com.belspec.app.retrofit.model.getDefaultData.Parking;
-import com.belspec.app.retrofit.model.getDefaultData.ParkingItem;
-import com.belspec.app.retrofit.model.getDefaultData.PoliceDepartment;
-import com.belspec.app.retrofit.model.getDefaultData.PoliceDepartmentItem;
-import com.belspec.app.retrofit.model.getDefaultData.Policeman;
-import com.belspec.app.retrofit.model.getDefaultData.PolicemanItem;
-import com.belspec.app.retrofit.model.getDefaultData.Wrecker;
-import com.belspec.app.retrofit.model.getDefaultData.WreckerItem;
+import com.belspec.app.retrofit.model.Clause;
+import com.belspec.app.retrofit.model.ClauseItem;
+import com.belspec.app.retrofit.model.Color;
+import com.belspec.app.retrofit.model.ColorItem;
+import com.belspec.app.retrofit.model.Manufacture;
+import com.belspec.app.retrofit.model.ManufactureItem;
+import com.belspec.app.retrofit.model.Organization;
+import com.belspec.app.retrofit.model.OrganizationItem;
+import com.belspec.app.retrofit.model.Parking;
+import com.belspec.app.retrofit.model.ParkingItem;
+import com.belspec.app.retrofit.model.PoliceDepartment;
+import com.belspec.app.retrofit.model.PoliceDepartmentItem;
 
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Root(name = "return")

@@ -5,39 +5,61 @@ import com.belspec.app.interfaces.NetworkDataUpdate;
 import com.belspec.app.interfaces.ResponseListener;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
-import com.belspec.app.retrofit.model.getDefaultData.Clause;
-import com.belspec.app.retrofit.model.getDefaultData.Color;
-import com.belspec.app.retrofit.model.getDefaultData.Manufacture;
-import com.belspec.app.retrofit.model.getDefaultData.Model;
-import com.belspec.app.retrofit.model.getDefaultData.ModelItem;
-import com.belspec.app.retrofit.model.getDefaultData.Organization;
-import com.belspec.app.retrofit.model.getDefaultData.Parking;
-import com.belspec.app.retrofit.model.getDefaultData.PoliceDepartment;
-import com.belspec.app.retrofit.model.getDefaultData.PoliceDepartmentItem;
-import com.belspec.app.retrofit.model.getDefaultData.Policeman;
-import com.belspec.app.retrofit.model.getDefaultData.PolicemanItem;
-import com.belspec.app.retrofit.model.getDefaultData.Wrecker;
-import com.belspec.app.retrofit.model.getDefaultData.WreckerItem;
+import com.belspec.app.retrofit.model.Clause;
+import com.belspec.app.retrofit.model.Color;
+import com.belspec.app.retrofit.model.Manufacture;
+import com.belspec.app.retrofit.model.Model;
+import com.belspec.app.retrofit.model.ModelItem;
+import com.belspec.app.retrofit.model.Organization;
+import com.belspec.app.retrofit.model.Parking;
+import com.belspec.app.retrofit.model.PoliceDepartment;
+import com.belspec.app.retrofit.model.Policeman;
+import com.belspec.app.retrofit.model.PolicemanItem;
+import com.belspec.app.retrofit.model.Position;
+import com.belspec.app.retrofit.model.Rank;
+import com.belspec.app.retrofit.model.Wrecker;
+import com.belspec.app.retrofit.model.WreckerItem;
 import com.belspec.app.retrofit.model.getDefaultData.request.GetDefaultDataRequestEnvelope;
 import com.belspec.app.retrofit.model.getDefaultData.response.GetDefaultDataResponseEnvelope;
+import com.belspec.app.retrofit.model.getPoliceDepartment.request.GetPoliceDepartmentRequestEnvelope;
+import com.belspec.app.retrofit.model.getPoliceDepartment.response.GetPoliceDepartmentResponseEnvelope;
+import com.belspec.app.retrofit.model.getPositions.request.GetPositionsRequestEnvelope;
+import com.belspec.app.retrofit.model.getPositions.response.GetPositionsResponseEnvelope;
+import com.belspec.app.retrofit.model.getRanks.request.GetRanksRequestEnvelope;
+import com.belspec.app.retrofit.model.getRanks.response.GetRanksResponseEnvelope;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Response;
 
 public class NetworkDataManager implements ResponseListener {
+    private static NetworkDataManager instance;
     private List<PoliceDepartment> policeDepartmentList = new ArrayList<>();
     private List<Parking> parkingList = new ArrayList<>();
     private List<Manufacture> manufactureList = new ArrayList<>();
     private List<Clause> clauseList = new ArrayList<>();
     private List<Organization> organizationList = new ArrayList<>();
     private List<Color> colorList = new ArrayList<>();
-    private NetworkDataUpdate listener;
+    private List<NetworkDataUpdate> listeners = new ArrayList<>();
+    private List<Rank> rankList = new ArrayList<>();
+    private List<Position> positionList = new ArrayList<>();
 
-    public NetworkDataManager(NetworkDataUpdate ndu){
-        listener = ndu;
+    public void setListener(NetworkDataUpdate ndu){
+        if(!listeners.contains(ndu)){
+            listeners.add(ndu);
+        }
+    }
+    private NetworkDataManager(){
+       super();
+    }
+
+    public static NetworkDataManager getInstance(){
+        if(instance == null){
+            instance = new NetworkDataManager();
+
+        }
+        return instance;
     }
 
     public void getDefaultData(){
@@ -50,6 +72,45 @@ public class NetworkDataManager implements ResponseListener {
                         UserManager.getInstanse().getmPassword()
                 ),
                 new GetDefaultDataRequestEnvelope()
+        ).enqueue(call);
+    }
+
+    public void getRanksList(){
+        RetrofitService retrofitService = Api.createRetrofitService();
+        MyCallback<GetRanksResponseEnvelope> call = new MyCallback<>();
+        call.addResponseListener(this);
+        retrofitService.executeGetRanks(
+                Encode.getBasicAuthTemplate(
+                        UserManager.getInstanse().getmLogin(),
+                        UserManager.getInstanse().getmPassword()
+                ),
+                new GetRanksRequestEnvelope()
+        ).enqueue(call);
+    }
+
+    public void getPositions(){
+        RetrofitService retrofitService = Api.createRetrofitService();
+        MyCallback<GetPositionsResponseEnvelope> call = new MyCallback<>();
+        call.addResponseListener(this);
+        retrofitService.executeGetPositions(
+                Encode.getBasicAuthTemplate(
+                        UserManager.getInstanse().getmLogin(),
+                        UserManager.getInstanse().getmPassword()
+                ),
+                new GetPositionsRequestEnvelope()
+        ).enqueue(call);
+    }
+
+    public void getPoliceDepartmet(){
+        RetrofitService retrofitService = Api.createRetrofitService();
+        MyCallback<GetPoliceDepartmentResponseEnvelope> call = new MyCallback<>();
+        call.addResponseListener(this);
+        retrofitService.executeGetPoliceDepartment(
+                Encode.getBasicAuthTemplate(
+                        UserManager.getInstanse().getmLogin(),
+                        UserManager.getInstanse().getmPassword()
+                ),
+                new GetPoliceDepartmentRequestEnvelope()
         ).enqueue(call);
     }
 
@@ -256,27 +317,43 @@ public class NetworkDataManager implements ResponseListener {
 
     @Override
     public void AuthorizationOK(Response response) {
-        GetDefaultDataResponseEnvelope responseEnvelope = (GetDefaultDataResponseEnvelope)response.body();
-        this.manufactureList = responseEnvelope.getBody().getManufactureList();
-        this.policeDepartmentList = responseEnvelope.getBody().getPoliceDepartmentList();
-        this.parkingList = responseEnvelope.getBody().getParkingList();
-        this.clauseList = responseEnvelope.getBody().getClauseList();
-        this.organizationList = responseEnvelope.getBody().getOrganizationList();
-        this.colorList = responseEnvelope.getBody().getColorList();
-        if (listener!= null) {
-            listener.onNetworkDataUpdate(this);
+        if(response.body().getClass() == GetDefaultDataResponseEnvelope.class){
+            GetDefaultDataResponseEnvelope responseEnvelope = (GetDefaultDataResponseEnvelope)response.body();
+            this.manufactureList = responseEnvelope.getBody().getManufactureList();
+            this.policeDepartmentList = responseEnvelope.getBody().getPoliceDepartmentList();
+            this.parkingList = responseEnvelope.getBody().getParkingList();
+            this.clauseList = responseEnvelope.getBody().getClauseList();
+            this.organizationList = responseEnvelope.getBody().getOrganizationList();
+            this.colorList = responseEnvelope.getBody().getColorList();
+            if (listeners != null) {
+                for (NetworkDataUpdate listener:listeners) {
+                    listener.onDefaultDataUpdate(this);
+                }
+            }
+        }
+        if(response.body().getClass() == GetRanksResponseEnvelope.class){
+
+        }
+        if(response.body().getClass() == GetPositionsResponseEnvelope.class){
+
+        }
+        if(response.body().getClass() == GetPoliceDepartmentResponseEnvelope.class){
+
         }
     }
 
     @Override
     public void AuthorizationBad(Response response) {
-        if(listener!=null)
-            listener.onNetworkDataUpdate(null);
+
+
     }
 
     @Override
     public void AuthorizationFail(Throwable t) {
-        if (listener !=null)
-            listener.onNetworkDataUpdate(null);
+        if(listeners !=null){
+            for(NetworkDataUpdate listener: listeners){
+                listener.onDefaultDataUpdate(null);
+            }
+        }
     }
 }
