@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/side_nav_bar">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/police_department"
+        android:id="@+id/txvPoliceDepartment"/>
+    <Spinner
+        style="@style/MyMaterialTheme.MySpinner"
+        android:layout_margin="0dp"
+        android:id="@+id/spnPoliceDepartment"
+        android:layout_below="@id/txvPoliceDepartment"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spnPoliceDepartment"
+        android:text="@string/rank"
+        android:id="@+id/txvRank"/>
+    <Spinner
+        style="@style/MyMaterialTheme.MySpinner"
+        android:layout_margin="0dp"
+        android:id="@+id/spnRank"
+        android:layout_below="@id/txvRank"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spnRank"
+        android:text="@string/position"
+        android:id="@+id/txvPosition"/>
+    <Spinner
+        style="@style/MyMaterialTheme.MySpinner"
+        android:layout_margin="0dp"
+        android:id="@+id/spnPosition"
+        android:layout_below="@id/txvPosition"
+        android:layout_height="wrap_content" />
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spnPosition"
+        android:id="@+id/tilName">
+        <EditText
+            style="@style/MyMaterialTheme.MyEditText"
+            android:id="@+id/edtName"
+            android:hint="@string/first_last_name"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords" />
+
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tilName"
+        android:id="@+id/tilCode">
+        <EditText
+            style="@style/MyMaterialTheme.MyEditText"
+            android:id="@+id/edtCode"
+            android:hint="@string/code"
+            android:inputType="textPassword"
+            android:imeOptions="actionDone" />
+
+    </android.support.design.widget.TextInputLayout>
+    <Button
+        style="@style/MyMaterialTheme.MyButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnRegister"
+        android:layout_below="@id/tilCode"
+        android:text="@string/register"
+        android:layout_centerInParent="true"/>
+
+</RelativeLayout>

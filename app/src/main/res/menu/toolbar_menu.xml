@@ -5,4 +5,8 @@
         android:icon="@drawable/ic_refresh_white_24dp"
         android:title="@string/refresh"
         app:showAsAction="ifRoom"/>
+    <item android:id="@+id/addPoliceman"
+        android:icon="@drawable/ic_add_black_24dp"
+        android:title="@string/add_policeman"
+        app:showAsAction="ifRoom"/>
 </menu>

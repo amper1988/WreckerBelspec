@@ -67,6 +67,9 @@
     <string name="without_evacuation">Свой ход</string>
     <string name="photo_print">Печатать фото</string>
     <string name="refresh">Обновить данные</string>
+    <string name="rank">Звание</string>
+    <string name="position">Должность</string>
+    <string name="add_policeman">Добавить сотрудника ГАИ</string>
 
 
 </resources>
