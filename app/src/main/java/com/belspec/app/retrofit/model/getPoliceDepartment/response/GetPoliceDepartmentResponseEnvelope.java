@@ -1,6 +1,7 @@
 package com.belspec.app.retrofit.model.getPoliceDepartment.response;
 
 import com.belspec.app.retrofit.model.PoliceDepartment;
+import com.belspec.app.retrofit.model.PoliceDepartmentItem;
 import com.belspec.app.retrofit.model.getDefaultData.response.DefaultData;
 
 import org.simpleframework.xml.Element;
@@ -14,9 +15,9 @@ public class GetPoliceDepartmentResponseEnvelope {
 
     @Element(name = "return")
     @Path("Body/GetPoliceDepartmentResponse")
-    private PoliceDepartment body;
+    private PoliceDepartmentItem body;
 
-    public PoliceDepartment getBody(){
+    public PoliceDepartmentItem getBody(){
         return this.body;
     }
 }

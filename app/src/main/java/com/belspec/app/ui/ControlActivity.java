@@ -115,6 +115,10 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
             case R.id.refresh:
                 NetworkDataManager.getInstance().getDefaultData();
                 return true;
+            case R.id.addPoliceman:
+                DialogFragmentCreatePoliceman dialogCreatePoliceman = new DialogFragmentCreatePoliceman();
+                dialogCreatePoliceman.show(getSupportFragmentManager(), "DialogFragmentCreatePoliceman");
+                return true;
         }
         return false;
     }

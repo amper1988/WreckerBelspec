@@ -33,6 +33,9 @@ import com.belspec.app.interfaces.RecyclerItemClickListener;
 import com.belspec.app.interfaces.ResponseListener;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
+import com.belspec.app.retrofit.model.PoliceDepartment;
+import com.belspec.app.retrofit.model.Position;
+import com.belspec.app.retrofit.model.Rank;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.request.GetCarOnEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.EvacuationData;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.GetCarOnEvacuationResponseEnvelope;
@@ -190,7 +193,7 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
     }
 
     @Override
-    public void onNetworkDataUpdate(final NetworkDataManager netDataManager) {
+    public void onDefaultDataUpdate(final NetworkDataManager netDataManager) {
         this.networkDataManager = netDataManager;
         if(networkDataManager!=null) {
 
@@ -328,6 +331,21 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
                 showHide();
                 break;
         }
+
+    }
+
+    @Override
+    public void onRanksUpdate(List<Rank> rankList) {
+
+    }
+
+    @Override
+    public void onPositionsUpdate(List<Position> positionList) {
+
+    }
+
+    @Override
+    public void onPoliceDepartmentUpdate(List<PoliceDepartment> policeDepartmentList) {
 
     }
 }

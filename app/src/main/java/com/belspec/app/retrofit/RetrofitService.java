@@ -4,6 +4,8 @@ import com.belspec.app.retrofit.model.createEvacuation.request.CreateEvacuationR
 import com.belspec.app.retrofit.model.createEvacuation.response.CreateEvacuationResponseEnvelope;
 import com.belspec.app.retrofit.model.createExtradition.request.CreateExtraditionRequestEnvelope;
 import com.belspec.app.retrofit.model.createExtradition.response.CreateExtraditionResponseEnvelope;
+import com.belspec.app.retrofit.model.createPoliceman.request.CreatePolicemanRequestEnvelope;
+import com.belspec.app.retrofit.model.createPoliceman.response.CreatePolicemanResponseEnvelope;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.request.GetCarOnEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.GetCarOnEvacuationResponseEnvelope;
 import com.belspec.app.retrofit.model.getDefaultData.request.GetDefaultDataRequestEnvelope;
@@ -67,5 +69,12 @@ public interface RetrofitService {
     })
     @POST("ws/createdata")
     Call<CreateExtraditionResponseEnvelope> executeCreateExtradition(@Header("Authorization") String auth, @Body CreateExtraditionRequestEnvelope request);
+
+    @Headers({
+            "Content-Type: application/soap+xml",
+            "Accept-Charset: utf-8"
+    })
+    @POST("ws/createdata")
+    Call<CreatePolicemanResponseEnvelope> executeCreatePoliceman(@Header("Authorization") String auth, @Body CreatePolicemanRequestEnvelope request);
 
 }

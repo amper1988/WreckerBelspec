@@ -50,6 +50,12 @@ public class NetworkDataManager implements ResponseListener {
             listeners.add(ndu);
         }
     }
+
+    public void unregister(NetworkDataUpdate ndu){
+        if(listeners.contains(ndu)){
+            listeners.remove(ndu);
+        }
+    }
     private NetworkDataManager(){
        super();
     }
@@ -75,7 +81,7 @@ public class NetworkDataManager implements ResponseListener {
         ).enqueue(call);
     }
 
-    public void getRanksList(){
+    public void getRanksListFromServer(){
         RetrofitService retrofitService = Api.createRetrofitService();
         MyCallback<GetRanksResponseEnvelope> call = new MyCallback<>();
         call.addResponseListener(this);
@@ -88,7 +94,7 @@ public class NetworkDataManager implements ResponseListener {
         ).enqueue(call);
     }
 
-    public void getPositions(){
+    public void getPositionsFromServer(){
         RetrofitService retrofitService = Api.createRetrofitService();
         MyCallback<GetPositionsResponseEnvelope> call = new MyCallback<>();
         call.addResponseListener(this);
@@ -101,7 +107,7 @@ public class NetworkDataManager implements ResponseListener {
         ).enqueue(call);
     }
 
-    public void getPoliceDepartmet(){
+    public void getPoliceDepartmetFromServer(){
         RetrofitService retrofitService = Api.createRetrofitService();
         MyCallback<GetPoliceDepartmentResponseEnvelope> call = new MyCallback<>();
         call.addResponseListener(this);
@@ -315,6 +321,44 @@ public class NetworkDataManager implements ResponseListener {
         return arrayList;
     }
 
+    public List<NetworkDataUpdate> getListeners() {
+        return listeners;
+    }
+
+    public List<String> getRankListAsString(){
+        if(this.rankList!=null){
+            ArrayList<String> arrayList = new ArrayList<>();
+            for(Rank rank: rankList){
+                arrayList.add(rank.getName());
+            }
+            return arrayList;
+        }
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("");
+        return arrayList;
+    }
+
+    public List<Rank> getRankList() {
+        return rankList;
+    }
+
+    public List<Position> getPositionList() {
+        return positionList;
+    }
+
+    public List<String> getPositionListAsString(){
+        if(this.positionList!=null){
+            ArrayList<String> arrayList = new ArrayList<>();
+            for(Position position: positionList){
+                arrayList.add(position.getName());
+            }
+            return arrayList;
+        }
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("");
+        return arrayList;
+    }
+
     @Override
     public void AuthorizationOK(Response response) {
         if(response.body().getClass() == GetDefaultDataResponseEnvelope.class){
@@ -332,28 +376,47 @@ public class NetworkDataManager implements ResponseListener {
             }
         }
         if(response.body().getClass() == GetRanksResponseEnvelope.class){
-
+            GetRanksResponseEnvelope responseEnvelope = (GetRanksResponseEnvelope) response.body();
+            this.rankList = responseEnvelope.getBody().getRankList();
+            if(listeners !=null){
+                for (NetworkDataUpdate listener:listeners) {
+                    listener.onRanksUpdate(this.rankList);
+                }
+            }
         }
         if(response.body().getClass() == GetPositionsResponseEnvelope.class){
-
+            GetPositionsResponseEnvelope responseEnvelope = (GetPositionsResponseEnvelope) response.body();
+            this.positionList = responseEnvelope.getBody().getPositionList();
+            if(listeners !=null){
+                for (NetworkDataUpdate listener:listeners) {
+                    listener.onPositionsUpdate(this.positionList);
+                }
+            }
         }
         if(response.body().getClass() == GetPoliceDepartmentResponseEnvelope.class){
+            GetPoliceDepartmentResponseEnvelope responseEnvelope = (GetPoliceDepartmentResponseEnvelope) response.body();
+            this.policeDepartmentList = responseEnvelope.getBody().getPoliceDepartment();
+            if(listeners !=null){
+                for (NetworkDataUpdate listener:listeners) {
+                    listener.onPoliceDepartmentUpdate(this.policeDepartmentList);
+                }
+            }
 
         }
     }
 
     @Override
     public void AuthorizationBad(Response response) {
+    if(listeners !=null){
 
+    }
 
     }
 
     @Override
     public void AuthorizationFail(Throwable t) {
         if(listeners !=null){
-            for(NetworkDataUpdate listener: listeners){
-                listener.onDefaultDataUpdate(null);
-            }
+
         }
     }
 }

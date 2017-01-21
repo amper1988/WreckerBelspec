@@ -45,6 +45,9 @@ import com.belspec.app.interfaces.NetworkDataUpdate;
 import com.belspec.app.interfaces.ResponseListener;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
+import com.belspec.app.retrofit.model.PoliceDepartment;
+import com.belspec.app.retrofit.model.Position;
+import com.belspec.app.retrofit.model.Rank;
 import com.belspec.app.retrofit.model.createEvacuation.request.CreateEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.createEvacuation.response.CreateEvacuationResponseEnvelope;
 import com.belspec.app.utils.Converter;
@@ -59,6 +62,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Response;
 
@@ -715,7 +719,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onNetworkDataUpdate(final NetworkDataManager netDataManager) {
+    public void onDefaultDataUpdate(final NetworkDataManager netDataManager) {
         if (netDataManager != null) {
             this.networkDataManager = netDataManager;
             //configure actvManufacture
@@ -880,4 +884,18 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onRanksUpdate(List<Rank> rankList) {
+
+    }
+
+    @Override
+    public void onPositionsUpdate(List<Position> positionList) {
+
+    }
+
+    @Override
+    public void onPoliceDepartmentUpdate(List<PoliceDepartment> policeDepartmentList) {
+
+    }
 }
