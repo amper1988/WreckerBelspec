@@ -70,6 +70,9 @@
     <string name="rank">Звание</string>
     <string name="position">Должность</string>
     <string name="add_policeman">Добавить сотрудника ГАИ</string>
+    <string name="road_law_point">Пункты ПДД</string>
+    <string name="cancel">Отмена</string>
+    <string name="add_to_all_detection">Добавить во все протоколы</string>
 
 
 </resources>

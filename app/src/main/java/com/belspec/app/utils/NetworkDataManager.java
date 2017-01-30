@@ -17,6 +17,7 @@ import com.belspec.app.retrofit.model.Policeman;
 import com.belspec.app.retrofit.model.PolicemanItem;
 import com.belspec.app.retrofit.model.Position;
 import com.belspec.app.retrofit.model.Rank;
+import com.belspec.app.retrofit.model.RoadLawPoint;
 import com.belspec.app.retrofit.model.Wrecker;
 import com.belspec.app.retrofit.model.WreckerItem;
 import com.belspec.app.retrofit.model.getDefaultData.request.GetDefaultDataRequestEnvelope;
@@ -27,6 +28,8 @@ import com.belspec.app.retrofit.model.getPositions.request.GetPositionsRequestEn
 import com.belspec.app.retrofit.model.getPositions.response.GetPositionsResponseEnvelope;
 import com.belspec.app.retrofit.model.getRanks.request.GetRanksRequestEnvelope;
 import com.belspec.app.retrofit.model.getRanks.response.GetRanksResponseEnvelope;
+import com.belspec.app.retrofit.model.getRoadLawPoint.request.GetRoadLawPointRequestEnvelope;
+import com.belspec.app.retrofit.model.getRoadLawPoint.response.GetRoadLawPointResponseEnvelope;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +47,7 @@ public class NetworkDataManager implements ResponseListener {
     private List<NetworkDataUpdate> listeners = new ArrayList<>();
     private List<Rank> rankList = new ArrayList<>();
     private List<Position> positionList = new ArrayList<>();
+    private List<RoadLawPoint> roadLawPoints = new ArrayList<>();
 
     public void setListener(NetworkDataUpdate ndu){
         if(!listeners.contains(ndu)){
@@ -117,6 +121,19 @@ public class NetworkDataManager implements ResponseListener {
                         UserManager.getInstanse().getmPassword()
                 ),
                 new GetPoliceDepartmentRequestEnvelope()
+        ).enqueue(call);
+    }
+
+    public void getRoadLawPointFromServer(){
+        RetrofitService retrofitService = Api.createRetrofitService();
+        MyCallback<GetPoliceDepartmentResponseEnvelope> call = new MyCallback<>();
+        call.addResponseListener(this);
+        retrofitService.executeGetRoadLawPoints(
+                Encode.getBasicAuthTemplate(
+                        UserManager.getInstanse().getmLogin(),
+                        UserManager.getInstanse().getmPassword()
+                ),
+                new GetRoadLawPointRequestEnvelope()
         ).enqueue(call);
     }
 
@@ -399,6 +416,16 @@ public class NetworkDataManager implements ResponseListener {
             if(listeners !=null){
                 for (NetworkDataUpdate listener:listeners) {
                     listener.onPoliceDepartmentUpdate(this.policeDepartmentList);
+                }
+            }
+
+        }
+        if(response.body().getClass() == GetRoadLawPointResponseEnvelope.class){
+            GetRoadLawPointResponseEnvelope responseEnvelope = (GetRoadLawPointResponseEnvelope) response.body();
+            this.roadLawPoints = responseEnvelope.getBody().getRoadLawPointList();
+            if(listeners != null){
+                for(NetworkDataUpdate listener : listeners){
+                    listener.onRoadLowPointUpdate(this.roadLawPoints);
                 }
             }
 

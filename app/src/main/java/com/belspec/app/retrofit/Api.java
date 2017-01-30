@@ -30,11 +30,12 @@ public class Api {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder()
-                .readTimeout(120, TimeUnit.SECONDS)
-                .connectTimeout(120,  TimeUnit.SECONDS);
+                .readTimeout(3600, TimeUnit.SECONDS)
+                .writeTimeout(3600, TimeUnit.SECONDS)
+                .connectTimeout(3600,  TimeUnit.SECONDS);
         httpClientBuilder.addInterceptor(interceptor);
         Retrofit restAdapter = new Retrofit.Builder()
-                .baseUrl("http://185.66.70.44:10101/TestUchet/")
+                .baseUrl("")
                 .client(httpClientBuilder.build())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build();

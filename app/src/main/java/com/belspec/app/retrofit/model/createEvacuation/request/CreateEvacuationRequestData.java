@@ -70,6 +70,10 @@ public class CreateEvacuationRequestData {
     private boolean withoutEvacuation;
     @Element(name = "tes:Parking")
     private String parking;
+    @Element(name = "tes:RoadLawPoints")
+    private String roadLawsPoints;
+
+
 
     public void setWithoutEvacuation(boolean withoutEvacuation) {
         this.withoutEvacuation = withoutEvacuation;
@@ -221,6 +225,10 @@ public class CreateEvacuationRequestData {
         return this;
     }
 
+    public CreateEvacuationRequestData setRoadLawsPoint(String roadLawsPoints){
+        this.roadLawsPoints = roadLawsPoints;
+        return this;
+    }
     public CreateEvacuationRequestData(){
         super();
         this.manufacture = "";
@@ -259,6 +267,7 @@ public class CreateEvacuationRequestData {
 
         this.withoutEvacuation = false;
         this.parking = "";
+        this.roadLawsPoints = "";
     }
 
     public CreateEvacuationRequestData(String manufacture, String model, String carId,
@@ -268,7 +277,7 @@ public class CreateEvacuationRequestData {
                                        String wrecker, String organization, int evacuationType, int userType, String regDevice, String code,
                                        String witness1Name, String witness1Address, String witness1Contact, String witness1Signature, String plea1,
                                        String witness2Name, String witness2Address, String witness2Contact, String witness2Signature, String plea2,
-                                       String policemanSignature, String revisionResult, boolean withoutEvacuation, String parking){
+                                       String policemanSignature, String revisionResult, boolean withoutEvacuation, String parking, String roadLawsPoints){
         this.manufacture = manufacture;
         this.model = model;
         this.carId = carId;
@@ -307,5 +316,7 @@ public class CreateEvacuationRequestData {
 
         this.withoutEvacuation = withoutEvacuation;
         this.parking = parking;
+
+        this.roadLawsPoints = roadLawsPoints;
     }
 }

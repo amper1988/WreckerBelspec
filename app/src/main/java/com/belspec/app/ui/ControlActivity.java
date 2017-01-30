@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -21,8 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.belspec.app.R;
+import com.belspec.app.adapters.ViewPagerAdapter;
 import com.belspec.app.utils.NetworkDataManager;
 import com.belspec.app.utils.UserManager;
+import com.belspec.app.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +29,11 @@ import java.util.List;
 public class ControlActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    FragmentDetection detection1;
+    FragmentDetection detection2;
+    FragmentDetection detection3;
+    FragmentDetection detection4;
+    ExtraditionFragment extradition;
 
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -61,6 +65,11 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
                 break;
 
         }
+        detection1 = new FragmentDetection();
+        detection2 = new FragmentDetection();
+        detection3 = new FragmentDetection();
+        detection4 = new FragmentDetection();
+        extradition = new ExtraditionFragment();
         navFullName.setText(UserManager.getInstanse().getmFullName());
         navLogin.setText(UserManager.getInstanse().getmLogin());
         navOrganization.setText(UserManager.getInstanse().getOrganization());
@@ -74,9 +83,13 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
     }
 
     private void setupViewPager(ViewPager viewPager) {
+        viewPager.setOffscreenPageLimit(4);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FragmentDetection(), "Обнаружение");
-        adapter.addFragment(new ExtraditionFragment(), "Съем");
+        adapter.addFragment(detection1, "Протокол 1");
+        adapter.addFragment(detection2, "Протокол 2");
+        adapter.addFragment(detection3, "Протокол 3");
+        adapter.addFragment(detection4, "Протокол 4");
+        adapter.addFragment(extradition, "Съем");
         viewPager.setAdapter(adapter);
     }
 
@@ -98,14 +111,32 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Utils.showYesNoDialog(this, "Do you want to really exit?", new Utils.DialogYesNoListener() {
+                @Override
+                public void onNegativePress() {
+
+                }
+
+                @Override
+                public void onPositivePress() {
+                    close();
+                }
+            });
+
         }
+    }
+
+    private void close(){
+        UserManager.getInstanse().logout();
+        super.onBackPressed();
+        onDestroy();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
+
         return true;
     }
 
@@ -114,10 +145,18 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
         switch (item.getItemId()) {
             case R.id.refresh:
                 NetworkDataManager.getInstance().getDefaultData();
+                NetworkDataManager.getInstance().getRoadLawPointFromServer();
+                NetworkDataManager.getInstance().getPositionsFromServer();
+                NetworkDataManager.getInstance().getRanksListFromServer();
                 return true;
             case R.id.addPoliceman:
-                DialogFragmentCreatePoliceman dialogCreatePoliceman = new DialogFragmentCreatePoliceman();
-                dialogCreatePoliceman.show(getSupportFragmentManager(), "DialogFragmentCreatePoliceman");
+                int userType = UserManager.getInstanse().getUserType();
+                if(userType != 1){
+                    DialogFragmentCreatePoliceman dialogCreatePoliceman = new DialogFragmentCreatePoliceman();
+                    dialogCreatePoliceman.show(getSupportFragmentManager(), "DialogFragmentCreatePoliceman");
+                }else{
+                    Toast.makeText(this, "Недоступно для вашего пользователя", Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return false;
@@ -148,34 +187,7 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
         super.onDestroy();
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
 
     private void logout() {
         UserManager.getInstanse().logout();

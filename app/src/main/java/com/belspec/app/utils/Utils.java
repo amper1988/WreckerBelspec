@@ -8,6 +8,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -31,18 +32,43 @@ public class Utils {
                 .setNegativeButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
+                                dialog.dismiss();
                             }
                         });
         AlertDialog alert = builder.create();
         alert.show();
     }
 
+    public interface DialogYesNoListener{
+        void onNegativePress();
+        void onPositivePress();
+    }
+    public static void showYesNoDialog(Context context, String message, final DialogYesNoListener listener){
+        AlertDialog.Builder adb = new AlertDialog.Builder(context);
+        adb.setTitle("Information")
+                .setMessage(message)
+                .setCancelable(true)
+                .setPositiveButton("Да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        listener.onPositivePress();
+                    }
+                }).setNegativeButton("Нет", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                listener.onNegativePress();
+            }
+        }).create().show();
+    }
+
     public static String getAdress(Context context){
         try {
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
             GPSTracker gpsTracker = new GPSTracker(context);
-            List<Address> addresses = geocoder.getFromLocation(gpsTracker.getLatitude(), gpsTracker.getLongitude(), 1);
+            Location location = gpsTracker.getLocation();
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (addresses.size() != 0) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("");

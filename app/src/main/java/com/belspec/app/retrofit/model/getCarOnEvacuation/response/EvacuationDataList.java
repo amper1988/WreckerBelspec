@@ -7,7 +7,7 @@ import java.util.List;
 
 @Root(name = "return")
 public class EvacuationDataList {
-    @ElementList(entry = "EvacuationDataItem", inline = true)
+    @ElementList(entry = "EvacuationDataItem", inline = true, required = false)
     private List<EvacuationData> evacuationDataList;
 
     public List<EvacuationData> getEvacuationDataList() {

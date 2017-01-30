@@ -36,6 +36,7 @@ import com.belspec.app.retrofit.RetrofitService;
 import com.belspec.app.retrofit.model.PoliceDepartment;
 import com.belspec.app.retrofit.model.Position;
 import com.belspec.app.retrofit.model.Rank;
+import com.belspec.app.retrofit.model.RoadLawPoint;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.request.GetCarOnEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.EvacuationData;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.GetCarOnEvacuationResponseEnvelope;
@@ -73,9 +74,11 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.extradition_fragment_policeman, container, false);
-        initViews(savedInstanceState);
-        srchHiden = false;
+        if (mView == null) {
+            mView = inflater.inflate(R.layout.extradition_fragment_policeman, container, false);
+            initViews(savedInstanceState);
+            srchHiden = false;
+        }
         return  mView;
     }
 
@@ -193,6 +196,19 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        networkDataManager.unregister(this);
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        networkDataManager.setListener(this);
+    }
+
+    @Override
     public void onDefaultDataUpdate(final NetworkDataManager netDataManager) {
         this.networkDataManager = netDataManager;
         if(networkDataManager!=null) {
@@ -257,9 +273,14 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
 
     @Override
     public void AuthorizationOK(Response response) {
-        GetCarOnEvacuationResponseEnvelope responseEnvelope = (GetCarOnEvacuationResponseEnvelope) response.body();
-        evacuationDataList = responseEnvelope.getDataList().getData().getEvacuationDataList();
-        carOnEvacuationAdapter.addListEvacuationData(evacuationDataList);
+        try{
+            GetCarOnEvacuationResponseEnvelope responseEnvelope = (GetCarOnEvacuationResponseEnvelope) response.body();
+            evacuationDataList = responseEnvelope.getDataList().getData().getEvacuationDataList();
+            carOnEvacuationAdapter.addListEvacuationData(evacuationDataList);
+        }catch (NullPointerException e){
+            Toast.makeText(getActivity(), "Данных по таким критериям не найдено", Toast.LENGTH_SHORT).show();
+        }
+
         setLoading(false);
     }
 
@@ -271,7 +292,7 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
 
     @Override
     public void AuthorizationFail(Throwable t) {
-        Toast.makeText(getActivity(), "FAil", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         setLoading(false);
     }
 
@@ -346,6 +367,11 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
 
     @Override
     public void onPoliceDepartmentUpdate(List<PoliceDepartment> policeDepartmentList) {
+
+    }
+
+    @Override
+    public void onRoadLowPointUpdate(List<RoadLawPoint> roadLawPoints) {
 
     }
 }

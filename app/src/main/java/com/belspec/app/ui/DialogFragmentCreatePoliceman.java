@@ -25,6 +25,7 @@ import com.belspec.app.retrofit.RetrofitService;
 import com.belspec.app.retrofit.model.PoliceDepartment;
 import com.belspec.app.retrofit.model.Position;
 import com.belspec.app.retrofit.model.Rank;
+import com.belspec.app.retrofit.model.RoadLawPoint;
 import com.belspec.app.retrofit.model.createPoliceman.request.CreatePolicemanRequestEnvelope;
 import com.belspec.app.retrofit.model.createPoliceman.response.CreatePolicemanResponseEnvelope;
 import com.belspec.app.utils.Encode;
@@ -170,5 +171,10 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Net
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, arrayList);
         spnPoliceDepartment.setAdapter(arrayAdapter);
+    }
+
+    @Override
+    public void onRoadLowPointUpdate(List<RoadLawPoint> roadLawPoints) {
+
     }
 }

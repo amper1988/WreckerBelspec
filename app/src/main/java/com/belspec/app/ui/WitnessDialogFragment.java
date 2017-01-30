@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.belspec.app.R;
+import com.belspec.app.adapters.ViewPagerAdapter;
 import com.belspec.app.views.DrawingView;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 public class WitnessDialogFragment extends DialogFragment {
     View mView;
@@ -34,6 +37,7 @@ public class WitnessDialogFragment extends DialogFragment {
     EditText edtAddress;
     EditText edtContact;
     CheckBox chbPlea;
+    CheckBox chbAddToAllDetections;
     DrawingView dvSignature;
     Button btnClear;
     Button btnOK;
@@ -67,6 +71,7 @@ public class WitnessDialogFragment extends DialogFragment {
                 }
             }
         });
+        chbAddToAllDetections = (CheckBox)mView.findViewById(R.id.chbAddToAllDetection);
         edtPlea = (EditText)mView.findViewById(R.id.edtPlea);
         edtLastName = (EditText) mView.findViewById(R.id.edtLastName);
         edtAddress = (EditText) mView.findViewById(R.id.edtAddress);
@@ -104,16 +109,26 @@ public class WitnessDialogFragment extends DialogFragment {
                     intent.putExtra("signature", byteArray);
                     getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
 
+                    if(chbAddToAllDetections.isChecked()){
+                        List<Fragment> fragments = getActivity().getSupportFragmentManager().getFragments();
+                        for(Fragment fragment: fragments){
+                            if(fragment.getClass() == FragmentDetection.class) {
+                                FragmentDetection fragmentDetection = (FragmentDetection) fragment;
+                                fragmentDetection.setWitness(intent);
+                            }
+                        }
+                    }
+
                     close();
                 }else{
                     if(edtLastName.getText().toString().equals("")){
                         tilLastName.setErrorEnabled(true);
                         tilLastName.setError("Input last name");
                     }
-                    if(edtContact.getText().toString().equals("")){
-                        tilContact.setErrorEnabled(true);
-                        tilContact.setError("Input contact");
-                    }
+//                    if(edtContact.getText().toString().equals("")){
+//                        tilContact.setErrorEnabled(true);
+//                        tilContact.setError("Input contact");
+//                    }
                     if(edtAddress.getText().toString().equals("")){
                         tilAddress.setErrorEnabled(true);
                         tilAddress.setError("Input address");
@@ -135,9 +150,9 @@ public class WitnessDialogFragment extends DialogFragment {
         if(edtLastName.getText().toString().equals("")){
             return false;
         }
-        if(edtContact.getText().toString().equals("")){
-            return false;
-        }
+//        if(edtContact.getText().toString().equals("")){
+//            return false;
+//        }
         if(edtAddress.getText().toString().equals("")){
             return false;
         }

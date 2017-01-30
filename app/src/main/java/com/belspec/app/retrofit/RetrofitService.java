@@ -16,6 +16,8 @@ import com.belspec.app.retrofit.model.getPositions.request.GetPositionsRequestEn
 import com.belspec.app.retrofit.model.getPositions.response.GetPositionsResponseEnvelope;
 import com.belspec.app.retrofit.model.getRanks.request.GetRanksRequestEnvelope;
 import com.belspec.app.retrofit.model.getRanks.response.GetRanksResponseEnvelope;
+import com.belspec.app.retrofit.model.getRoadLawPoint.request.GetRoadLawPointRequestEnvelope;
+import com.belspec.app.retrofit.model.getRoadLawPoint.response.GetRoadLawPointResponseEnvelope;
 import com.belspec.app.retrofit.model.test.request.TestRequestEnvelope;
 import com.belspec.app.retrofit.model.test.response.TestResponseEnvelope;
 
@@ -62,6 +64,9 @@ public interface RetrofitService {
 
     @POST("ws/getdata")
     Call<GetPoliceDepartmentResponseEnvelope> executeGetPoliceDepartment(@Header("Authorization") String auth, @Body GetPoliceDepartmentRequestEnvelope request);
+
+    @POST("ws/getdata")
+    Call<GetRoadLawPointResponseEnvelope> executeGetRoadLawPoints(@Header("Authorization") String auth, @Body GetRoadLawPointRequestEnvelope request);
 
     @Headers({
             "Content-Type: application/soap+xml",

@@ -3,7 +3,9 @@ package com.belspec.app.ui;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
@@ -14,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -48,6 +51,7 @@ import com.belspec.app.retrofit.RetrofitService;
 import com.belspec.app.retrofit.model.PoliceDepartment;
 import com.belspec.app.retrofit.model.Position;
 import com.belspec.app.retrofit.model.Rank;
+import com.belspec.app.retrofit.model.RoadLawPoint;
 import com.belspec.app.retrofit.model.createEvacuation.request.CreateEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.createEvacuation.response.CreateEvacuationResponseEnvelope;
 import com.belspec.app.utils.Converter;
@@ -62,6 +66,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Response;
@@ -75,6 +80,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     Spinner spnPoliceDepartment;
     Spinner spnPoliceman;
     Spinner spnParking;
+    Spinner spnRoadLawPoint;
     ScrollView svMain;
     Spinner spnClause;
     EditText edtCarID;
@@ -85,6 +91,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     RadioButton rbCarTypeLight;
     EditText edtCode;
     EditText edtRevisionResult;
+    EditText edtRoadLawPoint;
     TextView txvPoliceDepartment;
     TextView txvPoliceman;
     TextView txvOrganization;
@@ -101,8 +108,10 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     Button btnAddWitness1;
     Button btnAddWitness2;
     Button btnRefreshStreet;
+    Button btnClear;
     RecyclerView rvImageList;
     Button btnAddImage;
+    Button btnCancel;
     View mView;
     ImageListAdapter imageListAdapter;
     ImageView imvLoading;
@@ -125,13 +134,79 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     final int REQUEST_CODE_PHOTO = 1;
     final int REQUEST_CODE_WITNESS_SIGNATURE = 0;
     final int REQUEST_CODE_POLICEMAN_SIGNATURE = 2;
+    SharedPreferences sPref;
+    FragmentDetection main;
+    boolean regisrationInProcess;
+
+    public void setWitness(Intent intent){
+        String lastName = intent.getStringExtra("lastName");
+        String address = intent.getStringExtra("address");
+        String contact = intent.getStringExtra("contact");
+        int buttonID = intent.getIntExtra("buttonID", 0);
+        if (!(lastName.equals("") || address.equals("") || buttonID == 0)) {
+            switch (buttonID) {
+                case 1:
+                    if(txvWtns1LastName.getText().toString().equals(lastName)){
+                        break;
+                    }
+                    if(txvWtns1LastName.getText().toString().equals("") || txvWtns1Address.getText().toString().equals("")) {
+                        txvWtns1LastName.setText(lastName);
+                        txvWtns1Address.setText(address);
+                        txvWtns1Contact.setText(contact);
+                        plea1 = intent.getStringExtra("plea");
+                        byte[] byteArray = intent.getByteArrayExtra("signature");
+                        imvWtns1Signature.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                        break;
+                    }
+
+
+
+                case 2:
+                    if(txvWtns2LastName.getText().toString().equals(lastName)){
+                        break;
+                    }
+                    if(txvWtns2LastName.getText().toString().equals("") || txvWtns2Address.getText().toString().equals("")){
+                        txvWtns2LastName.setText(lastName);
+                        txvWtns2Address.setText(address);
+                        txvWtns2Contact.setText(contact);
+                        plea2 = intent.getStringExtra("plea");
+                        byte[] byteArray2 = intent.getByteArrayExtra("signature");
+                        imvWtns2Signature.setImageBitmap(BitmapFactory.decodeByteArray(byteArray2, 0, byteArray2.length));
+                    }else{
+                        if(txvWtns1LastName.getText().toString().equals(lastName)){
+                            break;
+                        }
+                        if(txvWtns1LastName.getText().toString().equals("") || txvWtns1Address.getText().toString().equals("")) {
+                            txvWtns1LastName.setText(lastName);
+                            txvWtns1Address.setText(address);
+                            txvWtns1Contact.setText(contact);
+                            plea1 = intent.getStringExtra("plea");
+                            byte[] byteArray = intent.getByteArrayExtra("signature");
+                            imvWtns1Signature.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
+                        }
+                    }
+
+                    break;
+            }
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.detection_fragment, container, false);
-        initViews(savedInstanceState);
+         if(mView == null) {
+            mView = inflater.inflate(R.layout.detection_fragment, container, false);
+            initViews(savedInstanceState);
+        }
+        main = this;
         return mView;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        networkDataManager.unregister(this);
+    }
+
 
     private void initViews(Bundle savedInstanceState) {
 
@@ -175,13 +250,18 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         spnWrecker = (Spinner) mView.findViewById(R.id.spnWrecker);
         txvPoliceDepartment = (TextView) mView.findViewById(R.id.txvPoliceDepartment);
         spnPoliceDepartment = (Spinner) mView.findViewById(R.id.spnPoliceDepartment);
+        spnRoadLawPoint = (Spinner) mView.findViewById(R.id.spnRoadLawPoint);
         txvPoliceman = (TextView) mView.findViewById(R.id.txvPoliceman);
         spnPoliceman = (Spinner) mView.findViewById(R.id.spnPoliceman);
         btnRegistrate = (Button) mView.findViewById(R.id.btnRegister);
+        btnClear = (Button)mView.findViewById(R.id.btnClear);
+        btnClear.setOnClickListener(this);
         btnAddWitness1 = (Button) mView.findViewById(R.id.btnAddWitness1);
         btnAddWitness1.setOnClickListener(this);
         btnAddWitness2 = (Button) mView.findViewById(R.id.btnAddWitness2);
         btnAddWitness2.setOnClickListener(this);
+        btnCancel = (Button)mView.findViewById(R.id.btnCancel);
+        btnCancel.setOnClickListener(this);
         btnRefreshStreet = (Button)mView.findViewById(R.id.btnRefreshStreet);
         btnRefreshStreet.setOnClickListener(this);
         txvWtns1LastName = (TextView) mView.findViewById(R.id.txvWtns1Name);
@@ -194,6 +274,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         imvWtns2Signature = (ImageView) mView.findViewById(R.id.imvWtns2Signature);
         edtCarID = (EditText) mView.findViewById(R.id.edtCarID);
         edtStreet = (EditText) mView.findViewById(R.id.edtStreet);
+        edtRoadLawPoint = (EditText)mView.findViewById(R.id.edtRoadLawPoint);
         rgCarType = (RadioGroup) mView.findViewById(R.id.rgType);
         edtRevisionResult = (EditText) mView.findViewById(R.id.edtResultInspection);
         rbCarTypeLight = (RadioButton) mView.findViewById(R.id.rbCarTypeLight);
@@ -201,6 +282,9 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         actvColor = (AutoCompleteTextView) mView.findViewById(R.id.actvColor);
         rvImageList = (RecyclerView) mView.findViewById(R.id.rvImageList);
         btnAddImage = (Button) mView.findViewById(R.id.btnAddImage);
+        btnAddImage.setFocusableInTouchMode(true);
+        btnAddImage.requestFocus();
+        btnAddImage.setFocusableInTouchMode(false);
         svMain = (ScrollView) mView.findViewById(R.id.svDetection);
         imvLoading = (ImageView) mView.findViewById(R.id.imvLoading);
         imvLoading.setBackgroundResource(R.drawable.pb_loading);
@@ -215,8 +299,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         tilStreet.setErrorEnabled(false);
         tilRevisionResult = (TextInputLayout) mView.findViewById(R.id.tilResultInspection);
         tilRevisionResult.setErrorEnabled(false);
-        setLoading(true);
-
+        regisrationInProcess = false;
         //set visible for special user's field
         switch (UserManager.getInstanse().getUserType()) {
             case 1:
@@ -232,10 +315,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 spnWrecker.setVisibility(View.GONE);
                 rgCarType.setVisibility(View.GONE);
                 break;
-
         }
         if (savedInstanceState == null) {
-            setLoading(true);
             imageListAdapter = new ImageListAdapter();
             actvModel.setText("");
             actvManufacture.setText("");
@@ -250,20 +331,17 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             txvWtns2LastName.setText("");
             txvWtns2Address.setText("");
             txvWtns2Contact.setText("");
+            edtRoadLawPoint.setText("");
             imvWtns1Signature.setImageDrawable(null);
             imvWtns2Signature.setImageDrawable(null);
             imvPolicemanSignature.setImageDrawable(null);
-            clausePos = 0;
-            organizationPos = 0;
-            wreckerPos = 0;
-            policemanPos = 0;
-            policeDepartmentPos = 0;
-            parkingPos = 0;
+            loadDefaultValue();
             chbWithoutEvacuation.setChecked(false);
             plea1 = "";
             plea2 = "";
         } else {
             edtStreet.setText(savedInstanceState.getString("adress"));
+            edtRoadLawPoint.setText(savedInstanceState.getString("roadLawPoint"));
             clausePos = savedInstanceState.getInt("clausePos");
             organizationPos = savedInstanceState.getInt("organizationPos");
             imageListAdapter = savedInstanceState.getParcelable("imageListAdapter");
@@ -278,8 +356,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         networkDataManager = NetworkDataManager.getInstance();
         networkDataManager.setListener(this);
         networkDataManager.getDefaultData();
-
-
+        networkDataManager.getRoadLawPointFromServer();
+        setLoading(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         llm.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvImageList.setLayoutManager(llm);
@@ -288,6 +366,44 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         btnRegistrate.setOnClickListener(this);
         chbWithoutEvacuation.setOnClickListener(this);
         showHideOrganizationWrecker();
+        spnRoadLawPoint.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(edtRoadLawPoint.getText().toString().equals("")){
+                    edtRoadLawPoint.setText(parent.getSelectedItem().toString());
+                }else{
+                    edtRoadLawPoint.setText(edtRoadLawPoint.getText().toString() + "; " + parent.getSelectedItem().toString());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+    }
+
+    private void loadDefaultValue(){
+        sPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        clausePos = sPref.getInt("clausePos", 0);
+        organizationPos = sPref.getInt("organizationPos", 0);
+        wreckerPos = sPref.getInt("wreckerPos", 0);
+        policemanPos = sPref.getInt("policemanPos", 0);
+        policeDepartmentPos = sPref.getInt("policeDepartmentPos", 0);
+        parkingPos = sPref.getInt("parkingPos", 0);
+    }
+
+    private void saveDefaultValue(){
+        sPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putInt("clausePos", clausePos);
+        ed.putInt("organizationPos", organizationPos);
+        ed.putInt("wreckerPos", wreckerPos);
+        ed.putInt("policemanPos", policemanPos);
+        ed.putInt("policeDepartmentPos", policeDepartmentPos);
+        ed.putInt("parkingPos", parkingPos);
+        ed.apply();
     }
 
     @Override
@@ -304,6 +420,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         outState.putString("plea2", plea2);
         outState.putBoolean("withouEvacuation", chbWithoutEvacuation.isChecked());
         outState.putInt("parkingPos", parkingPos);
+        outState.putString("roadLawPoint", edtRoadLawPoint.getText().toString());
     }
 
     @Override
@@ -313,126 +430,148 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
                 Utils.hideKeyboard(getActivity());
                 if (correctData()) {
-                    setLoading(true);
-                    RetrofitService createDataRetrofit = Api.createRetrofitService();
-                    MyCallback<CreateEvacuationResponseEnvelope> createDataCall = new MyCallback<>();
-                    createDataCall.addResponseListener(this);
+                    String message = "Статья: " + spnClause.getSelectedItem().toString() + "\n"
+                            + "Инспектор: " + spnPoliceman.getSelectedItem().toString() + "\n"
+                            + "Водитель эвакуатора: " + spnWrecker.getSelectedItem().toString() + "\n"
+                            + "Стоянка: " + spnParking.getSelectedItem().toString() + "\n"
+                            + "Адрес эвакуации: " + edtStreet.getText().toString() + "\n"+
+                            "Вы желаете отправить данные?";
+                    Utils.showYesNoDialog(getActivity(), message, new Utils.DialogYesNoListener() {
+                        @Override
+                        public void onNegativePress() {
 
-                    String photo1 = "";
-                    String photo2 = "";
-                    String photo3 = "";
-                    String photo4 = "";
+                        }
 
-                    int count = imageListAdapter.getItemCount();
-                    if (count == 4) {
-                        photo1 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(0));
-                        photo2 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(1));
-                        photo3 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(2));
-                        photo4 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(3));
-                    } else if (count == 3) {
-                        photo1 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(0));
-                        photo2 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(1));
-                        photo3 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(2));
-                    } else if (count == 2) {
-                        photo1 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(0));
-                        photo2 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(1));
-                    } else if (count == 1) {
-                        photo1 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(0));
-                    }
+                        @Override
+                        public void onPositivePress() {
+                            regisrationInProcess = true;
+                            setLoading(true);
+                            RetrofitService createDataRetrofit = Api.createRetrofitService();
+                            MyCallback<CreateEvacuationResponseEnvelope> createDataCall = new MyCallback<>();
+                            createDataCall.addResponseListener(main);
 
-                    String pre = Utils.random(4);
-                    String post = Utils.random(2);
-                    String code = Converter.encodeToBase64(pre + edtCode.getText().toString() + post);
+                            String photo1 = "";
+                            String photo2 = "";
+                            String photo3 = "";
+                            String photo4 = "";
 
-                    String witness1Signature = Converter.encodeImageViewToBase64String(imvWtns1Signature, Bitmap.CompressFormat.PNG);
-                    String witness2Signature = Converter.encodeImageViewToBase64String(imvWtns2Signature, Bitmap.CompressFormat.PNG);
-                    String policemanSinature = Converter.encodeImageViewToBase64String(imvPolicemanSignature, Bitmap.CompressFormat.PNG);
+                            int count = imageListAdapter.getItemCount();
+                            if (count == 4) {
+                                photo1 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(0));
+                                photo2 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(1));
+                                photo3 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(2));
+                                photo4 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(3));
+                            } else if (count == 3) {
+                                photo1 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(0));
+                                photo2 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(1));
+                                photo3 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(2));
+                            } else if (count == 2) {
+                                photo1 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(0));
+                                photo2 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(1));
+                            } else if (count == 1) {
+                                photo1 = Converter.encodeFileToBase64String(imageListAdapter.getFilePath(0));
+                            }
 
-                    switch (UserManager.getInstanse().getUserType()) {
-                        case 1:
-                            createDataRetrofit.executeCreateEvacuation(
-                                    Encode.getBasicAuthTemplate(
-                                            UserManager.getInstanse().getmLogin(),
-                                            UserManager.getInstanse().getmPassword()
-                                    ),
-                                    new CreateEvacuationRequestEnvelope(
-                                            actvManufacture.getText().toString(),
-                                            actvModel.getText().toString(),
-                                            edtCarID.getText().toString(),
-                                            actvColor.getText().toString(),
-                                            photo1, photo2, photo3, photo4,
-                                            edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
-                                            UserManager.getInstanse().getOrganization(), UserManager.getInstanse().getmFullName(),
-                                            spnWrecker.getSelectedItem().toString(),
-                                            spnOrganization.getSelectedItem().toString(),
-                                            ((rbCarTypeStrong.isChecked()) ? 1 : 2),
-                                            UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.DEVICE + " " + Build.SERIAL, code,
-                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
-                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
-                                            policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString()
-                                    )
-                            ).enqueue(createDataCall);
-                            break;
+                            String pre = Utils.random(4);
+                            String post = Utils.random(2);
+                            String code = Converter.encodeToBase64(pre + edtCode.getText().toString() + post);
 
-                        case 2:
-                            createDataRetrofit.executeCreateEvacuation(
-                                    Encode.getBasicAuthTemplate(
-                                            UserManager.getInstanse().getmLogin(),
-                                            UserManager.getInstanse().getmPassword()
-                                    ),
-                                    new CreateEvacuationRequestEnvelope(
-                                            actvManufacture.getText().toString(),
-                                            actvModel.getText().toString(),
-                                            edtCarID.getText().toString(),
-                                            actvColor.getText().toString(),
-                                            photo1, photo2, photo3, photo4,
-                                            edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
-                                            spnPoliceDepartment.getSelectedItem().toString(), spnPoliceman.getSelectedItem().toString(),
-                                            UserManager.getInstanse().getmLogin(),
-                                            UserManager.getInstanse().getOrganization(),
-                                            ((rbCarTypeStrong.isChecked()) ? 1 : 2),
-                                            UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.MODEL + " " + Build.SERIAL, code,
-                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
-                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
-                                            policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString()
-                                    )
-                            ).enqueue(createDataCall);
-                            break;
+                            String witness1Signature = Converter.encodeImageViewToBase64String(imvWtns1Signature, Bitmap.CompressFormat.PNG);
+                            String witness2Signature = Converter.encodeImageViewToBase64String(imvWtns2Signature, Bitmap.CompressFormat.PNG);
+                            String policemanSinature = Converter.encodeImageViewToBase64String(imvPolicemanSignature, Bitmap.CompressFormat.PNG);
 
-                        case 3:
-                            createDataRetrofit.executeCreateEvacuation(
-                                    Encode.getBasicAuthTemplate(
-                                            UserManager.getInstanse().getmLogin(),
-                                            UserManager.getInstanse().getmPassword()
-                                    ),
-                                    new CreateEvacuationRequestEnvelope(
-                                            actvManufacture.getText().toString(),
-                                            actvModel.getText().toString(),
-                                            edtCarID.getText().toString(),
-                                            actvColor.getText().toString(),
-                                            photo1, photo2, photo3, photo4,
-                                            edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
-                                            spnPoliceDepartment.getSelectedItem().toString(), spnPoliceman.getSelectedItem().toString(),
-                                            spnWrecker.getSelectedItem().toString(),
-                                            spnOrganization.getSelectedItem().toString(),
-                                            ((rbCarTypeStrong.isChecked()) ? 1 : 2),
-                                            UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " +  Build.DEVICE + " " + Build.SERIAL, code,
-                                            txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
-                                            txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
-                                            policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString()
-                                    )
-                            ).enqueue(createDataCall);
-                            break;
-                    }
+                            switch (UserManager.getInstanse().getUserType()) {
+                                case 1:
+                                    createDataRetrofit.executeCreateEvacuation(
+                                            Encode.getBasicAuthTemplate(
+                                                    UserManager.getInstanse().getmLogin(),
+                                                    UserManager.getInstanse().getmPassword()
+                                            ),
+                                            new CreateEvacuationRequestEnvelope(
+                                                    actvManufacture.getText().toString(),
+                                                    actvModel.getText().toString(),
+                                                    edtCarID.getText().toString(),
+                                                    actvColor.getText().toString(),
+                                                    photo1, photo2, photo3, photo4,
+                                                    edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
+                                                    UserManager.getInstanse().getOrganization(), UserManager.getInstanse().getmFullName(),
+                                                    spnWrecker.getSelectedItem().toString(),
+                                                    spnOrganization.getSelectedItem().toString(),
+                                                    ((rbCarTypeStrong.isChecked()) ? 1 : 2),
+                                                    UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.DEVICE + " " + Build.SERIAL, code,
+                                                    txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
+                                                    txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
+                                                    policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString(),
+                                                    edtRoadLawPoint.getText().toString()
+                                            )
+                                    ).enqueue(createDataCall);
+                                    break;
+
+                                case 2:
+                                    createDataRetrofit.executeCreateEvacuation(
+                                            Encode.getBasicAuthTemplate(
+                                                    UserManager.getInstanse().getmLogin(),
+                                                    UserManager.getInstanse().getmPassword()
+                                            ),
+                                            new CreateEvacuationRequestEnvelope(
+                                                    actvManufacture.getText().toString(),
+                                                    actvModel.getText().toString(),
+                                                    edtCarID.getText().toString(),
+                                                    actvColor.getText().toString(),
+                                                    photo1, photo2, photo3, photo4,
+                                                    edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
+                                                    spnPoliceDepartment.getSelectedItem().toString(), spnPoliceman.getSelectedItem().toString(),
+                                                    UserManager.getInstanse().getmFullName(),
+                                                    UserManager.getInstanse().getOrganization(),
+                                                    ((rbCarTypeStrong.isChecked()) ? 1 : 2),
+                                                    UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " + Build.MODEL + " " + Build.SERIAL, code,
+                                                    txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
+                                                    txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
+                                                    policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString(),
+                                                    edtRoadLawPoint.getText().toString()
+                                            )
+                                    ).enqueue(createDataCall);
+                                    break;
+
+                                case 3:
+                                    createDataRetrofit.executeCreateEvacuation(
+                                            Encode.getBasicAuthTemplate(
+                                                    UserManager.getInstanse().getmLogin(),
+                                                    UserManager.getInstanse().getmPassword()
+                                            ),
+                                            new CreateEvacuationRequestEnvelope(
+                                                    actvManufacture.getText().toString(),
+                                                    actvModel.getText().toString(),
+                                                    edtCarID.getText().toString(),
+                                                    actvColor.getText().toString(),
+                                                    photo1, photo2, photo3, photo4,
+                                                    edtStreet.getText().toString(), spnClause.getSelectedItem().toString(),
+                                                    spnPoliceDepartment.getSelectedItem().toString(), spnPoliceman.getSelectedItem().toString(),
+                                                    spnWrecker.getSelectedItem().toString(),
+                                                    spnOrganization.getSelectedItem().toString(),
+                                                    ((rbCarTypeStrong.isChecked()) ? 1 : 2),
+                                                    UserManager.getInstanse().getUserType(), Build.MANUFACTURER + " " +  Build.DEVICE + " " + Build.SERIAL, code,
+                                                    txvWtns1LastName.getText().toString(), txvWtns1Address.getText().toString(), txvWtns1Contact.getText().toString(), witness1Signature, plea1,
+                                                    txvWtns2LastName.getText().toString(), txvWtns2Address.getText().toString(), txvWtns2Contact.getText().toString(), witness2Signature, plea2,
+                                                    policemanSinature, edtRevisionResult.getText().toString(), chbWithoutEvacuation.isChecked(), spnParking.getSelectedItem().toString(),
+                                                    edtRoadLawPoint.getText().toString()
+                                            )
+                                    ).enqueue(createDataCall);
+                                    break;
+                            }
+                        }
+                    });
+
 
                 }
-
                 break;
             case (R.id.btnAddImage):
+                this.onClick(btnRefreshStreet);
                 Utils.hideKeyboard(getActivity());
                 btnAddImage.setFocusableInTouchMode(true);
                 btnAddImage.requestFocus();
                 btnAddImage.setFocusableInTouchMode(false);
+
                 if (imageListAdapter.getItemCount() < 4) {
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -504,21 +643,32 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             case (R.id.chbWithoutEvacuation):
                 showHideOrganizationWrecker();
                 break;
+            case(R.id.btnClear):
+                if(imageListAdapter != null)
+                    imageListAdapter.clear();
+                break;
+            case(R.id.btnCancel):
+                if(imageListAdapter !=null)
+                    imageListAdapter.clear();
+                initViews(null);
+                break;
         }
 
     }
 
     private void showHideOrganizationWrecker(){
-        if(chbWithoutEvacuation.isChecked()){
-            spnOrganization.setVisibility(View.GONE);
-            spnWrecker.setVisibility(View.GONE);
-            txvOrganization.setVisibility(View.GONE);
-            txvWrecker.setVisibility(View.GONE);
-        }else{
-            spnOrganization.setVisibility(View.VISIBLE);
-            spnWrecker.setVisibility(View.VISIBLE);
-            txvOrganization.setVisibility(View.VISIBLE);
-            txvWrecker.setVisibility(View.VISIBLE);
+        if(UserManager.getInstanse().getUserType() != 2){
+            if(chbWithoutEvacuation.isChecked()){
+                spnOrganization.setVisibility(View.GONE);
+                spnWrecker.setVisibility(View.GONE);
+                txvOrganization.setVisibility(View.GONE);
+                txvWrecker.setVisibility(View.GONE);
+            }else{
+                spnOrganization.setVisibility(View.VISIBLE);
+                spnWrecker.setVisibility(View.VISIBLE);
+                txvOrganization.setVisibility(View.VISIBLE);
+                txvWrecker.setVisibility(View.VISIBLE);
+            }
         }
 
     }
@@ -528,7 +678,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         if (requestCode == REQUEST_CODE_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 GPSTracker gps = new GPSTracker(getActivity());
-                Converter.compressImage(imageListAdapter.getCurrentPath(), Bitmap.CompressFormat.JPEG, 80, 1024);
+                Converter.compressImage(imageListAdapter.getCurrentPath(), Bitmap.CompressFormat.JPEG, 70, 1536);
                 if (gps.setGpsToFile(imageListAdapter.getCurrentPath())) {
                     BitmapFactory.Options opt = new BitmapFactory.Options();
                     opt.inSampleSize = 8;
@@ -546,21 +696,21 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             String address = intent.getStringExtra("address");
             String contact = intent.getStringExtra("contact");
             int buttonID = intent.getIntExtra("buttonID", 0);
-            if (!(lastName.equals("") || address.equals("") || contact.equals("") || buttonID == 0)) {
+            if (!(lastName.equals("") || address.equals("") || buttonID == 0)) {
                 switch (buttonID) {
                     case 1:
-                        txvWtns1LastName.setText(intent.getStringExtra("lastName"));
-                        txvWtns1Address.setText(intent.getStringExtra("address"));
-                        txvWtns1Contact.setText(intent.getStringExtra("contact"));
+                        txvWtns1LastName.setText(lastName);
+                        txvWtns1Address.setText(address);
+                        txvWtns1Contact.setText(contact);
                         plea1 = intent.getStringExtra("plea");
                         byte[] byteArray = intent.getByteArrayExtra("signature");
                         imvWtns1Signature.setImageBitmap(BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length));
                         break;
 
                     case 2:
-                        txvWtns2LastName.setText(intent.getStringExtra("lastName"));
-                        txvWtns2Address.setText(intent.getStringExtra("address"));
-                        txvWtns2Contact.setText(intent.getStringExtra("contact"));
+                        txvWtns2LastName.setText(lastName);
+                        txvWtns2Address.setText(address);
+                        txvWtns2Contact.setText(contact);
                         plea2 = intent.getStringExtra("plea");
                         byte[] byteArray2 = intent.getByteArrayExtra("signature");
                         imvWtns2Signature.setImageBitmap(BitmapFactory.decodeByteArray(byteArray2, 0, byteArray2.length));
@@ -578,6 +728,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
     @Override
     public void AuthorizationOK(Response response) {
+        regisrationInProcess = false;
         if (response.body().getClass() == CreateEvacuationResponseEnvelope.class) {
             CreateEvacuationResponseEnvelope responseEnvelope = (CreateEvacuationResponseEnvelope) response.body();
             if (responseEnvelope != null) {
@@ -604,7 +755,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                     } catch (IOException e) {
 
                     }
-
+                    setLoading(false);
+                    saveDefaultValue();
                     clear();
                 } else {
                     setLoading(false);
@@ -619,12 +771,14 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
     @Override
     public void AuthorizationBad(Response response) {
+        regisrationInProcess = false;
         Utils.showMessage(this.getActivity(), "Wrong authorization. Response code: " + response.code() + " " + response.message());
         setLoading(false);
     }
 
     @Override
     public void AuthorizationFail(Throwable t) {
+        regisrationInProcess = false;
         Utils.showMessage(this.getActivity(), "Network fail. " + t.getMessage());
         setLoading(false);
     }
@@ -636,18 +790,26 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         initViews(null);
     }
 
-    private void setLoading(Boolean bool) {
+    private void setLoading(boolean bool) {
         AnimationDrawable animation = (AnimationDrawable) imvLoading.getBackground();
-        if (bool) {
+        if(regisrationInProcess){
             imvLoading.setVisibility(View.VISIBLE);
             animation.start();
             svMain.setVisibility(View.GONE);
         } else {
-            imvLoading.setVisibility(View.GONE);
-            animation.stop();
-            svMain.setVisibility(View.VISIBLE);
+            if(bool){
+                imvLoading.setVisibility(View.VISIBLE);
+                animation.start();
+                svMain.setVisibility(View.GONE);
+            }else {
+                imvLoading.setVisibility(View.GONE);
+                animation.stop();
+                svMain.setVisibility(View.VISIBLE);
+            }
 
         }
+
+
     }
 
     private boolean correctData() {
@@ -735,6 +897,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             //configure spnClause
             ArrayAdapter<String> arrayAdapterClause = new ArrayAdapter<>(this.getActivity(), R.layout.spinner_item, netDataManager.getClauseListAsString());
             spnClause.setAdapter(arrayAdapterClause);
+            clausePos = (arrayAdapterClause.getCount() < clausePos + 1 ? 0: clausePos);
             spnClause.setSelection(clausePos);
             spnClause.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -745,13 +908,14 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-                    clausePos = 0;
+
                 }
             });
 
             //configure spnPoliceDepartment
             ArrayAdapter<String> arrayAdapterPoliceDepartment = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getPoliceDepartmentListAsStirng());
             spnPoliceDepartment.setAdapter(arrayAdapterPoliceDepartment);
+            policeDepartmentPos =  (arrayAdapterPoliceDepartment.getCount() < policeDepartmentPos + 1) ? 0: policeDepartmentPos;
             spnPoliceDepartment.setSelection(policeDepartmentPos);
             spnPoliceDepartment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -759,38 +923,28 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                     policeDepartmentPos = adapterView.getSelectedItemPosition();
                     ArrayAdapter<String> arrayAdapterPoliceman = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getPolicemanListAsStirng(policeDepartmentPos));
                     spnPoliceman.setAdapter(arrayAdapterPoliceman);
+                    policemanPos = (arrayAdapterPoliceman.getCount() < policeDepartmentPos + 1) ? 0: policemanPos;
+                    spnPoliceman.setSelection(policemanPos);
                     spnPoliceman.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                             policemanPos = adapterView.getSelectedItemPosition();
                             Utils.hideKeyboard(getActivity());
                         }
-
                         @Override
                         public void onNothingSelected(AdapterView<?> adapterView) {
-                            Utils.hideKeyboard(getActivity());
                         }
-
                     });
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-//                    policeDepartmentPos = 0;
-//                    ArrayAdapter<String> arrayAdapterPoliceman = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getPolicemanListAsStirng(policeDepartmentPos));
-//                    spnPoliceman.setAdapter(arrayAdapterPoliceman);
-//                    spnPoliceman.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                            policemanPos = adapterView.getSelectedItemPosition();
-//                            Utils.hideKeyboard(getActivity());
-//                        }
-//                    });
                 }
             });
 
             //configure spnPoliceman
-            spnPoliceman.setAdapter(new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getPolicemanListAsStirng(policeDepartmentPos)));
+            ArrayAdapter<String> arrayAdapterPoliceman = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getPolicemanListAsStirng(policeDepartmentPos));
+            spnPoliceman.setAdapter(arrayAdapterPoliceman);
+            policemanPos = (arrayAdapterPoliceman.getCount() < policemanPos + 1) ? 0: policemanPos;
             spnPoliceman.setSelection(policemanPos);
             spnPoliceman.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -806,6 +960,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             //configure spnParking
             ArrayAdapter<String> arrayAdapterParking = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getParkingListAsString());
             spnParking.setAdapter(arrayAdapterParking);
+            parkingPos = (arrayAdapterParking.getCount() < parkingPos + 1) ? 0: parkingPos;
             spnParking.setSelection(parkingPos);
             spnParking.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -821,6 +976,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             //configure spnOrganization
             ArrayAdapter<String> arrayAdapterOrganization = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getOrganizationListAsString());
             spnOrganization.setAdapter(arrayAdapterOrganization);
+            organizationPos = (arrayAdapterOrganization.getCount() < organizationPos + 1)? 0: organizationPos;
             spnOrganization.setSelection(organizationPos);
             spnOrganization.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -828,6 +984,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                     organizationPos = adapterView.getSelectedItemPosition();
                     ArrayAdapter<String> arrayAdapterWrecker = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getWreckerListAsStirng(organizationPos));
                     spnWrecker.setAdapter(arrayAdapterWrecker);
+                    wreckerPos = (arrayAdapterWrecker.getCount() < wreckerPos + 1) ? 0: wreckerPos;
+                    spnWrecker.setSelection(wreckerPos);
                     spnWrecker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -845,21 +1003,13 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-//                    organizationPos = 0;
-//                    ArrayAdapter<String> arrayAdapterWrecker = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getWreckerListAsStirng(organizationPos));
-//                    spnWrecker.setAdapter(arrayAdapterWrecker);
-//                    spnWrecker.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                            wreckerPos = adapterView.getSelectedItemPosition();
-//                            Utils.hideKeyboard(getActivity());
-//                        }
-//                    });
                 }
             });
 
             //configure spnWrecker
-            spnWrecker.setAdapter(new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getWreckerListAsStirng(organizationPos)));
+            ArrayAdapter<String> arrayAdapterWrecker = new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item, netDataManager.getWreckerListAsStirng(organizationPos));
+            spnWrecker.setAdapter(arrayAdapterWrecker);
+            wreckerPos = (arrayAdapterWrecker.getCount() < wreckerPos + 1) ? 0 : wreckerPos;
             spnWrecker.setSelection(wreckerPos);
             spnWrecker.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -879,7 +1029,6 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             actvColor.setAdapter(arrayAdapterColor);
             setLoading(false);
         } else {
-            networkDataManager.getDefaultData();
             setLoading(false);
         }
     }
@@ -897,5 +1046,15 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     @Override
     public void onPoliceDepartmentUpdate(List<PoliceDepartment> policeDepartmentList) {
 
+    }
+
+    @Override
+    public void onRoadLowPointUpdate(List<RoadLawPoint> roadLawPoints) {
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("");
+        for(RoadLawPoint item : roadLawPoints){
+            arrayList.add(item.getName());
+        }
+        spnRoadLawPoint.setAdapter(new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item,  arrayList));
     }
 }
