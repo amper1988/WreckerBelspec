@@ -128,8 +128,9 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
 
     private void close(){
         UserManager.getInstanse().logout();
+
+//        onDestroy();
         super.onBackPressed();
-        onDestroy();
     }
 
     @Override

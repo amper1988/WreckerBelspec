@@ -62,12 +62,15 @@ public class Converter {
     }
 
     public static String encodeBitmapToBase64String(Bitmap bm, Bitmap.CompressFormat compressFormat){
-        Bitmap immagex=bm;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        immagex.compress(compressFormat, 100, baos);
-        byte[] b = baos.toByteArray();
-        String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
-        return imageEncoded;
+        if (bm!= null){
+            Bitmap immagex=bm;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            immagex.compress(compressFormat, 100, baos);
+            byte[] b = baos.toByteArray();
+            String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
+            return imageEncoded;
+        }
+        return "";
     }
 
     public static String encodeToBase64(String sourse){
@@ -80,6 +83,9 @@ public class Converter {
             Bitmap bm = BitmapFactory.decodeByteArray(base64, 0, base64.length);
 
             return bm;
+        }
+        if(base64String == ""){
+            return null;
         }
         AssetManager assetManager = context.getAssets();
         InputStream istr = null;
