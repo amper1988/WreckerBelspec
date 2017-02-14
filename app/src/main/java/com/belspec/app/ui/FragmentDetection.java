@@ -1088,7 +1088,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                     policeDepartmentPos = adapterView.getSelectedItemPosition();
                     ArrayAdapter<String> arrayAdapterPoliceman = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, netDataManager.getPolicemanListAsStirng(policeDepartmentPos));
                     spnPoliceman.setAdapter(arrayAdapterPoliceman);
-                    policemanPos = (arrayAdapterPoliceman.getCount() < policeDepartmentPos + 1) ? 0: policemanPos;
+                    policemanPos = (arrayAdapterPoliceman.getCount() < policemanPos + 1) ? 0: policemanPos;
                     spnPoliceman.setSelection(policemanPos);
                     spnPoliceman.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override

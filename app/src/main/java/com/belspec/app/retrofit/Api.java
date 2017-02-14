@@ -25,6 +25,7 @@ public class Api {
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
+
     public static  RetrofitService createRetrofitService() {
         LoggingInterceptor interceptor = new LoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
