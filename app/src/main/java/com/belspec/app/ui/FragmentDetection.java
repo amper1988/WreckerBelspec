@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,7 +74,7 @@ import java.util.List;
 
 import retrofit2.Response;
 
-public class FragmentDetection extends Fragment implements View.OnClickListener, ResponseListener, TextView.OnEditorActionListener, NetworkDataUpdate {
+public class FragmentDetection extends Fragment implements View.OnClickListener, ResponseListener, TextView.OnEditorActionListener, NetworkDataUpdate, GPSTracker.LocationDataChangeListener {
     AutoCompleteTextView actvManufacture;
     AutoCompleteTextView actvModel;
     AutoCompleteTextView actvColor;
@@ -137,6 +138,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     final int REQUEST_CODE_WITNESS_SIGNATURE = 0;
     final int REQUEST_CODE_POLICEMAN_SIGNATURE = 2;
     int fragmentId;
+    GPSTracker gpsTracker;
     SharedPreferences sPref;
     FragmentDetection main;
     boolean regisrationInProcess;
@@ -206,11 +208,30 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
          if(mView == null) {
-            mView = inflater.inflate(R.layout.detection_fragment, container, false);
+             gpsTracker = new GPSTracker(getActivity());
+             mView = inflater.inflate(R.layout.detection_fragment, container, false);
             initViews(savedInstanceState);
         }
         main = this;
+
         return mView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        gpsTracker.setDataChangeListener(this);
+        if(gpsTracker.canGetLocation())
+            gpsTracker.startUsingGPS();
+        else
+            gpsTracker.showSettingsAlert();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        gpsTracker.unsetDataChangeListener(this);
+        gpsTracker.stopUsingGPS();
     }
 
     @Override
@@ -422,7 +443,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             actvColor.setText(SavingManager.loadColor(activity, fragmentId));
             edtCarID.setText(SavingManager.loadCarId(activity, fragmentId));
             edtCode.setText("");
-            edtStreet.setText(Utils.getAdress(activity));
+            edtStreet.setText(Utils.getAdress(activity, gpsTracker.getLatitude(), gpsTracker.getLongitude()));
             edtRevisionResult.setText(SavingManager.loadRevisionResult(activity, fragmentId));
 
             Witness witness1 = SavingManager.loadWitness(activity, fragmentId, 1);
@@ -786,7 +807,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 btnRefreshStreet.setFocusableInTouchMode(true);
                 btnRefreshStreet.requestFocus();
                 btnRefreshStreet.setFocusableInTouchMode(false);
-                edtStreet.setText(Utils.getAdress(getActivity()));
+                edtStreet.setText(Utils.getAdress(getActivity(), gpsTracker.getLatitude(), gpsTracker.getLongitude()));
                 break;
             case (R.id.chbWithoutEvacuation):
                 showHideOrganizationWrecker();
@@ -831,7 +852,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == REQUEST_CODE_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
-                GPSTracker gps = new GPSTracker(getActivity());
+                GPSTracker gps = new GPSTracker(getContext());
                 Converter.compressImage(imageListAdapter.getCurrentPath(), Bitmap.CompressFormat.JPEG, 70, 1536);
                 if (gps.setGpsToFile(imageListAdapter.getCurrentPath())) {
                     BitmapFactory.Options opt = new BitmapFactory.Options();
@@ -1221,5 +1242,10 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             arrayList.add(item.getName());
         }
         spnRoadLawPoint.setAdapter(new ArrayAdapter<String>(this.getActivity(), R.layout.spinner_item,  arrayList));
+    }
+
+    @Override
+    public void onLocationDataChange(String locationAction, Location location) {
+
     }
 }

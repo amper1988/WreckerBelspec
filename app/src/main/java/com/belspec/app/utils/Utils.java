@@ -63,17 +63,15 @@ public class Utils {
         }).create().show();
     }
 
-    public static String getAdress(Context context){
+    public static String getAdress(Context context, double latitude, double longitude){
         try {
             Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-            GPSTracker gpsTracker = new GPSTracker(context);
-            Location location = gpsTracker.getLocation();
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() != 0) {
                 Address returnedAddress = addresses.get(0);
                 StringBuilder strReturnedAddress = new StringBuilder("");
 
-                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
                     strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
                 }
                 return strReturnedAddress.toString();

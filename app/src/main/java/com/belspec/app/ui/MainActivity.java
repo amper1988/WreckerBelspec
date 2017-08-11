@@ -1,7 +1,9 @@
 package com.belspec.app.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.location.Location;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.belspec.app.R;
+import com.belspec.app.gps.GPSTracker;
 import com.belspec.app.interfaces.MyCallback;
 import com.belspec.app.interfaces.NetworkDataUpdate;
 import com.belspec.app.interfaces.ResponseListener;
@@ -30,7 +33,7 @@ import com.belspec.app.utils.Utils;
 
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener, TextView.OnEditorActionListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener, TextView.OnEditorActionListener, GPSTracker.LocationDataChangeListener {
 
     Button btnLogin;
     EditText edtName;
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView txvStatus;
     ImageView imvLoading;
     RelativeLayout rllContent;
+    GPSTracker gpsTracker;
+
 
 
     @Override
@@ -51,7 +56,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        initComponents();
+        gpsTracker = new GPSTracker(this);
+        if(gpsTracker.canGetLocation())
+            gpsTracker.startUsingGPS();
+        gpsTracker.setDataChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        gpsTracker.stopUsingGPS();
+        gpsTracker.unsetDataChangeListener(this);
     }
 
     private void initComponents() {
@@ -144,5 +159,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onLocationDataChange(String locationAction, Location location) {
+        if(locationAction.equals(GPSTracker.PROVIDER_DISABLED)){
+            if(!gpsTracker.canGetLocation())
+                gpsTracker.showSettingsAlert();
+        }
+
     }
 }
