@@ -186,7 +186,7 @@ public class GPSTracker extends Service implements LocationListener {
         if (canGetLocation()) {
             double latitude = getLatitude();
             double longitude = getLongitude();
-            ExifInterface exif = null;
+            ExifInterface exif;
             try {
                 exif = new ExifInterface(path);
                 exif.setAttribute(ExifInterface.TAG_GPS_LATITUDE, Gps.convert(latitude));

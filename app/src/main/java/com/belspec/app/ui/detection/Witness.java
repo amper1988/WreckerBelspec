@@ -1,4 +1,4 @@
-package com.belspec.app.model;
+package com.belspec.app.ui.detection;
 
 import android.graphics.Bitmap;
 

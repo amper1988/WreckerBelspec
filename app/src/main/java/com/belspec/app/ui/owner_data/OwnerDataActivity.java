@@ -1,4 +1,4 @@
-package com.belspec.app.ui;
+package com.belspec.app.ui.owner_data;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;

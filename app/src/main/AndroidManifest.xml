@@ -16,7 +16,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
-        <activity android:name="com.belspec.app.ui.MainActivity"
+        <activity android:name="com.belspec.app.ui.main.MainActivity"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -26,11 +26,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.belspec.app.ui.ControlActivity"
+            android:name="com.belspec.app.ui.control.ControlActivity"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.belspec.app.ui.OwnerDataActivity"
+            android:name="com.belspec.app.ui.owner_data.OwnerDataActivity"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait"/>
     </application>

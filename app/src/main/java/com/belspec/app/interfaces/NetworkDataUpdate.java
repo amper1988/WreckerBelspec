@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface NetworkDataUpdate {
     void onDefaultDataUpdate(NetworkDataManager netDataManager);
-    void onRanksUpdate(List<Rank> rankList);
-    void onPositionsUpdate(List<Position> positionList);
-    void onPoliceDepartmentUpdate(List<PoliceDepartment> policeDepartmentList);
-    void onRoadLowPointUpdate(List<RoadLawPoint> roadLawPoints);
+    void onRanksUpdate(NetworkDataManager netDataManager);
+    void onPositionsUpdate(NetworkDataManager netDataManager);
+    void onPoliceDepartmentUpdate(NetworkDataManager netDataManager);
+    void onRoadLowPointUpdate(NetworkDataManager netDataManager);
 }

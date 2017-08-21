@@ -1,9 +1,8 @@
-package com.belspec.app.ui;
+package com.belspec.app.ui.extradition_fragment;
 
 
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
@@ -13,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -33,19 +31,14 @@ import com.belspec.app.interfaces.RecyclerItemClickListener;
 import com.belspec.app.interfaces.ResponseListener;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
-import com.belspec.app.retrofit.model.PoliceDepartment;
-import com.belspec.app.retrofit.model.Position;
-import com.belspec.app.retrofit.model.Rank;
-import com.belspec.app.retrofit.model.RoadLawPoint;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.request.GetCarOnEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.EvacuationData;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.GetCarOnEvacuationResponseEnvelope;
+import com.belspec.app.ui.owner_data.OwnerDataActivity;
 import com.belspec.app.utils.Encode;
 import com.belspec.app.utils.NetworkDataManager;
 import com.belspec.app.utils.UserManager;
 import com.belspec.app.utils.Utils;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -272,6 +265,26 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
     }
 
     @Override
+    public void onRanksUpdate(NetworkDataManager netDataManager) {
+
+    }
+
+    @Override
+    public void onPositionsUpdate(NetworkDataManager netDataManager) {
+
+    }
+
+    @Override
+    public void onPoliceDepartmentUpdate(NetworkDataManager netDataManager) {
+
+    }
+
+    @Override
+    public void onRoadLowPointUpdate(NetworkDataManager netDataManager) {
+
+    }
+
+    @Override
     public void AuthorizationOK(Response response) {
         try{
             GetCarOnEvacuationResponseEnvelope responseEnvelope = (GetCarOnEvacuationResponseEnvelope) response.body();
@@ -354,24 +367,24 @@ public class ExtraditionFragment extends Fragment implements NetworkDataUpdate, 
         }
 
     }
-
-    @Override
-    public void onRanksUpdate(List<Rank> rankList) {
-
-    }
-
-    @Override
-    public void onPositionsUpdate(List<Position> positionList) {
-
-    }
-
-    @Override
-    public void onPoliceDepartmentUpdate(List<PoliceDepartment> policeDepartmentList) {
-
-    }
-
-    @Override
-    public void onRoadLowPointUpdate(List<RoadLawPoint> roadLawPoints) {
-
-    }
+//
+//    @Override
+//    public void onRanksUpdate(List<Rank> rankList) {
+//
+//    }
+//
+//    @Override
+//    public void onPositionsUpdate(List<Position> positionList) {
+//
+//    }
+//
+//    @Override
+//    public void onPoliceDepartmentUpdate(List<PoliceDepartment> policeDepartmentList) {
+//
+//    }
+//
+//    @Override
+//    public void onRoadLowPointUpdate(List<RoadLawPoint> roadLawPoints) {
+//
+//    }
 }

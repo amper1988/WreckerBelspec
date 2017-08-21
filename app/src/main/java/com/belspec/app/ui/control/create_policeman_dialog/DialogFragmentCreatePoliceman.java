@@ -1,4 +1,4 @@
-package com.belspec.app.ui;
+package com.belspec.app.ui.control.create_policeman_dialog;
 
 
 import android.app.Dialog;
@@ -144,9 +144,9 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Net
     }
 
     @Override
-    public void onRanksUpdate(List<Rank> rankList) {
+    public void onRanksUpdate(NetworkDataManager networkDataManager) {
         ArrayList<String> arrayList = new ArrayList<String>();
-        for(Rank rank: rankList){
+        for(Rank rank: networkDataManager.getRankList()){
             arrayList.add(rank.getName());
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, arrayList);
@@ -154,9 +154,9 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Net
     }
 
     @Override
-    public void onPositionsUpdate(List<Position> positionList) {
+    public void onPositionsUpdate(NetworkDataManager networkDataManager) {
         ArrayList<String> arrayList = new ArrayList<String>();
-        for(Position position: positionList){
+        for(Position position: networkDataManager.getPositionList()){
             arrayList.add(position.getName());
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, arrayList);
@@ -164,9 +164,9 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Net
     }
 
     @Override
-    public void onPoliceDepartmentUpdate(List<PoliceDepartment> policeDepartmentList) {
+    public void onPoliceDepartmentUpdate(NetworkDataManager networkDataManager) {
         ArrayList<String> arrayList = new ArrayList<String>();
-        for(PoliceDepartment policeDepartment: policeDepartmentList){
+        for(PoliceDepartment policeDepartment: networkDataManager.getPoliceDepartmentList()){
             arrayList.add(policeDepartment.getName());
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), R.layout.spinner_item, arrayList);
@@ -174,7 +174,7 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Net
     }
 
     @Override
-    public void onRoadLowPointUpdate(List<RoadLawPoint> roadLawPoints) {
+    public void onRoadLowPointUpdate(NetworkDataManager networkDataManager) {
 
     }
 }

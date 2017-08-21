@@ -1,6 +1,8 @@
 package com.belspec.app.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 
 import java.io.File;
@@ -27,12 +29,18 @@ public class FileManager {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String pdfFileName = "PDF_" + timeStamp + "_";
-        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
         File pdfFile = File.createTempFile(
                 pdfFileName,  /* prefix */
                 ".pdf",         /* suffix */
                 storageDir      /* directory */
         );
         return pdfFile;
+    }
+
+    public static Bitmap loadBitmapFromPath(String path){
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inSampleSize = 8;
+        return BitmapFactory.decodeFile(path, opt);
     }
 }

@@ -150,9 +150,11 @@ public class DrawingView extends View {
     }
 
     public void setBitmap(Bitmap bm) {
-        mBitmap = bm.copy(Bitmap.Config.ARGB_8888, true);
-        mCanvas = new Canvas(mBitmap);
-        invalidate();
-        init();
+        if (bm != null) {
+            mBitmap = bm.copy(Bitmap.Config.ARGB_8888, true);
+            mCanvas = new Canvas(mBitmap);
+            invalidate();
+            init();
+        }
     }
 }

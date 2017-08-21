@@ -64,7 +64,7 @@ public class NetworkDataManager implements ResponseListener {
        super();
     }
 
-    public static NetworkDataManager getInstance(){
+    public static synchronized NetworkDataManager getInstance(){
         if(instance == null){
             instance = new NetworkDataManager();
 
@@ -254,6 +254,19 @@ public class NetworkDataManager implements ResponseListener {
 
     }
 
+    public List<String> getRoadLawPointListAsString(){
+        if(roadLawPoints!=null){
+            ArrayList<String> arrayList = new ArrayList<>();
+            for (RoadLawPoint item: roadLawPoints ){
+                arrayList.add(item.getName());
+            }
+            return arrayList;
+        }
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("");
+        return arrayList;
+    }
+
     public List<Parking> getParkingList(){
         return parkingList;
     }
@@ -397,7 +410,7 @@ public class NetworkDataManager implements ResponseListener {
             this.rankList = responseEnvelope.getBody().getRankList();
             if(listeners !=null){
                 for (NetworkDataUpdate listener:listeners) {
-                    listener.onRanksUpdate(this.rankList);
+                    listener.onRanksUpdate(this);
                 }
             }
         }
@@ -406,7 +419,7 @@ public class NetworkDataManager implements ResponseListener {
             this.positionList = responseEnvelope.getBody().getPositionList();
             if(listeners !=null){
                 for (NetworkDataUpdate listener:listeners) {
-                    listener.onPositionsUpdate(this.positionList);
+                    listener.onPositionsUpdate(this);
                 }
             }
         }
@@ -415,7 +428,7 @@ public class NetworkDataManager implements ResponseListener {
             this.policeDepartmentList = responseEnvelope.getBody().getPoliceDepartment();
             if(listeners !=null){
                 for (NetworkDataUpdate listener:listeners) {
-                    listener.onPoliceDepartmentUpdate(this.policeDepartmentList);
+                    listener.onPoliceDepartmentUpdate(this);
                 }
             }
 
@@ -425,7 +438,7 @@ public class NetworkDataManager implements ResponseListener {
             this.roadLawPoints = responseEnvelope.getBody().getRoadLawPointList();
             if(listeners != null){
                 for(NetworkDataUpdate listener : listeners){
-                    listener.onRoadLowPointUpdate(this.roadLawPoints);
+                    listener.onRoadLowPointUpdate(this);
                 }
             }
 
