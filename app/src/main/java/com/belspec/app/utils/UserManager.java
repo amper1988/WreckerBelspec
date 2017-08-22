@@ -1,7 +1,7 @@
 package com.belspec.app.utils;
 
 public class UserManager {
-    public static UserManager instanse;
+    private static UserManager instanse;
     private String mLogin;
     private String mPassword;
     private String mFullName;
@@ -24,7 +24,7 @@ public class UserManager {
         }
         return instanse;
 
-    };
+    }
 
     public void logout(){
         this.mRegistered = false;
@@ -37,14 +37,6 @@ public class UserManager {
 
     public String getmFullName() {
         return mFullName;
-    }
-
-    public void setmFullName(String mFullName) {
-        this.mFullName = mFullName;
-    }
-
-    public static void setInstanse(UserManager instanse) {
-        UserManager.instanse = instanse;
     }
 
     public int getUserType() {
@@ -70,14 +62,9 @@ public class UserManager {
         this.mFullName = fullName;
         this.mUserType = userType;
         this.organization = organization;
-
-
-
-
     }
 
     public String getmLogin() {
-
         return mLogin;
     }
 
@@ -97,7 +84,4 @@ public class UserManager {
         return mRegistered;
     }
 
-    public void setmRegistered(boolean mRegistered) {
-        this.mRegistered = mRegistered;
-    }
 }

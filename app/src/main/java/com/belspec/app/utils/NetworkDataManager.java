@@ -48,6 +48,7 @@ public class NetworkDataManager implements ResponseListener {
     private List<Rank> rankList = new ArrayList<>();
     private List<Position> positionList = new ArrayList<>();
     private List<RoadLawPoint> roadLawPoints = new ArrayList<>();
+    private List<PoliceDepartment> policeDepartmentOnlyList = new ArrayList<>();
 
     public void setListener(NetworkDataUpdate ndu){
         if(!listeners.contains(ndu)){
@@ -111,7 +112,7 @@ public class NetworkDataManager implements ResponseListener {
         ).enqueue(call);
     }
 
-    public void getPoliceDepartmetFromServer(){
+    public void getPoliceDepartmentFromServer(){
         RetrofitService retrofitService = Api.createRetrofitService();
         MyCallback<GetPoliceDepartmentResponseEnvelope> call = new MyCallback<>();
         call.addResponseListener(this);
@@ -208,7 +209,24 @@ public class NetworkDataManager implements ResponseListener {
         return policeDepartmentList;
     }
 
-    public List<String> getPoliceDepartmentListAsStirng(){
+    public List<PoliceDepartment> getPoliceDepartmentOnlyList(){
+        return policeDepartmentOnlyList;
+    }
+
+    public List<String> getPoliceDepartmentOnlyListAsString(){
+        if(policeDepartmentOnlyList!=null){
+            ArrayList<String> arrayList = new ArrayList<>();
+            for(PoliceDepartment polDep: policeDepartmentOnlyList){
+                arrayList.add(polDep.getName());
+            }
+            return arrayList;
+        }
+        ArrayList<String> arrayList = new ArrayList<>();
+        arrayList.add("");
+        return arrayList;
+    }
+
+    public List<String> getPoliceDepartmentListAsString(){
         if(policeDepartmentList!=null){
             ArrayList<String> arrayList = new ArrayList<>();
             for(PoliceDepartment polDep: policeDepartmentList){
@@ -219,10 +237,9 @@ public class NetworkDataManager implements ResponseListener {
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add("");
         return arrayList;
-
     }
 
-    public List<String> getPolicemanListAsStirng(int pos){
+    public List<String> getPolicemanListAsString(int pos){
         if(policeDepartmentList!=null){
             PolicemanItem policemanItem = policeDepartmentList.get(pos).getPolicemanItemList();
             if(policemanItem!=null){
@@ -244,7 +261,7 @@ public class NetworkDataManager implements ResponseListener {
         if(policeDepartmentList!=null){
             for(PoliceDepartment policeDepartment: policeDepartmentList){
                 if(policeDepartment.getName().equals(polDep)){
-                    return getPolicemanListAsStirng(policeDepartmentList.indexOf(policeDepartment));
+                    return getPolicemanListAsString(policeDepartmentList.indexOf(policeDepartment));
                 }
             }
         }
@@ -399,64 +416,77 @@ public class NetworkDataManager implements ResponseListener {
             this.clauseList = responseEnvelope.getBody().getClauseList();
             this.organizationList = responseEnvelope.getBody().getOrganizationList();
             this.colorList = responseEnvelope.getBody().getColorList();
-            if (listeners != null) {
-                for (NetworkDataUpdate listener:listeners) {
-                    listener.onDefaultDataUpdate(this);
-                }
-            }
+            notifyDefaultDataUpdate();
         }
         if(response.body().getClass() == GetRanksResponseEnvelope.class){
             GetRanksResponseEnvelope responseEnvelope = (GetRanksResponseEnvelope) response.body();
             this.rankList = responseEnvelope.getBody().getRankList();
-            if(listeners !=null){
-                for (NetworkDataUpdate listener:listeners) {
-                    listener.onRanksUpdate(this);
-                }
-            }
+            notifyRanksUpdate();
         }
         if(response.body().getClass() == GetPositionsResponseEnvelope.class){
             GetPositionsResponseEnvelope responseEnvelope = (GetPositionsResponseEnvelope) response.body();
             this.positionList = responseEnvelope.getBody().getPositionList();
-            if(listeners !=null){
-                for (NetworkDataUpdate listener:listeners) {
-                    listener.onPositionsUpdate(this);
-                }
-            }
+            notifyPositionUpdate();
         }
         if(response.body().getClass() == GetPoliceDepartmentResponseEnvelope.class){
             GetPoliceDepartmentResponseEnvelope responseEnvelope = (GetPoliceDepartmentResponseEnvelope) response.body();
-            this.policeDepartmentList = responseEnvelope.getBody().getPoliceDepartment();
-            if(listeners !=null){
-                for (NetworkDataUpdate listener:listeners) {
-                    listener.onPoliceDepartmentUpdate(this);
-                }
-            }
-
+            this.policeDepartmentOnlyList = responseEnvelope.getBody().getPoliceDepartment();
+            notifyPoliceDepartmentUpdate();
         }
         if(response.body().getClass() == GetRoadLawPointResponseEnvelope.class){
             GetRoadLawPointResponseEnvelope responseEnvelope = (GetRoadLawPointResponseEnvelope) response.body();
             this.roadLawPoints = responseEnvelope.getBody().getRoadLawPointList();
-            if(listeners != null){
-                for(NetworkDataUpdate listener : listeners){
-                    listener.onRoadLowPointUpdate(this);
-                }
-            }
-
+            notifyRoadLawPointUpdate();
         }
     }
 
     @Override
     public void AuthorizationBad(Response response) {
-    if(listeners !=null){
-
-    }
 
     }
 
     @Override
     public void AuthorizationFail(Throwable t) {
-        if(listeners !=null){
 
+    }
+
+    public void notifyDefaultDataUpdate(){
+        if(listeners != null){
+            for(NetworkDataUpdate listener : listeners){
+                listener.onDefaultDataUpdate(this);
+            }
+        }
+    }
+
+    public void notifyRanksUpdate(){
+        if(listeners != null){
+            for(NetworkDataUpdate listener : listeners){
+                listener.onRanksUpdate(this);
+            }
+        }
+    }
+
+    public void notifyPositionUpdate(){
+        if(listeners != null){
+            for(NetworkDataUpdate listener : listeners){
+                listener.onPositionsUpdate(this);
+            }
+        }
+    }
+
+    public void notifyPoliceDepartmentUpdate(){
+        if(listeners != null){
+            for(NetworkDataUpdate listener : listeners){
+                listener.onPoliceDepartmentUpdate(this);
+            }
+        }
+    }
+
+    public void notifyRoadLawPointUpdate(){
+        if(listeners != null){
+            for(NetworkDataUpdate listener : listeners){
+                listener.onRoadLowPointUpdate(this);
+            }
         }
     }
 }

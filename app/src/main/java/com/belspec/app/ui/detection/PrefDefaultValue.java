@@ -3,7 +3,6 @@ package com.belspec.app.ui.detection;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 import com.belspec.app.utils.Converter;
 
@@ -242,11 +241,11 @@ class PrefDefaultValue {
 
     }
 
-    static Bitmap loadBitmapFromPath(String path){
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inSampleSize = 8;
-        return BitmapFactory.decodeFile(path, opt);
-    }
+//    static Bitmap loadBitmapFromPath(String path){
+//        BitmapFactory.Options opt = new BitmapFactory.Options();
+//        opt.inSampleSize = 8;
+//        return BitmapFactory.decodeFile(path, opt);
+//    }
 
     static String loadManufacture(Context context, int docId){
         SharedPreferences sPref = getPrefName(context, docId);

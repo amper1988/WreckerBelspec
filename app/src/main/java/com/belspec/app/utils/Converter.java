@@ -63,12 +63,10 @@ public class Converter {
 
     public static String encodeBitmapToBase64String(Bitmap bm, Bitmap.CompressFormat compressFormat){
         if (bm!= null){
-            Bitmap immagex=bm;
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            immagex.compress(compressFormat, 100, baos);
+            bm.compress(compressFormat, 100, baos);
             byte[] b = baos.toByteArray();
-            String imageEncoded = Base64.encodeToString(b,Base64.DEFAULT);
-            return imageEncoded;
+            return Base64.encodeToString(b,Base64.DEFAULT);
         }
         return "";
     }

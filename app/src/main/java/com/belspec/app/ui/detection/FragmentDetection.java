@@ -301,7 +301,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 //save backup
                 presenter.savePolicemanBackup((String)adapterView.getSelectedItem());
                 //hide keyboard.
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
             }
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -322,7 +322,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 presenter.saveClauseBackup((String)adapterView.getSelectedItem());
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
             }
 
             @Override
@@ -346,7 +346,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 presenter.saveWreckerBackup((String)adapterView.getSelectedItem());
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
             }
 
             @Override
@@ -433,14 +433,14 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     public void onClick(View view) {
         switch (view.getId()) {
             case (R.id.btnRegister):
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
                 if (correctData()) {
                     confirmWrecker();
                 }
                 break;
             case (R.id.btnAddImage):
                 presenter.getStreet();
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
                 btnAddImage.setFocusableInTouchMode(true);
                 btnAddImage.requestFocus();
                 btnAddImage.setFocusableInTouchMode(false);
@@ -456,7 +456,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
 
             case (R.id.btnAddWitness1):
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
                 btnAddWitness1.setFocusableInTouchMode(true);
                 btnAddWitness1.requestFocus();
                 btnAddWitness1.setFocusableInTouchMode(false);
@@ -473,7 +473,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
 
             case (R.id.btnAddWitness2):
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
                 btnAddWitness2.setFocusableInTouchMode(true);
                 btnAddWitness2.requestFocus();
                 btnAddWitness2.setFocusableInTouchMode(false);
@@ -490,7 +490,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
 
             case (R.id.btnPolicemanSignature):
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
                 btnPolicemanSignature.setFocusableInTouchMode(true);
                 btnPolicemanSignature.requestFocus();
                 btnPolicemanSignature.setFocusableInTouchMode(false);
@@ -499,7 +499,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 presenter.getSignaturePol();
                 break;
             case (R.id.btnRefreshStreet):
-//                Utils.hideKeyboard(getActivity());
+                Utils.hideKeyboard(getActivity());
                 btnRefreshStreet.setFocusableInTouchMode(true);
                 btnRefreshStreet.requestFocus();
                 btnRefreshStreet.setFocusableInTouchMode(false);

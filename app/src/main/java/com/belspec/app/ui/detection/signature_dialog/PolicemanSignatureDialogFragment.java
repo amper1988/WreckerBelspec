@@ -26,7 +26,6 @@ public class PolicemanSignatureDialogFragment extends DialogFragment implements 
     @BindView(R.id.btnClear) Button btnClear;
     @BindView(R.id.btnOk) Button btnOk;
     @BindView(R.id.ibClose) ImageButton ibClose;
-    public final static String SIGNATURE = "SIGNATURE";
     SignatureDialogContract.Presenter presenter;
     View mView;
 
@@ -36,7 +35,7 @@ public class PolicemanSignatureDialogFragment extends DialogFragment implements 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         mView = inflater.inflate(R.layout.policeman_signature_fragment, null);
         ButterKnife.bind(this, mView);
-        presenter = new SignatureDialogPresenter(this);
+        presenter = new SignatureDialogPresenter();
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,12 +45,8 @@ public class PolicemanSignatureDialogFragment extends DialogFragment implements 
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 dvSignature.getmBitmap().compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-//                intent.putExtra(RESULT, byteArray);
-//                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
                 presenter.sendResult(dvSignature.getmBitmap());
                 dismiss();
             }

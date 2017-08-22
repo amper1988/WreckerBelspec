@@ -637,7 +637,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
         view.setLoading(false);
         view.setListManufacture(netDataManager.getManufactureListAsString());
         if (UserManager.getInstanse().getUserType() != 1)
-            view.setListPoliceDepartment(netDataManager.getPoliceDepartmentListAsStirng());
+            view.setListPoliceDepartment(netDataManager.getPoliceDepartmentListAsString());
         view.setListColor(netDataManager.getColorListAsString());
         view.setListParkings(netDataManager.getParkingListAsString());
         if (UserManager.getInstanse().getUserType() != 2)

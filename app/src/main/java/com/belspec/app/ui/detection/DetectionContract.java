@@ -1,18 +1,16 @@
 package com.belspec.app.ui.detection;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.belspec.app.adapters.ImageListAdapter;
 
 import java.util.List;
 
-public abstract class DetectionContract {
+abstract class DetectionContract {
     static final int REQUEST_CODE_PHOTO = 1;
 
     interface View{
@@ -94,7 +92,7 @@ public abstract class DetectionContract {
         void getWitness(int index);
         Bitmap getBitmap(ImageView imageView);
         void clearImages();
-        boolean imageIsEmpty(ImageView imageView);;
+        boolean imageIsEmpty(ImageView imageView);
         Uri getPhotoUri();
         void onAddPhoto();
         void onPhotoCancel();

@@ -3,7 +3,7 @@ package com.belspec.app.ui.main;
 import android.content.Context;
 
 
-public interface MainContract {
+interface MainContract {
     interface View {
         void showMessage(String message);
         void setLoading(boolean loading);

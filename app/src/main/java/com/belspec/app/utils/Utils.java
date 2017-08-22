@@ -5,16 +5,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
-
-import com.belspec.app.gps.GPSTracker;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
@@ -87,9 +83,8 @@ public class Utils {
     public static String random(int size) {
         Random generator = new Random();
         StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = size;
         char tempChar;
-        for (int i = 0; i < randomLength; i++){
+        for (int i = 0; i < size; i++){
             tempChar = (char) (generator.nextInt(96) + 32);
             randomStringBuilder.append(tempChar);
         }

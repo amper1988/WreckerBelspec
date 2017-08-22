@@ -21,7 +21,7 @@ public class  CarOnEvacuationAdapter extends RecyclerView.Adapter<CarOnEvacuatio
 
     public CarOnEvacuationAdapter(){
         super();
-        evacuationDataList = new ArrayList<EvacuationData>();
+        evacuationDataList = new ArrayList<>();
         carHolder = new ArrayList<>();
 
     }

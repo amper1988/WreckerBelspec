@@ -2,7 +2,6 @@ package com.belspec.app.ui.owner_data;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import com.belspec.app.interfaces.MyCallback;
 import com.belspec.app.interfaces.ResponseListener;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
-import com.belspec.app.retrofit.model.createEvacuation.response.CreateEvacuationResponseEnvelope;
 import com.belspec.app.retrofit.model.createExtradition.request.CreateExtraditionRequestEnvelope;
 import com.belspec.app.retrofit.model.createExtradition.response.CreateExtraditionResponseEnvelope;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.EvacuationData;
@@ -72,6 +70,8 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     Button btnCopy;
     Button btnRegister;
     EvacuationData evacuationData;
+
+    public static final String EVACUATION_DATA = "EVACUATION_DATA";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,7 +139,7 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initComponents(Bundle bundle){
-        evacuationData = getIntent().getParcelableExtra("evacuationData");
+        evacuationData = getIntent().getParcelableExtra(EVACUATION_DATA);
         txvModel.setText(evacuationData.getModel());
         txvManufacture.setText(evacuationData.getManufacture());
         txvCarId.setText(evacuationData.getCarId());
