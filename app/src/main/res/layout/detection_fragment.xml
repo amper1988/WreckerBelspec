@@ -22,7 +22,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnAddImage"
-                android:text="@string/addImage"
+                android:text="@string/photo"
+                android:drawableLeft="@drawable/ic_add_a_photo_white_24dp"
+                android:drawableStart="@drawable/ic_add_a_photo_white_24dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"/>
             <Button
@@ -31,6 +33,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/clear"
+                android:drawableStart="@drawable/ic_delete_sweep_white_24dp"
+                android:drawableLeft="@drawable/ic_delete_sweep_white_24dp"
                 android:layout_toEndOf="@id/btnAddImage"
                 android:layout_toRightOf="@id/btnAddImage"/>
             <android.support.v7.widget.RecyclerView
@@ -93,15 +97,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:weightSum="1">
                         <Button
                             style="@style/MyMaterialTheme.MyButton"
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
-                            android:layout_margin="8dp"
-                            android:padding="1dp"
+                            android:padding="2dp"
                             android:id="@+id/btnAddWitness1"
-                            android:text="@string/input_witness"/>
+                            android:drawableTop="@drawable/ic_person_add_white_18dp" />
                         <TextView
                             style="@style/MyMaterialTheme.MyEditText"
                             android:layout_width="match_parent"
@@ -138,10 +142,9 @@
                             style="@style/MyMaterialTheme.MyButton"
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
-                            android:layout_margin="8dp"
-                            android:padding="1dp"
+                            android:padding="2dp"
                             android:id="@+id/btnAddWitness2"
-                            android:text="@string/input_witness"/>
+                            android:drawableTop="@drawable/ic_person_add_white_18dp"/>
                         <TextView
                             style="@style/MyMaterialTheme.MyEditText"
                             android:layout_width="match_parent"
@@ -251,11 +254,12 @@
                     android:layout_weight="1">
                     <Button
                         style="@style/MyMaterialTheme.MyButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="20dp"
                         android:padding="0dp"
                         android:layout_marginBottom="1dp"
-                        android:text="@string/refresh_street"
+                        android:gravity="center"
+                        android:drawableTop="@drawable/ic_refresh_white_18dp"
                         android:id="@+id/btnRefreshStreet"/>
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -279,6 +283,9 @@
                     android:orientation="vertical"
                     android:layout_weight="1" >
                     <CheckBox
+                        style="@style/MyMaterialTheme.MyCheckBox"
+                        android:padding="8dp"
+                        android:layout_margin="1dp"
                         android:id="@+id/chbWithoutEvacuation"
                         android:textColor="@color/textColorPrimary"
                         android:layout_width="wrap_content"
@@ -383,6 +390,7 @@
             <Spinner
                 android:id="@+id/spnParking"
                 android:layout_below="@id/txvParkingTitle"
+                android:layout_margin="0dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -487,6 +495,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel"
+                android:drawableLeft="@drawable/ic_delete_white_24dp"
+                android:drawableStart="@drawable/ic_delete_white_24dp"
                 android:id="@+id/btnCancel"
                 android:layout_below="@id/tilCode"
                 android:layout_alignParentLeft="true"
@@ -497,9 +507,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
+                android:drawableLeft="@drawable/ic_send_white_24dp"
+                android:drawableStart="@drawable/ic_send_white_24dp"
                 android:id="@+id/btnRegister"
                 android:layout_below="@+id/tilCode"
-                android:layout_centerInParent="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginBottom="70dp"/>
          </RelativeLayout>
     </ScrollView>

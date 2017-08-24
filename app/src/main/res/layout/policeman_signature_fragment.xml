@@ -34,6 +34,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/btnOk"
         android:layout_below="@id/llSignature"
+        android:drawableLeft="@drawable/ic_send_white_24dp"
+        android:drawableStart="@drawable/ic_send_white_24dp"
         android:text="@string/register"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>

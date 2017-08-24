@@ -81,6 +81,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/find_detection"
+                    android:drawableLeft="@drawable/ic_send_white_24dp"
+                    android:drawableStart="@drawable/ic_send_white_24dp"
                     android:id="@+id/btnFindDetection"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -91,6 +93,9 @@
                         android:layout_height="20dp"
                         android:padding="1dp"
                         android:layout_margin="1dp"
+                        android:drawableLeft="@drawable/ic_arrow_drop_up_white_18dp"
+                        android:drawableStart="@drawable/ic_arrow_drop_up_white_18dp"
+
                         android:text="@string/hide"
                         android:id="@+id/btnHide"/>
                     <Button
@@ -99,6 +104,8 @@
                         android:layout_height="20dp"
                         android:padding="1dp"
                         android:layout_margin="1dp"
+                        android:drawableLeft="@drawable/ic_arrow_drop_down_white_18dp"
+                        android:drawableStart="@drawable/ic_arrow_drop_down_white_18dp"
                         android:text="@string/show"
                         android:id="@+id/btnShow"/>
 
