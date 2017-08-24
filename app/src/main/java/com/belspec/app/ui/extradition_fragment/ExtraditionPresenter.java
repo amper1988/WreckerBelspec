@@ -7,9 +7,13 @@ import com.belspec.app.retrofit.RetrofitService;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.request.GetCarOnEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.EvacuationData;
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.GetCarOnEvacuationResponseEnvelope;
+import com.belspec.app.ui.owner_data.OwnerDataSendEvent;
 import com.belspec.app.utils.Encode;
 import com.belspec.app.utils.NetworkDataManager;
 import com.belspec.app.utils.UserManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
@@ -95,9 +99,70 @@ class ExtraditionPresenter implements ExtraditionContract.Presenter, NetworkData
     }
 
     @Override
-    public EvacuationData getDataForOwnerActivity(int position) {
-        return carOnEvacuationAdapter.getEvacuationData(position);
+    public String getManufactureFromAdapter(int position) {
+        EvacuationData evacuationData = carOnEvacuationAdapter.getEvacuationData(position);
+        if(evacuationData != null){
+            return evacuationData.getManufacture();
+        }
+        return "";
     }
+
+    @Override
+    public String getModelFromAdapter(int position) {
+        EvacuationData evacuationData = carOnEvacuationAdapter.getEvacuationData(position);
+        if(evacuationData != null){
+            return evacuationData.getModel();
+        }
+        return "";
+    }
+
+    @Override
+    public String getCarIdFromAdapter(int position) {
+        EvacuationData evacuationData = carOnEvacuationAdapter.getEvacuationData(position);
+        if(evacuationData != null){
+            return evacuationData.getCarId();
+        }
+        return "";
+    }
+
+    @Override
+    public String getPhotoFromAdapter(int position) {
+        EvacuationData evacuationData = carOnEvacuationAdapter.getEvacuationData(position);
+        if(evacuationData != null){
+            return evacuationData.getPhoto1();
+        }
+        return "";
+    }
+
+    @Override
+    public int getDocIdFromAdapter(int position) {
+        EvacuationData evacuationData = carOnEvacuationAdapter.getEvacuationData(position);
+        if(evacuationData != null){
+            return evacuationData.getId();
+        }
+        return -1;
+    }
+
+    @Override
+    public void onOwnerDataStart() {
+        if(!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    void onEvent(OwnerDataSendEvent event){
+        EventBus.getDefault().unregister(this);
+        if(event.getDocId() != -1){
+            int docId = event.getDocId();
+            for (int i=0; i <= carOnEvacuationAdapter.getItemCount(); i++){
+                EvacuationData evacuationData = carOnEvacuationAdapter.getEvacuationData(i);
+                if(evacuationData.getId() == docId){
+                    carOnEvacuationAdapter.removeEvacuationData(evacuationData);
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onDefaultDataUpdate(NetworkDataManager netDataManager) {

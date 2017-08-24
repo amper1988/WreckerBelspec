@@ -109,7 +109,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     //use for start GPSTracker
     private void startGPSTracker() {
         if (gpsTracker == null) {
-            gpsTracker = new GPSTracker(context);
+            gpsTracker = GPSTracker.getInstance();
         }
         if (gpsTracker.canGetLocation())
             gpsTracker.startUsingGPS();
@@ -121,7 +121,6 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     //use for stop GPSTracker
     private void stopGPSTracker() {
         if (gpsTracker != null) {
-            gpsTracker.stopUsingGPS();
             gpsTracker.unsetDataChangeListener(this);
         }
     }
@@ -193,12 +192,14 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                     view.setWitnessPlea(witness.getPlea(), 1);
                     view.setWitnessSignature(witness.getSignature(), 1);
                 } else if (view.canSetWitness(2)) {
-                    saveWitnessBackup(2, witness);
-                    view.setWitnessAddress(witness.getAddress(), 2);
-                    view.setWitnessName(witness.getName(), 2);
-                    view.setWitnessContact(witness.getContact(), 2);
-                    view.setWitnessPlea(witness.getPlea(), 2);
-                    view.setWitnessSignature(witness.getSignature(), 2);
+                    if(!(view.getWitnessName(1).equals(witness.getName()) && view.getWitnessName(1).equals(witness.getAddress()))){
+                        saveWitnessBackup(2, witness);
+                        view.setWitnessAddress(witness.getAddress(), 2);
+                        view.setWitnessName(witness.getName(), 2);
+                        view.setWitnessContact(witness.getContact(), 2);
+                        view.setWitnessPlea(witness.getPlea(), 2);
+                        view.setWitnessSignature(witness.getSignature(), 2);
+                    }
                 }
             }
         }
@@ -500,6 +501,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
+                                        imageListAdapter.clear();
                                         PrefDefaultValue.clear(context, docId);
                                         view.setLoading(false);
                                         view.initialize();

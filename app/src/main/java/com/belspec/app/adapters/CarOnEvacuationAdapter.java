@@ -100,6 +100,15 @@ public class  CarOnEvacuationAdapter extends RecyclerView.Adapter<CarOnEvacuatio
         evacuationDataList.clear();
     }
 
+    public void removeEvacuationData(int position){
+        evacuationDataList.remove(position);
+        notifyDataSetChanged();
+    }
+
+    public void removeEvacuationData(EvacuationData data){
+        evacuationDataList.remove(data);
+        notifyDataSetChanged();
+    }
 
     public static class CarOnEvacuationViewHolder extends RecyclerView.ViewHolder{
         RecyclerView rvImages;

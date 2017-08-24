@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--  Active tab -->
+    <item android:state_selected="true">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/colorAccent" />
+                </shape>
+            </item>
+            <item android:top="3dp" android:bottom="3dp">
+                <shape>
+                    <solid android:color="@color/colorPrimaryDark" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <!--  Inactive tab -->
+    <item android:state_selected="false">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="@color/colorPrimaryDark" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <!--  Pressed tab -->
+    <item android:state_pressed="true" android:drawable="@android:color/transparent" />
+    <!--  Selected tab (using d-pad) -->
+    <item android:state_focused="true" android:state_selected="true"
+        android:state_pressed="false" android:drawable="@android:color/transparent" />
+</selector>
+

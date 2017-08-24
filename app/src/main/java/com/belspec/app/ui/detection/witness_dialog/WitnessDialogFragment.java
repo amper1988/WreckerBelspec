@@ -1,9 +1,13 @@
 package com.belspec.app.ui.detection.witness_dialog;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
@@ -15,6 +19,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TabHost;
+import android.widget.TabWidget;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.belspec.app.R;
@@ -55,8 +61,20 @@ public class WitnessDialogFragment extends DialogFragment implements WitnessDial
         mView = inflater.inflate(R.layout.witness_fragment, null);
         ButterKnife.bind(this, mView);
         tabHost.setup();
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("Данные понятого").setContent(R.id.witness_data));
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("Подпись понятого").setContent(R.id.signature));
+        View tabs_bg1 = inflater.inflate(R.layout.tabs_bg, null);
+        TextView tv1 = (TextView) tabs_bg1.findViewById(R.id.tabsText);
+        tv1.setText("Данные понятого");
+        TabHost.TabSpec tabSpec1 = tabHost.newTabSpec("tab1");
+        tabSpec1.setIndicator(tabs_bg1);
+        tabSpec1.setContent(R.id.witness_data);
+        tabHost.addTab(tabSpec1);
+        View tabs_bg2 = inflater.inflate(R.layout.tabs_bg, null);
+        TextView tv2 = (TextView) tabs_bg2.findViewById(R.id.tabsText);
+        TabHost.TabSpec tabSpec2 = tabHost.newTabSpec("tab2");
+        tv2.setText("Подпись понятого");
+        tabSpec2.setIndicator(tabs_bg2);
+        tabSpec2.setContent(R.id.signature);
+        tabHost.addTab(tabSpec2);
         Bundle args = getArguments();
         if(!args.isEmpty()){
             edtLastName.setText((String)args.get(NAME_TAG));

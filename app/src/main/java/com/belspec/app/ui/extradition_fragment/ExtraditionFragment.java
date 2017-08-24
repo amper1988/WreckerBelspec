@@ -78,8 +78,14 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
         rvListCarOnEvacuation.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                presenter.onOwnerDataStart();
                 Intent intent = new Intent(view.getContext(), OwnerDataActivity.class);
-                intent.putExtra(OwnerDataActivity.EVACUATION_DATA, presenter.getDataForOwnerActivity(position));
+
+                intent.putExtra(OwnerDataActivity.MANUFACTURE, presenter.getManufactureFromAdapter(position));
+                intent.putExtra(OwnerDataActivity.MODEL, presenter.getModelFromAdapter(position));
+                intent.putExtra(OwnerDataActivity.CAR_ID, presenter.getCarIdFromAdapter(position));
+                intent.putExtra(OwnerDataActivity.PHOTO, presenter.getPhotoFromAdapter(position));
+                intent.putExtra(OwnerDataActivity.DOC_ID, presenter.getDocIdFromAdapter(position));
                 view.getContext().startActivity(intent);
             }
         }));

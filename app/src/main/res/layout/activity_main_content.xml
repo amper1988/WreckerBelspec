@@ -71,9 +71,7 @@ xmlns:tools="http://schemas.android.com/tools"
             android:layout_gravity="center_horizontal"
             android:layout_below="@+id/tilPwd"
             android:layout_centerHorizontal="true"/>
-
     </RelativeLayout>
-
 
     <ImageView
         android:layout_width="wrap_content"
@@ -82,4 +80,5 @@ xmlns:tools="http://schemas.android.com/tools"
         android:contentDescription="@string/loading"
         android:layout_gravity="center"
         android:layout_centerInParent="true" />
+
 </RelativeLayout>

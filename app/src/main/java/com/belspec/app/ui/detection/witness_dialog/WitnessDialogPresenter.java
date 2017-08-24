@@ -2,8 +2,10 @@ package com.belspec.app.ui.detection.witness_dialog;
 
 
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.belspec.app.ui.detection.Witness;
+import com.belspec.app.utils.Utils;
 
 import org.greenrobot.eventbus.EventBus;
 

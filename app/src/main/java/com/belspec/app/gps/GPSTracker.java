@@ -1,12 +1,12 @@
 package com.belspec.app.gps;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -14,42 +14,47 @@ import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
+import com.belspec.app.utils.AppHolder;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GPSTracker extends Service implements LocationListener {
 
-    private final Context mContext;
+    private static GPSTracker instance;
     public static final String PROVIDER_DISABLED = "PROVIDER_DISABLED";
     public static final String PROVIDER_ENABLED = "PROVIDER_ENABLED";
     public static final String LOCATION_CHANGED = "LOCATION_CHANGED";
 
     // Flag for GPS status
     boolean isGPSEnabled = false;
-
     // Flag for network status
     boolean isNetworkEnabled = false;
-
     Location locationGPS; // LocationGPS
+    long gpsTime;
     Location locationNetwork; //LocationNetwork
+    long networkTime;
+    Location finalLocation;
     double latitude; // Latitude
     double longitude; // Longitude
-
     List<LocationDataChangeListener> locationDataChangeListenerList;
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60; // 1 minute
-
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 1; // 10 seconds
     // Declaring a Location Manager
     protected LocationManager locationManager;
 
-    public GPSTracker(Context context) {
-        this.mContext = context;
+    public static synchronized GPSTracker getInstance(){
+        if(instance == null)
+            instance = new GPSTracker();
+        return instance;
+    }
+
+    private GPSTracker() {
         locationDataChangeListenerList = new ArrayList<>();
-        locationManager = (LocationManager) mContext
+        locationManager = (LocationManager) AppHolder.getInstance().getContext()
                 .getSystemService(LOCATION_SERVICE);
     }
 
@@ -63,7 +68,7 @@ public class GPSTracker extends Service implements LocationListener {
             locationDataChangeListenerList.remove(listener);
     }
 
-    public void startUsingGPS() {
+    public boolean startUsingGPS() {
         try {
             if(canGetLocation()){
                 // If GPS enabled, get latitude/longitude using GPS Services
@@ -89,10 +94,12 @@ public class GPSTracker extends Service implements LocationListener {
                                 .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                     }
                 }
+                return true;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return false;
     }
 
 
@@ -100,23 +107,22 @@ public class GPSTracker extends Service implements LocationListener {
      * Stop using GPS listener
      * Calling this function will stop using GPS in your app.
      */
-    public void stopUsingGPS() {
+    private void stopUsingGPS() {
         if (locationManager != null) {
             locationManager.removeUpdates(GPSTracker.this);
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopUsingGPS();
+    }
 
     /**
      * Function to get latitude
      */
     public double getLatitude() {
-        //if locationGPS not allowed return locationNetwork
-        if(locationGPS != null)
-            latitude = locationGPS.getLatitude();
-        else if(locationNetwork != null)
-            latitude = locationNetwork.getLatitude();
-        // return latitude
         return latitude;
     }
 
@@ -125,11 +131,6 @@ public class GPSTracker extends Service implements LocationListener {
      * Function to get longitude
      */
     public double getLongitude() {
-        if(locationGPS != null){
-            longitude = locationGPS.getLongitude();
-        }else if(locationNetwork != null)
-            longitude = locationNetwork.getLongitude();
-        // return longitude
         return longitude;
     }
 
@@ -154,7 +155,7 @@ public class GPSTracker extends Service implements LocationListener {
      */
 
     public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(AppHolder.getInstance().getContext());
 
         // Setting Dialog Title
         alertDialog.setTitle("Настойте GPS");
@@ -166,17 +167,15 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.setPositiveButton("Настройки", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                mContext.startActivity(intent);
+                getApplicationContext().startActivity(intent);
             }
         });
-
         // On pressing the cancel button
         alertDialog.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-
         // Showing Alert Message
         alertDialog.show();
 
@@ -207,21 +206,29 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        if(location.getProvider().equals(LocationManager.GPS_PROVIDER))
+        if(location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
             locationGPS = location;
-        else if(location.getProvider().equals(LocationManager.NETWORK_PROVIDER))
+            gpsTime = location.getTime();
+        }
+        else if(location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) {
             locationNetwork = location;
+            networkTime = location.getTime();
+        }
         Location bestLocation = null;
-        if (locationGPS != null)
+        if (locationGPS != null && gpsTime > networkTime)
             bestLocation = locationGPS;
-        if(bestLocation == null){
+        if(bestLocation == null && networkTime > gpsTime && Math.abs(networkTime - gpsTime) > 20000){
             if(locationNetwork!= null)
                 bestLocation = locationNetwork;
+        }
+        if(bestLocation != null){
+            latitude = bestLocation.getLatitude();
+            longitude = bestLocation.getLongitude();
         }
         for(LocationDataChangeListener item: locationDataChangeListenerList){
             item.onLocationDataChange(LOCATION_CHANGED, bestLocation);
         }
-
+        Log.d("OnLocCh", location.getProvider() + " " + location.getLatitude() + " " + location.getLongitude());
     }
 
 
@@ -251,6 +258,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+
     }
 
 

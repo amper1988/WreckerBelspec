@@ -34,6 +34,11 @@ interface ExtraditionContract {
         int getUserType();
         void getPolicemans(String policeDepartment);
         void getWreckers(String organization);
-        EvacuationData getDataForOwnerActivity(int position);
+        String getManufactureFromAdapter(int position);
+        String getModelFromAdapter(int position);
+        String getCarIdFromAdapter(int position);
+        String getPhotoFromAdapter(int position);
+        int getDocIdFromAdapter(int position);
+        void onOwnerDataStart();
     }
 }

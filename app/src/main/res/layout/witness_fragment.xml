@@ -12,37 +12,43 @@
 
     <ImageButton
         android:id="@+id/btnClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
         android:contentDescription="@string/close"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        app:srcCompat="@drawable/ic_close_white_24dp" />
 
     <CheckBox
         android:id="@+id/chbAddToAllDetection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tab_host"
+        style="@style/MyMaterialTheme.MyCheckBox"
+        android:padding="5dp"
         android:layout_alignTop="@+id/btnOk"
         android:layout_toEndOf="@+id/btnOk"
         android:layout_toLeftOf="@+id/btnClose"
         android:layout_toRightOf="@+id/btnOk"
         android:layout_toStartOf="@+id/btnClose"
         android:text="@string/add_to_all_detection"
-        android:textColor="@color/textColorPrimary" />
+        android:textAlignment="center" />
 
     <Button
         android:id="@+id/btnOk"
         style="@style/MyMaterialTheme.MyButton"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="45dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="13dp"
         android:layout_marginStart="13dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:padding="1dp"
         android:text="@string/register"
         tools:ignore="RelativeOverlap" />
@@ -51,7 +57,8 @@
         android:id="@+id/tab_host"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/btnClose">
+        android:layout_below="@id/btnClose"
+        android:layout_margin="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,98 +75,94 @@
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <LinearLayout
-                        android:id="@+id/witness_data"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/witness_data"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/tilLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/edtLastName"
+                            style="@style/MyMaterialTheme.MyEditText"
+                            android:hint="@string/first_last_name"
+                            android:inputType="textCapWords" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/tilAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/edtAddress"
+                            style="@style/MyMaterialTheme.MyEditText"
+                            android:hint="@string/address"
+                            android:inputType="textCapWords|textCapSentences" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/tilContact"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/edtContact"
+                            style="@style/MyMaterialTheme.MyEditText"
+                            android:hint="@string/contact"
+                            android:inputType="number|phone" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rlPlea"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/chbPlea"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:paddingTop="10dp" />
+
+                        <TextView
+                            android:id="@+id/tvPlea"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_toEndOf="@+id/chbPlea"
+                            android:layout_toRightOf="@+id/chbPlea"
+                            android:text="@string/plea" />
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/tilLastName"
+                            android:id="@+id/tilPlea"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_toEndOf="@+id/chbPlea"
+                            android:layout_toRightOf="@+id/chbPlea"
+                            android:visibility="invisible">
 
                             <EditText
-                                android:id="@+id/edtLastName"
+                                android:id="@+id/edtPlea"
                                 style="@style/MyMaterialTheme.MyEditText"
-                                android:hint="@string/first_last_name"
-                                android:inputType="textCapWords" />
-
+                                android:hint="@string/plea" />
                         </android.support.design.widget.TextInputLayout>
 
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/tilAddress"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
 
-                            <EditText
-                                android:id="@+id/edtAddress"
-                                style="@style/MyMaterialTheme.MyEditText"
-                                android:hint="@string/address"
-                                android:inputType="textCapWords|textCapSentences" />
+                    </RelativeLayout>
 
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/tilContact"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <EditText
-                                android:id="@+id/edtContact"
-                                style="@style/MyMaterialTheme.MyEditText"
-                                android:hint="@string/contact"
-                                android:inputType="number|phone" />
-
-                        </android.support.design.widget.TextInputLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/rlPlea"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-                            <CheckBox
-                                android:id="@+id/chbPlea"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:paddingTop="10dp" />
-
-                            <TextView
-                                android:id="@+id/tvPlea"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="15dp"
-                                android:layout_marginTop="20dp"
-                                android:layout_toEndOf="@+id/chbPlea"
-                                android:layout_toRightOf="@+id/chbPlea"
-                                android:text="@string/plea" />
-
-                            <android.support.design.widget.TextInputLayout
-                                android:id="@+id/tilPlea"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="10dp"
-                                android:layout_toEndOf="@+id/chbPlea"
-                                android:layout_toRightOf="@+id/chbPlea"
-                                android:visibility="invisible">
-
-                                <EditText
-                                    android:id="@+id/edtPlea"
-                                    style="@style/MyMaterialTheme.MyEditText"
-                                    android:hint="@string/plea" />
-                            </android.support.design.widget.TextInputLayout>
-
-
-                        </RelativeLayout>
-
-                    </LinearLayout>
-                </ScrollView>
-
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/signature"

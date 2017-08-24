@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.belspec.app.R;
 import com.belspec.app.ui.control.ControlActivity;
 import com.belspec.app.utils.UserManager;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_content);
         presenter = new MainPresenter(this);
+        presenter.setApplicationContext(getApplicationContext());
         ButterKnife.bind(this);
         initComponents();
     }
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
         presenter.stopGPSTracker();
     }
+
 
     private void initComponents() {
         btnLogin.setOnClickListener(this);
@@ -117,4 +120,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
         this.finish();
     }
+
 }

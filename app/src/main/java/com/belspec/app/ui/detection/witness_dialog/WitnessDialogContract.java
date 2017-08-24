@@ -3,6 +3,7 @@ package com.belspec.app.ui.detection.witness_dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 interface WitnessDialogContract {
     interface View{

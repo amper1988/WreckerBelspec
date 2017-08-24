@@ -1,15 +1,13 @@
 package com.belspec.app.ui.owner_data;
 
-import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -21,112 +19,81 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.belspec.app.R;
-import com.belspec.app.interfaces.MyCallback;
-import com.belspec.app.interfaces.ResponseListener;
-import com.belspec.app.retrofit.Api;
-import com.belspec.app.retrofit.RetrofitService;
-import com.belspec.app.retrofit.model.createExtradition.request.CreateExtraditionRequestEnvelope;
-import com.belspec.app.retrofit.model.createExtradition.response.CreateExtraditionResponseEnvelope;
-import com.belspec.app.retrofit.model.getCarOnEvacuation.response.EvacuationData;
 import com.belspec.app.utils.Converter;
-import com.belspec.app.utils.Encode;
-import com.belspec.app.utils.FileManager;
-import com.belspec.app.utils.UserManager;
 import com.belspec.app.utils.Utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-import retrofit2.Response;
+public class OwnerDataActivity extends AppCompatActivity implements View.OnClickListener, OwnerDataContract.View {
+    @BindView(R.id.txvManufacture) TextView txvManufacture;
+    @BindView(R.id.txvModel) TextView txvModel;
+    @BindView(R.id.txvCarId) TextView txvCarId;
+    @BindView(R.id.edtSeriesRC) EditText edtSeriesRC;
+    @BindView(R.id.edtNumberRC) EditText edtNumberRC;
+    @BindView(R.id.edtAddressRC) EditText edtAddressRC;
+    @BindView(R.id.edtLastNameRC) EditText edtLastNameRC;
+    @BindView(R.id.edtSeriesDL) EditText edtSeriesDL;
+    @BindView(R.id.edtNumberDL) EditText edtNumberDL;
+    @BindView(R.id.edtAddressDL) EditText edtAddressDL;
+    @BindView(R.id.edtLastNameDL) EditText edtLastNameDL;
+    @BindView(R.id.edtContact) EditText edtContact;
+    @BindView(R.id.edtCode) EditText edtCode;
+    @BindView(R.id.svMain) ScrollView svMain;
+    @BindView(R.id.chbPrintPhoto) CheckBox chbPrintPhoto;
+    @BindView(R.id.llBottomContainer) LinearLayout llBottomContent;
+    @BindView(R.id.tilSeriesRC) TextInputLayout tilSeriesRC;
+    @BindView(R.id.tilNumberRC) TextInputLayout tilNumberRC;
+    @BindView(R.id.tilAddressRC) TextInputLayout tilAddressRC;
+    @BindView(R.id.tilLastNameRC) TextInputLayout tilLastNameRC;
+    @BindView(R.id.tilSeriesDL) TextInputLayout tilSeriesDL;
+    @BindView(R.id.tilNumberDL) TextInputLayout tilNumberDL;
+    @BindView(R.id.tilAddressDL) TextInputLayout tilAddressDL;
+    @BindView(R.id.tilLastNameDL) TextInputLayout tilLastNameDL;
+    @BindView(R.id.tilContact) TextInputLayout tilContact;
+    @BindView(R.id.imvPhoto) ImageView imvPhoto;
+    @BindView(R.id.imvLoading) ImageView imvLoading;
+    @BindView(R.id.btnCopy) Button btnCopy;
+    @BindView(R.id.btnRegister) Button btnRegister;
 
-public class OwnerDataActivity extends AppCompatActivity implements View.OnClickListener, ResponseListener {
-    TextView txvManufacture;
-    TextView txvModel;
-    TextView txvCarId;
-    EditText edtSeriesRC;
-    EditText edtNumberRC;
-    EditText edtAddressRC;
-    EditText edtLastNameRC;
-    EditText edtSeriesDL;
-    EditText edtNumberDL;
-    EditText edtAddressDL;
-    EditText edtLastNameDL;
-    EditText edtContact;
-    EditText edtCode;
-    ScrollView svMain;
-    CheckBox chbPrintPhoto;
-    LinearLayout llBottomContent;
-    TextInputLayout tilSeriesRC;
-    TextInputLayout tilNumberRC;
-    TextInputLayout tilAddressRC;
-    TextInputLayout tilLastNameRC;
-    TextInputLayout tilSeriesDL;
-    TextInputLayout tilNumberDL;
-    TextInputLayout tilAddressDL;
-    TextInputLayout tilLastNameDL;
-    ImageView imvPhoto;
-    ImageView imvLoading;
-    Button btnCopy;
-    Button btnRegister;
-    EvacuationData evacuationData;
-
-    public static final String EVACUATION_DATA = "EVACUATION_DATA";
+    int docId;
+    OwnerDataPresenter presenter;
+    public static final String MANUFACTURE = "MANUFACTURE";
+    public static final String MODEL = "MODEL";
+    public static final String CAR_ID = "CAR_ID";
+    public static final String PHOTO = "PHOTO";
+    public static final String DOC_ID = "DOC_ID";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.extradition_activity);
+        ButterKnife.bind(this);
+        presenter = new OwnerDataPresenter(this);
         initViews();
-        initComponents(savedInstanceState);
+        initComponents();
     }
 
     private void initViews(){
-        svMain = (ScrollView)findViewById(R.id.svMain);
-        txvManufacture = (TextView) findViewById(R.id.txvManufacture);
         txvManufacture.setSelected(true);
-        txvModel = (TextView)findViewById(R.id.txvModel);
         txvModel.setSelected(true);
-        txvCarId = (TextView)findViewById(R.id.txvCarId);
         txvCarId.setSelected(true);
-        llBottomContent = (LinearLayout)findViewById(R.id.llBottomContainer);
-        chbPrintPhoto = (CheckBox)findViewById(R.id.chbPrintPhoto);
-        edtSeriesRC = (EditText)findViewById(R.id.edtSeriesRC);
-        edtNumberRC = (EditText)findViewById(R.id.edtNumberRC);
-        edtAddressRC = (EditText) findViewById(R.id.edtAddressRC);
-        edtLastNameRC = (EditText)findViewById(R.id.edtLastNameRC);
-        edtSeriesDL = (EditText)findViewById(R.id.edtSeriesDL);
-        edtNumberDL = (EditText)findViewById(R.id.edtNumberDL);
-        edtAddressDL = (EditText)findViewById(R.id.edtAddressDL);
-        edtLastNameDL = (EditText)findViewById(R.id.edtLastNameDL);
-        edtContact = (EditText)findViewById(R.id.edtContact);
-        edtCode = (EditText)findViewById(R.id.edtCode);
-        tilSeriesDL = (TextInputLayout)findViewById(R.id.tilSeriesDL);
         tilSeriesDL.setErrorEnabled(false);
-        tilNumberDL = (TextInputLayout)findViewById(R.id.tilNumberDL);
         tilNumberDL.setErrorEnabled(false);
-        tilLastNameDL = (TextInputLayout)findViewById(R.id.tilLastNameDL);
         tilLastNameDL.setErrorEnabled(false);
-        tilAddressDL = (TextInputLayout)findViewById(R.id.tilAddressDL);
         tilAddressDL.setErrorEnabled(false);
-        tilSeriesRC = (TextInputLayout)findViewById(R.id.tilSeriesRC);
         tilSeriesRC.setErrorEnabled(false);
-        tilNumberRC = (TextInputLayout)findViewById(R.id.tilNumberRC);
         tilNumberRC.setErrorEnabled(false);
-        tilLastNameRC = (TextInputLayout)findViewById(R.id.tilLastNameRC);
         tilLastNameRC.setErrorEnabled(false);
-        tilAddressRC = (TextInputLayout)findViewById(R.id.tilAddressRC);
         tilAddressRC.setErrorEnabled(false);
-        imvPhoto = (ImageView)findViewById(R.id.imvPhoto);
-        imvLoading = (ImageView) findViewById(R.id.imvLoading);
-        btnCopy = (Button)findViewById(R.id.btnCopy);
+        tilContact.setErrorEnabled(false);
         btnCopy.setOnClickListener(this);
-        btnRegister = (Button)findViewById(R.id.btnRegister);
         btnRegister.setOnClickListener(this);
         btnCopy.setOnClickListener(this);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setLoading(false);
     }
 
@@ -138,14 +105,17 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
         return super.onOptionsItemSelected(item);
     }
 
-    private void initComponents(Bundle bundle){
-        evacuationData = getIntent().getParcelableExtra(EVACUATION_DATA);
-        txvModel.setText(evacuationData.getModel());
-        txvManufacture.setText(evacuationData.getManufacture());
-        txvCarId.setText(evacuationData.getCarId());
-        imvPhoto.setImageBitmap(Converter.getBitmapFromBase64Stirng(this, evacuationData.getPhoto1()));
-
-
+    private void initComponents(){
+        Intent intent = getIntent();
+        if(intent != null){
+            txvModel.setText(intent.getStringExtra(MODEL));
+            txvManufacture.setText(intent.getStringExtra(MANUFACTURE));
+            txvCarId.setText(intent.getStringExtra(CAR_ID));
+            imvPhoto.setImageBitmap(Converter.getBitmapFromBase64Stirng(this, intent.getStringExtra(PHOTO)));
+            docId = intent.getIntExtra(DOC_ID, -1);
+        }else{
+            finish();
+        }
     }
 
     @Override
@@ -154,36 +124,20 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
             case R.id.btnRegister:
                 Utils.hideKeyboard(this);
                 if(confirmData()){
-                    setLoading(true);
-                    RetrofitService createDataRetrofit = Api.createRetrofitService();
-                    MyCallback<CreateExtraditionResponseEnvelope> createDataCall = new MyCallback<>();
-                    createDataCall.addResponseListener(this);
-                    String pre = Utils.random(4);
-                    String post = Utils.random(2);
-                    String code = Converter.encodeToBase64(pre + edtCode.getText().toString() + post);
-                    createDataRetrofit.executeCreateExtradition( Encode.getBasicAuthTemplate(
-                            UserManager.getInstanse().getmLogin(),
-                            UserManager.getInstanse().getmPassword()
-                    ),
-                            new CreateExtraditionRequestEnvelope(evacuationData.getId(), edtSeriesRC.getText().toString(), edtNumberRC.getText().toString(), edtLastNameRC.getText().toString(), edtAddressRC.getText().toString(),
-                                                                edtSeriesDL.getText().toString(), edtNumberDL.getText().toString(), edtLastNameDL.getText().toString(), edtAddressDL.getText().toString(), edtContact.getText().toString(),
-                                                                code, UserManager.getInstanse().getUserType(), UserManager.getInstanse().getmLogin(), chbPrintPhoto.isChecked())
-                    ).enqueue(createDataCall);
+                    presenter.onRegisterClick();
                 }
                 break;
-
             case R.id.btnCopy:
                 edtLastNameDL.setText(edtLastNameRC.getText().toString());
                 edtAddressDL.setText(edtAddressRC.getText().toString());
                 break;
-
         }
-
     }
 
     private boolean confirmData(){
         if(edtSeriesRC.getText().toString().equals("")||edtNumberRC.getText().toString().equals("")||edtLastNameRC.getText().toString().equals("")||edtAddressRC.getText().toString().equals("")||
-           edtSeriesDL.getText().toString().equals("")||edtNumberDL.getText().toString().equals("")||edtLastNameDL.getText().toString().equals("")||edtAddressDL.getText().toString().equals("")){
+           edtSeriesDL.getText().toString().equals("")||edtNumberDL.getText().toString().equals("")||edtLastNameDL.getText().toString().equals("")||edtAddressDL.getText().toString().equals("") ||
+                edtContact.getText().toString().equals("")){
 
             if(edtSeriesDL.getText().toString().equals("")){
                 tilSeriesDL.setErrorEnabled(true);
@@ -217,6 +171,10 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
                 tilAddressRC.setErrorEnabled(true);
                 tilAddressRC.setError("Input address of registration certificate");
             }
+            if(edtContact.getText().toString().equals("")){
+                tilContact.setErrorEnabled(true);
+                tilContact.setError("Контакт должен быть заполнен");
+            }
 
             return false;
         }
@@ -228,10 +186,14 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
         tilNumberRC.setErrorEnabled(false);
         tilLastNameRC.setErrorEnabled(false);
         tilAddressRC.setErrorEnabled(false);
+        tilContact.setErrorEnabled(false);
         return true;
     }
 
-    private void setLoading(Boolean bool) {
+
+
+    @Override
+    public void setLoading(boolean bool) {
         AnimationDrawable animation = (AnimationDrawable) imvLoading.getBackground();
         if (bool) {
             imvLoading.setVisibility(View.VISIBLE);
@@ -244,60 +206,103 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
             animation.stop();
             svMain.setVisibility(View.VISIBLE);
             llBottomContent.setVisibility(View.VISIBLE);
-
         }
     }
 
     @Override
-    public void AuthorizationOK(Response response) {
-        if (response.body().getClass() == CreateExtraditionResponseEnvelope.class) {
-            CreateExtraditionResponseEnvelope responseEnvelope = (CreateExtraditionResponseEnvelope) response.body();
-            if (responseEnvelope != null) {
-                if (responseEnvelope.getData().getCode() == 1) {
-                    setLoading(false);
-                    Utils.showMessage(this, "Съем зарегистрирован");
-                    try {
-                        File tmpFile = FileManager.createPdfFile(this);
-                        FileOutputStream fos=new FileOutputStream(tmpFile);
-
-                        fos.write(Base64.decode(responseEnvelope.getData().getDescription(), Base64.DEFAULT));
-                        fos.close();
-
-                        Uri path = Uri.fromFile(tmpFile);
-                        Intent pdfOpenintent = new Intent(Intent.ACTION_VIEW);
-                        pdfOpenintent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        pdfOpenintent.setDataAndType(path, "application/pdf");
-                        try {
-                            startActivity(pdfOpenintent);
-                        }
-                        catch (ActivityNotFoundException e) {
-                            Utils.showMessage(this, "Установите программу для просмотра Pdf файлов");
-                        }
-                    } catch (IOException e) {
-
-                    }
-                    finish();
-
-                } else {
-                    setLoading(false);
-                    Utils.showMessage(this, "Ошибка. Код ошибки: " + responseEnvelope.getData().getCode() + " Описание ошибки: " + responseEnvelope.getData().getDescription());
-                }
-            } else {
-                setLoading(false);
-                Utils.showMessage(this, "Неожиданно пустой ответ от сервера. Повторите попытку.");
-            }
-        }
+    public int getDocId() {
+        return docId;
     }
 
     @Override
-    public void AuthorizationBad(Response response) {
-        Utils.showMessage(this, "Wrong authorization. Response code: " + response.code() + " " + response.message());
-        setLoading(false);
+    public String getSeriesDL() {
+        return edtSeriesDL.getText().toString();
     }
 
     @Override
-    public void AuthorizationFail(Throwable t) {
-        Utils.showMessage(this, "Network fail. " + t.getMessage());
-        setLoading(false);
+    public String getSeriesRC() {
+        return edtSeriesRC.getText().toString();
+    }
+
+    @Override
+    public String getNumberDL() {
+        return edtNumberDL.getText().toString();
+    }
+
+    @Override
+    public String getNumberRC() {
+        return edtNumberRC.getText().toString();
+    }
+
+    @Override
+    public String getNameRC() {
+        return edtLastNameRC.getText().toString();
+    }
+
+    @Override
+    public String getNameDL() {
+        return edtLastNameDL.getText().toString();
+    }
+
+    @Override
+    public String getAddressRC() {
+        return edtAddressRC.getText().toString();
+    }
+
+    @Override
+    public String getAddressDL() {
+        return edtAddressDL.getText().toString();
+    }
+
+    @Override
+    public String getContact() {
+        return edtContact.getText().toString();
+    }
+
+    @Override
+    public String getCode() {
+        return edtCode.getText().toString();
+    }
+
+    @Override
+    public boolean getPrintPhoto() {
+        return chbPrintPhoto.isChecked();
+    }
+
+    @Override
+    public void showMessage(String message) {
+        Utils.showMessage(this, message);
+    }
+
+    @Override
+    public String getManufacture() {
+        return txvManufacture.getText().toString();
+    }
+
+    @Override
+    public String getCarId() {
+        return txvCarId.getText().toString();
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
+    }
+
+    @Override
+    public void showActivity(Intent intent) {
+        if(intent != null)
+        startActivity(intent);
+    }
+
+    @Override
+    public void close() {
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 }

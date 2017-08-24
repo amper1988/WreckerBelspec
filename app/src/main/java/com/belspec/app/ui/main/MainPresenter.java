@@ -8,6 +8,7 @@ import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
 import com.belspec.app.retrofit.model.test.request.TestRequestEnvelope;
 import com.belspec.app.retrofit.model.test.response.TestResponseEnvelope;
+import com.belspec.app.utils.AppHolder;
 import com.belspec.app.utils.Encode;
 import com.belspec.app.utils.UserManager;
 
@@ -58,7 +59,7 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
     @Override
     public void startGPSTracker(Context context) {
         if(gpsTracker == null)
-            gpsTracker = new GPSTracker(context);
+            gpsTracker = GPSTracker.getInstance();
         if(gpsTracker.canGetLocation())
             gpsTracker.startUsingGPS();
         else
@@ -69,9 +70,13 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
     @Override
     public void stopGPSTracker() {
         if(gpsTracker != null){
-            gpsTracker.stopUsingGPS();
             gpsTracker.unsetDataChangeListener(this);
         }
+    }
+
+    @Override
+    public void setApplicationContext(Context context) {
+        AppHolder.getInstance().setmContext(context);
     }
 
     @Override
