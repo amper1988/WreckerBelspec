@@ -44,6 +44,7 @@ class ExtraditionPresenter implements ExtraditionContract.Presenter, NetworkData
 
     @Override
     public void onFindClick() {
+        mView.setLoading(true);
         if(carOnEvacuationAdapter!=null) {
             carOnEvacuationAdapter.clear();
         }
@@ -64,6 +65,7 @@ class ExtraditionPresenter implements ExtraditionContract.Presenter, NetworkData
         ).enqueue(new Callback<GetCarOnEvacuationResponseEnvelope>() {
             @Override
             public void onResponse(Call<GetCarOnEvacuationResponseEnvelope> call, Response<GetCarOnEvacuationResponseEnvelope> response) {
+                mView.setLoading(false);
                 if(response.code() == 200){
                     List<EvacuationData> dataList = response.body().getDataList().getData().getEvacuationDataList();
                     if(dataList != null)
@@ -78,6 +80,7 @@ class ExtraditionPresenter implements ExtraditionContract.Presenter, NetworkData
 
             @Override
             public void onFailure(Call<GetCarOnEvacuationResponseEnvelope> call, Throwable t) {
+                mView.setLoading(false);
                 mView.showMessage(t.getMessage());
             }
         });
