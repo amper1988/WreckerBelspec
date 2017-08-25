@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -142,8 +143,13 @@ public class WitnessDialogFragment extends DialogFragment implements WitnessDial
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(mView);
         return builder.create();
+    }
 
-
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(getDialog().getWindow() != null)
+            getDialog().getWindow().getAttributes().windowAnimations = R.style.MyAnimation_Window;
     }
 
     @Override

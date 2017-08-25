@@ -50,6 +50,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     private Context context;
     private int docId;
     private ImageListAdapter imageListAdapter;
+    private boolean registerInProgress;
 
     DetectionPresenter(DetectionContract.View view) {
         this.view = view;
@@ -411,6 +412,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     @Override
     public void sendEvacuation() {
         view.setLoading(true);
+        registerInProgress = true;
         Thread thread = new Thread(){
             @Override
             public void run() {
@@ -480,7 +482,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                 ).enqueue(new Callback<CreateEvacuationResponseEnvelope>() {
                     @Override
                     public void onResponse(Call<CreateEvacuationResponseEnvelope> call, Response<CreateEvacuationResponseEnvelope> response) {
-
+                        registerInProgress = false;
                         if (response.code() == 200) {
                             if (response.body().getClass() == CreateEvacuationResponseEnvelope.class) {
                                 CreateEvacuationResponseEnvelope responseEnvelope = response.body();
@@ -503,26 +505,25 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                         }
                                         imageListAdapter.clear();
                                         PrefDefaultValue.clear(context, docId);
-                                        view.setLoading(false);
                                         view.initialize();
 
                                     } else {
                                         view.showMessageDialog("Ошибка. Код ошибки: " + responseEnvelope.getData().getCode() + " Описание ошибки: " + responseEnvelope.getData().getDescription());
-                                        view.setLoading(false);
                                     }
                                 } else {
                                     view.showMessageDialog("Неожиданно пустой ответ от сервера. Повторите попытку.");
-                                    view.setLoading(false);
                                 }
                             }
                         } else {
                             view.showMessageDialog("Wrong authorization. Response code: " + response.code() + " " + response.message());
-                            view.setLoading(false);
                         }
+                        view.setLoading(false);
+
                     }
 
                     @Override
                     public void onFailure(Call<CreateEvacuationResponseEnvelope> call, Throwable t) {
+                        registerInProgress = false;
                         view.setLoading(false);
                         view.showMessageDialog("Network fail. " + t.getMessage());
                     }
@@ -636,7 +637,8 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
     @Override
     public void onDefaultDataUpdate(NetworkDataManager netDataManager) {
-        view.setLoading(false);
+        if(!registerInProgress)
+            view.setLoading(false);
         view.setListManufacture(netDataManager.getManufactureListAsString());
         if (UserManager.getInstanse().getUserType() != 1)
             view.setListPoliceDepartment(netDataManager.getPoliceDepartmentListAsString());
@@ -658,22 +660,26 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
     @Override
     public void onRanksUpdate(NetworkDataManager netDataManager) {
-        view.setLoading(false);
+        if(!registerInProgress)
+            view.setLoading(false);
     }
 
     @Override
     public void onPositionsUpdate(NetworkDataManager netDataManager) {
-        view.setLoading(false);
+        if(!registerInProgress)
+            view.setLoading(false);
     }
 
     @Override
     public void onPoliceDepartmentUpdate(NetworkDataManager netDataManager) {
-        view.setLoading(false);
+        if(!registerInProgress)
+            view.setLoading(false);
     }
 
     @Override
     public void onRoadLowPointUpdate(NetworkDataManager netDataManager) {
-        view.setLoading(false);
+        if(!registerInProgress)
+            view.setLoading(false);
         ArrayList<String> roadLawPoints = new ArrayList<>();
         roadLawPoints.add("");
         roadLawPoints.addAll(netDataManager.getRoadLawPointListAsString());

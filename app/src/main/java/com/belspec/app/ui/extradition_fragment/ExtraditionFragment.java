@@ -14,6 +14,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -47,8 +49,9 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
     @BindView(R.id.btnFindDetection) Button btnFind;
     @BindView(R.id.btnHide) Button btnHide;
     @BindView(R.id.btnShow) Button btnShow;
-    boolean srchHiden;
+    private boolean srchNeedHide = false;
     ExtraditionPresenter presenter;
+    private boolean srchNeedShow = true;
 
     @Nullable
     @Override
@@ -60,7 +63,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
             presenter.onCreate();
             initViews();
 
-            srchHiden = false;
+            srchNeedHide = false;
         }
         return  mView;
     }
@@ -154,21 +157,194 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
     }
 
     private void showHide(){
-        if (srchHiden){
+        if (srchNeedHide){
             btnHide.setVisibility(View.GONE);
             btnShow.setVisibility(View.VISIBLE);
-            llOrganizationWrecker.setVisibility(View.GONE);
-            llPoliceData.setVisibility(View.GONE);
-            tilCarID.setVisibility(View.GONE);
-            btnFind.setVisibility(View.GONE);
-        }else{
+            hide();
+        }
+        if(srchNeedShow){
             btnHide.setVisibility(View.VISIBLE);
             btnShow.setVisibility(View.GONE);
-            llOrganizationWrecker.setVisibility(View.VISIBLE);
-            llPoliceData.setVisibility(View.VISIBLE);
-            tilCarID.setVisibility(View.VISIBLE);
-            btnFind.setVisibility(View.VISIBLE);
+            showFields();
         }
+    }
+
+    private void showFields(){
+        llOrganizationWrecker.setVisibility(View.INVISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_show_search);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                llOrganizationWrecker.setVisibility(View.VISIBLE);
+                showPoliceData();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        llOrganizationWrecker.startAnimation(animation);
+    }
+
+    private void showPoliceData(){
+        llPoliceData.setVisibility(View.INVISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_show_search);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                llPoliceData.setVisibility(View.VISIBLE);
+                showCarId();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        llPoliceData.startAnimation(animation);
+    }
+
+    private void showCarId(){
+        tilCarID.setVisibility(View.INVISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_show_search);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tilCarID.setVisibility(View.VISIBLE);
+                showFindButton();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        tilCarID.startAnimation(animation);
+    }
+
+    private void showFindButton(){
+        btnFind.setVisibility(View.INVISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_show_search);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                btnFind.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        btnFind.startAnimation(animation);
+    }
+
+    private void hide(){
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_hide_search);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                btnFind.setVisibility(View.GONE);
+                hideCarID();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        btnFind.startAnimation(animation);
+    }
+
+    private void hideCarID(){
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_hide_search);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                tilCarID.setVisibility(View.GONE);
+                hidePoliceData();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        tilCarID.startAnimation(animation);
+    }
+
+    private void hidePoliceData(){
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_hide_search);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                llPoliceData.setVisibility(View.GONE);
+                hideOrganization();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        llPoliceData.startAnimation(animation);
+    }
+
+    private void hideOrganization(){
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_hide_search);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                llOrganizationWrecker.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        llOrganizationWrecker.startAnimation(animation);
     }
 
     @Override
@@ -176,16 +352,19 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
         switch (view.getId()){
             case R.id.btnFindDetection:
                 Utils.hideKeyboard(getActivity());
-                srchHiden = true;
+                srchNeedHide = true;
+                srchNeedShow = false;
                 showHide();
                 presenter.onFindClick();
                 break;
             case R.id.btnHide:
-                srchHiden = true;
+                srchNeedHide = true;
+                srchNeedShow = false;
                 showHide();
                 break;
             case R.id.btnShow:
-                srchHiden = false;
+                srchNeedHide = false;
+                srchNeedShow = true;
                 showHide();
                 break;
         }
@@ -219,10 +398,6 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
             imvLoading.setVisibility(View.GONE);
             animation.stop();
             rvListCarOnEvacuation.setVisibility(View.VISIBLE);
-            llOrganizationWrecker.setVisibility(View.VISIBLE);
-            llPoliceData.setVisibility(View.VISIBLE);
-            tilCarID.setVisibility(View.VISIBLE);
-            btnFind.setVisibility(View.VISIBLE);
             showHide();
         }
     }

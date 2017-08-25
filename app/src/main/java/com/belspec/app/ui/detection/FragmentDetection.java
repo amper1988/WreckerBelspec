@@ -20,6 +20,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -27,6 +29,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -94,6 +97,9 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     @BindView(R.id.tilCarID) TextInputLayout tilCarId;
     @BindView(R.id.tilStreet) TextInputLayout tilStreet;
     @BindView(R.id.tilResultInspection) TextInputLayout tilRevisionResult;
+    @BindView(R.id.llSpinersOrganization) LinearLayout llSpinersOrganization;
+    @BindView(R.id.llSpinersPolicedata) LinearLayout llSpinersPolicedata;
+    @BindView(R.id.llSpinersParking) LinearLayout llSpinersParking;
 
     View mView;
     private String plea1;
@@ -541,15 +547,14 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
     private void showHideOrganizationWrecker(){
         if(chbWithoutEvacuation.isChecked()){
-            txvOrganization.setVisibility(View.GONE);
-            spnOrganization.setVisibility(View.GONE);
-            txvWrecker.setVisibility(View.GONE);
-            spnWrecker.setVisibility(View.GONE);
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.anim_remove_speaners);
+            llSpinersOrganization.setVisibility(View.GONE);
+            llSpinersOrganization.startAnimation(animation);
         }else if(presenter.getUserType() != 2){
-            txvOrganization.setVisibility(View.VISIBLE);
-            spnOrganization.setVisibility(View.VISIBLE);
-            txvWrecker.setVisibility(View.VISIBLE);
-            spnWrecker.setVisibility(View.VISIBLE);
+            llSpinersOrganization.setVisibility(View.INVISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.anim_insert_spenears);
+            llSpinersOrganization.startAnimation(animation);
+            llSpinersOrganization.setVisibility(View.VISIBLE);
         }
 
     }
@@ -1035,50 +1040,65 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     private boolean correctData() {
         if (actvManufacture.getText().toString().equals("")) {
             tilManuf.setError("Введите марку");
+            Toast.makeText(getActivity(), "Введите марку", Toast.LENGTH_SHORT).show();
+            actvManufacture.requestFocus();
             return false;
         }
         if (edtCarID.getText().toString().equals("")) {
             tilCarId.setError("Введите регзнак");
+            Toast.makeText(getActivity(), "Введите регзнак", Toast.LENGTH_SHORT).show();
+            edtCarID.requestFocus();
             return false;
         }
         if (edtStreet.getText().toString().equals("")) {
             tilStreet.setError("Введите адрес эвакуации");
+            Toast.makeText(getActivity(), "Введите адрес эвакуации", Toast.LENGTH_SHORT).show();
+            edtStreet.requestFocus();
             return false;
         }
         if (edtRevisionResult.getText().toString().equals("")) {
             tilRevisionResult.setError("Введите результаты осмотра");
+            Toast.makeText(getActivity(), "Внесите ружельтаты осмотра", Toast.LENGTH_SHORT).show();
+            edtRevisionResult.requestFocus();
             return false;
         }
         if (rvImageList.getAdapter().getItemCount() < 4) {
             Toast.makeText(getActivity(), "Сделайте 4 фотографии", Toast.LENGTH_LONG).show();
+            btnAddImage.requestFocus();
             return false;
         }
         if (imvWtns1Signature.getDrawable() == null){
             Toast.makeText(getActivity(), "Понятой 1 не подписал документ", Toast.LENGTH_LONG).show();
+            btnAddWitness1.requestFocus();
             return false;
         }else{
             if (presenter.imageIsEmpty(imvWtns1Signature)){
                 Toast.makeText(getActivity(), "Понятой 1 не подписал документ", Toast.LENGTH_LONG).show();
+                btnAddWitness1.requestFocus();
                 return false;
             }
         }
 
         if (imvWtns2Signature.getDrawable() == null){
             Toast.makeText(getActivity(), "Понятой 2 не подписал документ", Toast.LENGTH_LONG).show();
+            btnAddWitness2.requestFocus();
             return false;
         }else{
             if (presenter.imageIsEmpty(imvWtns2Signature)){
                 Toast.makeText(getActivity(), "Понятой 2 не подписал документ", Toast.LENGTH_LONG).show();
+                btnAddWitness2.requestFocus();
                 return false;
             }
         }
         if (imvPolicemanSignature.getDrawable() == null){
             Toast.makeText(getActivity(), "Сотрудник ГАИ не подписал документ", Toast.LENGTH_LONG).show();
+            btnPolicemanSignature.requestFocus();
             return false;
 
         }else{
             if(presenter.imageIsEmpty(imvPolicemanSignature)){
                 Toast.makeText(getActivity(), "Сотрудник ГАИ не подписал документ", Toast.LENGTH_LONG).show();
+                btnPolicemanSignature.requestFocus();
                 return false;
             }
         }

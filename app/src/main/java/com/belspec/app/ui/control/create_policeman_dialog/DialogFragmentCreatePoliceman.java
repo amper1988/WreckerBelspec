@@ -39,7 +39,7 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Cre
         mView = inflater.inflate(R.layout.fragment_create_policeman, null);
         ButterKnife.bind(this, mView);
         presenter = new CreatePolicemanPresenter(this);
-        presenter.onCreateDialog();
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +53,14 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Cre
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(mView);
         return builder.create();
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(getDialog().getWindow() != null)
+            getDialog().getWindow().getAttributes().windowAnimations = R.style.MyAnimation_Window;
+        presenter.onCreateDialog();
     }
 
     @Override

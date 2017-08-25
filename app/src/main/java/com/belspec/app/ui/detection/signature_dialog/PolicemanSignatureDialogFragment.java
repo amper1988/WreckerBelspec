@@ -65,6 +65,13 @@ public class PolicemanSignatureDialogFragment extends DialogFragment implements 
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(getDialog().getWindow() != null)
+            getDialog().getWindow().getAttributes().windowAnimations = R.style.MyAnimation_Window;
+    }
+
+    @Override
     public void setSignature(Bitmap signature) {
         dvSignature.setBitmap(signature);
     }

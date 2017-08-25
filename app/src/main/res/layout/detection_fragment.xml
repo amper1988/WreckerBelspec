@@ -381,20 +381,27 @@
 
             </LinearLayout>
             <!--parking-->
-            <TextView
-                android:id="@+id/txvParkingTitle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/llSpinersParking"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/llSpinersOrganization"
-                android:text="@string/parking_title"/>
-            <Spinner
-                android:id="@+id/spnParking"
-                android:layout_below="@id/txvParkingTitle"
-                android:layout_margin="0dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/txvParkingTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/parking_title"/>
+                <Spinner
+                    android:id="@+id/spnParking"
+                    android:layout_margin="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </Spinner>
+            </LinearLayout>
 
-            </Spinner>
+
+
             <!--policedata-->
             <LinearLayout
                 android:baselineAligned="false"
@@ -402,7 +409,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:id="@+id/llSpinersPolicedata"
-                android:layout_below="@+id/spnParking">
+                android:layout_below="@+id/llSpinersParking">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

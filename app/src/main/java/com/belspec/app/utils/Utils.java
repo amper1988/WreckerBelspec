@@ -103,19 +103,25 @@ public class Utils {
 
     public static boolean DrawableIsEmptyInImageView(ImageView imv) {
         BitmapDrawable drawable = (BitmapDrawable) imv.getDrawable();
-        Bitmap imvBitmap = drawable.getBitmap();
-        int width = imvBitmap.getWidth();
-        int height = imvBitmap.getHeight();
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        if(drawable != null){
+            Bitmap imvBitmap = drawable.getBitmap();
+            if(imvBitmap != null){
+                int width = imvBitmap.getWidth();
+                int height = imvBitmap.getHeight();
+                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
 
-        ByteBuffer buffer1 = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getRowBytes());
-        bitmap.copyPixelsToBuffer(buffer1);
+                ByteBuffer buffer1 = ByteBuffer.allocate(bitmap.getHeight() * bitmap.getRowBytes());
+                bitmap.copyPixelsToBuffer(buffer1);
 
-        ByteBuffer buffer2 = ByteBuffer.allocate(imvBitmap.getHeight() * imvBitmap.getRowBytes());
-        imvBitmap.copyPixelsToBuffer(buffer2);
+                ByteBuffer buffer2 = ByteBuffer.allocate(imvBitmap.getHeight() * imvBitmap.getRowBytes());
+                imvBitmap.copyPixelsToBuffer(buffer2);
 
 
-        return Arrays.equals(buffer1.array(), buffer2.array());
+                return Arrays.equals(buffer1.array(), buffer2.array());
+            }
+            return true;
+        }
+        return true;
     }
 }
