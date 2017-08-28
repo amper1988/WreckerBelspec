@@ -41,6 +41,8 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
     @BindView(R.id.tilCarID) TextInputLayout tilCarID;
     @BindView(R.id.llPoliceData) LinearLayout llPoliceData;
     @BindView(R.id.llOrganizationWrecker) LinearLayout llOrganizationWrecker;
+    @BindView(R.id.llCarId) LinearLayout llCarId;
+    @BindView(R.id.llFindButton) LinearLayout llFindButton;
     @BindView(R.id.actvOrganization) AutoCompleteTextView actvOrganization;
     @BindView(R.id.actvWrecker) AutoCompleteTextView actvWrecker;
     @BindView(R.id.actvPoliceDepartment) AutoCompleteTextView actvPoliceDepartment;
@@ -216,7 +218,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
     }
 
     private void showCarId(){
-        tilCarID.setVisibility(View.INVISIBLE);
+        llCarId.setVisibility(View.INVISIBLE);
         Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_show_search);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -226,7 +228,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                tilCarID.setVisibility(View.VISIBLE);
+                llCarId.setVisibility(View.VISIBLE);
                 showFindButton();
             }
 
@@ -235,11 +237,11 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
 
             }
         });
-        tilCarID.startAnimation(animation);
+        llCarId.startAnimation(animation);
     }
 
     private void showFindButton(){
-        btnFind.setVisibility(View.INVISIBLE);
+        llFindButton.setVisibility(View.INVISIBLE);
         Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_show_search);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -249,7 +251,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                btnFind.setVisibility(View.VISIBLE);
+                llFindButton.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -257,7 +259,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
 
             }
         });
-        btnFind.startAnimation(animation);
+        llFindButton.startAnimation(animation);
     }
 
     private void hide(){
@@ -270,7 +272,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                btnFind.setVisibility(View.GONE);
+                llFindButton.setVisibility(View.GONE);
                 hideCarID();
             }
 
@@ -279,7 +281,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
 
             }
         });
-        btnFind.startAnimation(animation);
+        llFindButton.startAnimation(animation);
     }
 
     private void hideCarID(){
@@ -292,7 +294,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                tilCarID.setVisibility(View.GONE);
+                llCarId.setVisibility(View.GONE);
                 hidePoliceData();
             }
 
@@ -301,7 +303,7 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
 
             }
         });
-        tilCarID.startAnimation(animation);
+        llCarId.startAnimation(animation);
     }
 
     private void hidePoliceData(){
@@ -387,8 +389,8 @@ public class ExtraditionFragment extends Fragment implements View.OnClickListene
         if(bool){
             llOrganizationWrecker.setVisibility(View.GONE);
             llPoliceData.setVisibility(View.GONE);
-            tilCarID.setVisibility(View.GONE);
-            btnFind.setVisibility(View.GONE);
+            llCarId.setVisibility(View.GONE);
+            llFindButton.setVisibility(View.GONE);
             imvLoading.setVisibility(View.VISIBLE);
             btnHide.setVisibility(View.GONE);
             btnShow.setVisibility(View.GONE);
