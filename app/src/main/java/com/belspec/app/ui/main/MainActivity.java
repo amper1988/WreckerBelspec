@@ -2,7 +2,11 @@ package com.belspec.app.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -17,6 +21,8 @@ import android.widget.TextView;
 import com.belspec.app.R;
 import com.belspec.app.ui.control.ControlActivity;
 import com.belspec.app.utils.UserManager;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,7 +78,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
-                presenter.login();
+                try {
+                    PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    presenter.login(info.versionName);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
                 break;
         }
     }
@@ -142,6 +154,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public String getPassword() {
         return edtPwd.getText().toString();
+    }
+
+    @Override
+    public void installApkFromUri(Uri uri) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
 }

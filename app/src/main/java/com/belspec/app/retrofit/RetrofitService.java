@@ -1,5 +1,7 @@
 package com.belspec.app.retrofit;
 
+import com.belspec.app.retrofit.model.checkUpdate.request.CheckUpdateRequestEnvelope;
+import com.belspec.app.retrofit.model.checkUpdate.response.CheckUpdateResponseEnvelope;
 import com.belspec.app.retrofit.model.createEvacuation.request.CreateEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.createEvacuation.response.CreateEvacuationResponseEnvelope;
 import com.belspec.app.retrofit.model.createExtradition.request.CreateExtraditionRequestEnvelope;
@@ -81,5 +83,12 @@ public interface RetrofitService {
     })
     @POST("ws/MobileAppWebServices")
     Call<CreatePolicemanResponseEnvelope> executeCreatePoliceman(@Header("Authorization") String auth, @Body CreatePolicemanRequestEnvelope request);
+
+    @Headers({
+            "Content-Type: application/soap+xml",
+            "Accept-Charset: utf-8"
+    })
+    @POST("ws/MobileAppWebServices")
+    Call<CheckUpdateResponseEnvelope> executeCheckUpdate(@Header("Authorization") String auth, @Body CheckUpdateRequestEnvelope request);
 
 }

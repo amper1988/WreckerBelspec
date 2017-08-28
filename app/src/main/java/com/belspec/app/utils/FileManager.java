@@ -38,6 +38,18 @@ public class FileManager {
         return pdfFile;
     }
 
+    public static File createApkFile(Context context) throws IOException{
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String apkFileName = "APK_" + timeStamp + "_";
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+        return File.createTempFile(
+                apkFileName,  /* prefix */
+                ".apk",         /* suffix */
+                storageDir      /* directory */
+        );
+    }
+
     public static Bitmap loadBitmapFromPath(String path){
         BitmapFactory.Options opt = new BitmapFactory.Options();
         opt.inSampleSize = 8;

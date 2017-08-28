@@ -1,16 +1,25 @@
 package com.belspec.app.ui.main;
 
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 
 import com.belspec.app.gps.GPSTracker;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
+import com.belspec.app.retrofit.model.checkUpdate.request.CheckUpdateRequestEnvelope;
+import com.belspec.app.retrofit.model.checkUpdate.response.CheckUpdateResponseEnvelope;
 import com.belspec.app.retrofit.model.test.request.TestRequestEnvelope;
 import com.belspec.app.retrofit.model.test.response.TestResponseEnvelope;
 import com.belspec.app.utils.AppHolder;
 import com.belspec.app.utils.Encode;
+import com.belspec.app.utils.FileManager;
 import com.belspec.app.utils.UserManager;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,7 +35,49 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
     }
 
     @Override
-    public void login() {
+    public void login(String version) {
+        view.setLoading(true);
+        Api.createRetrofitService().executeCheckUpdate(
+                Encode.getBasicAuthTemplate(
+                        view.getName(),
+                        view.getPassword()
+                ),
+                new CheckUpdateRequestEnvelope(version)
+        ).enqueue(new Callback<CheckUpdateResponseEnvelope>() {
+            @Override
+            public void onResponse(Call<CheckUpdateResponseEnvelope> call, Response<CheckUpdateResponseEnvelope> response) {
+                view.setLoading(false);
+                if(response.code() == 200){
+                    if(response.body().getBody().getCode() == 1){
+                        try {
+                            File tmpFile = FileManager.createApkFile(AppHolder.getInstance().getContext());
+                            FileOutputStream fos = new FileOutputStream(tmpFile);
+                            fos.write(Base64.decode(response.body().getBody().getDescription(), Base64.DEFAULT));
+                            fos.close();
+                            Uri path = Uri.fromFile(tmpFile);
+                            view.installApkFromUri(path);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else if(response.body().getBody().getCode() == 5){
+                        login();
+                    }else{
+                        view.showMessage("Ошибка ответа сервера " + response.body().getBody().getCode() + ": " + response.body().getBody().getDescription());
+                    }
+                }else{
+                    view.showMessage("Ошибка сервера " + response.code() + ": " + response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CheckUpdateResponseEnvelope> call, Throwable t) {
+                view.setLoading(false);
+                view.showMessage("Ошибка при отправлении запроса: " + t.getMessage());
+            }
+        });
+    }
+
+    private void login(){
         String login = view.getName();
         String password = view.getPassword();
         UserManager.getInstanse().setmLogin(login);
