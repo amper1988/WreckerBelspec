@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.response) TextView txvStatus;
     @BindView(R.id.imvLoading) ImageView imvLoading;
     @BindView(R.id.rllContent) RelativeLayout rllContent;
+    @BindView(R.id.txvLoadingData) TextView txvLoadingData;
     MainContract.Presenter presenter;
 
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         edtPwd.setOnEditorActionListener(this);
         imvLoading.setBackgroundResource(R.drawable.pb_loading);
         imvLoading.setVisibility(View.GONE);
+        txvLoadingData.setVisibility(View.GONE);
     }
 
     @Override
@@ -103,14 +105,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void setLoading(boolean loading) {
+    public void setLoading(boolean loading, String status) {
         AnimationDrawable animation = (AnimationDrawable) imvLoading.getBackground();
+        txvLoadingData.setText(status);
         if (loading) {
             imvLoading.setVisibility(View.VISIBLE);
+            txvLoadingData.setVisibility(View.VISIBLE);
             animation.start();
             rllContent.setVisibility(View.GONE);
         } else {
             imvLoading.setVisibility(View.GONE);
+            txvLoadingData.setVisibility(View.GONE);
             animation.stop();
             rllContent.setVisibility(View.VISIBLE);
         }

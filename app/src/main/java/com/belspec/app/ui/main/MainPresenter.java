@@ -36,7 +36,7 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
 
     @Override
     public void login(String version) {
-        view.setLoading(true);
+        view.setLoading(true, "Проверка обновления");
         Api.createRetrofitService().executeCheckUpdate(
                 Encode.getBasicAuthTemplate(
                         view.getName(),
@@ -46,7 +46,7 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
         ).enqueue(new Callback<CheckUpdateResponseEnvelope>() {
             @Override
             public void onResponse(Call<CheckUpdateResponseEnvelope> call, Response<CheckUpdateResponseEnvelope> response) {
-                view.setLoading(false);
+                view.setLoading(false, "Обновления получены");
                 if(response.code() == 200){
                     if(response.body().getBody().getCode() == 1){
                         try {
@@ -71,7 +71,7 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
 
             @Override
             public void onFailure(Call<CheckUpdateResponseEnvelope> call, Throwable t) {
-                view.setLoading(false);
+                view.setLoading(false, "Ошибка при получении обновлений");
                 view.showMessage("Ошибка при отправлении запроса: " + t.getMessage());
             }
         });
@@ -82,13 +82,13 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
         String password = view.getPassword();
         UserManager.getInstanse().setmLogin(login);
         UserManager.getInstanse().setmPassword(password);
-        view.setLoading(true);
+        view.setLoading(true, "Проверка введенных данных");
         RetrofitService retrofit = Api.createRetrofitService();
         retrofit.executeTestOperation(Encode.getBasicAuthTemplate(login, password), new TestRequestEnvelope())
                 .enqueue(new Callback<TestResponseEnvelope>() {
                     @Override
                     public void onResponse(Call<TestResponseEnvelope> call, Response<TestResponseEnvelope> response) {
-                        view.setLoading(false);
+                        view.setLoading(false, "Введенные данные проверены");
                         if(response.code() == 200){
                             view.showMessage("Через мгновение все начнется...");
                             UserManager user = UserManager.getInstanse();
@@ -103,7 +103,7 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
 
                     @Override
                     public void onFailure(Call<TestResponseEnvelope> call, Throwable t) {
-                        view.setLoading(false);
+                        view.setLoading(false, "Ошибка при проверке введенных данных");
                         UserManager.getInstanse().logout();
                         view.showMessage(t.getMessage());
                     }

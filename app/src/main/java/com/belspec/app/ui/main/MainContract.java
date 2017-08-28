@@ -10,7 +10,7 @@ interface MainContract {
     interface View {
         Context getContext();
         void showMessage(String message);
-        void setLoading(boolean loading);
+        void setLoading(boolean loading, String status);
         void afterLogin();
         void setName(String name);
         String getName();
