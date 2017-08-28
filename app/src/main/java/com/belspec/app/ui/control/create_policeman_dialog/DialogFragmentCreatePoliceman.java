@@ -4,6 +4,7 @@ package com.belspec.app.ui.control.create_policeman_dialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.belspec.app.R;
@@ -31,6 +34,12 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Cre
     @BindView(R.id.edtName) EditText edtName;
     @BindView(R.id.edtCode) EditText edtCode;
     @BindView(R.id.btnRegister) Button btnRegister;
+    @BindView(R.id.txvErrorPoliceDepartment) TextView txvErrorPoliceDepartment;
+    @BindView(R.id.txvErrorRank) TextView txvErrorRank;
+    @BindView(R.id.txvErrorPosition) TextView txvErrorPosition;
+    @BindView(R.id.tilName) TextInputLayout tilName;
+    @BindView(R.id.tilCode) TextInputLayout tilCode;
+    @BindView(R.id.btnClose) ImageButton btnClose;
 
     @NonNull
     @Override
@@ -39,20 +48,38 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Cre
         mView = inflater.inflate(R.layout.fragment_create_policeman, null);
         ButterKnife.bind(this, mView);
         presenter = new CreatePolicemanPresenter(this);
-
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(confirmData()){
-                    presenter.onRegisterClick();
-                }else{
-                    Toast.makeText(getActivity(), "Проверьте введенные данные на корректрость", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        presenter.onCreateDialog();
+        initViews();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(mView);
         return builder.create();
+    }
+
+    private void initViews(){
+        clearError();
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearError();
+                presenter.onRegisterClick();
+            }
+        });
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                close();
+            }
+        });
+    }
+
+    private void clearError(){
+        txvErrorPoliceDepartment.setText("");
+        txvErrorPosition.setText("");
+        txvErrorRank.setText("");
+        tilCode.setError("");
+        tilCode.setErrorEnabled(false);
+        tilName.setError("");
+        tilName.setErrorEnabled(false);
     }
 
     @Override
@@ -60,27 +87,7 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Cre
         super.onActivityCreated(savedInstanceState);
         if(getDialog().getWindow() != null)
             getDialog().getWindow().getAttributes().windowAnimations = R.style.MyAnimation_Window;
-        presenter.onCreateDialog();
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        presenter.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        presenter.onStop();
-    }
-
-    private boolean confirmData(){
-        if(edtCode.getText().toString().equals(""))
-            return false;
-        if(edtName.getText().toString().equals(""))
-            return false;
-        return true;
     }
 
     @Override
@@ -96,6 +103,33 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Cre
         edtName.setEnabled(bool);
         edtCode.setEnabled(bool);
         btnRegister.setEnabled(bool);
+    }
+
+    @Override
+    public void setErrorRanks(String message) {
+        txvErrorRank.setText(message);
+    }
+
+    @Override
+    public void setErrorPosition(String message) {
+        txvErrorPosition.setText(message);
+    }
+
+    @Override
+    public void setErrorPoliceDepartment(String message) {
+        txvErrorPoliceDepartment.setText(message);
+    }
+
+    @Override
+    public void setErrorName(String message) {
+        tilName.setErrorEnabled(true);
+        tilName.setError(message);
+    }
+
+    @Override
+    public void setErrorCode(String message) {
+        tilCode.setErrorEnabled(true);
+        tilCode.setError(message);
     }
 
     @Override
@@ -124,19 +158,19 @@ public class DialogFragmentCreatePoliceman extends DialogFragment implements Cre
     }
 
     @Override
-    public void onRanksReceive(List<String> ranksList) {
+    public void setRanks(List<String> ranksList) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, ranksList);
         spnRank.setAdapter(arrayAdapter);
     }
 
     @Override
-    public void onPositionReceive(List<String> positionList) {
+    public void setPosition(List<String> positionList) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, positionList);
         spnPosition.setAdapter(arrayAdapter);
     }
 
     @Override
-    public void onPoliceDepartmentReceive(List<String> policeDepartmentList) {
+    public void setPoliceDepartment(List<String> policeDepartmentList) {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item, policeDepartmentList);
         spnPoliceDepartment.setAdapter(arrayAdapter);
     }

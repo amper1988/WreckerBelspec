@@ -1,13 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/side_nav_bar">
+    <ImageButton
+        android:id="@+id/btnClose"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/close"
+        app:srcCompat="@drawable/ic_close_white_24dp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/police_department"
+        android:layout_below="@id/btnClose"
         android:id="@+id/txvPoliceDepartment"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="3dp"
+        android:layout_marginEnd="3dp"
+        android:textColor="@color/red"
+        android:layout_toRightOf="@id/txvPoliceDepartment"
+        android:layout_toEndOf="@id/txvPoliceDepartment"
+        android:layout_alignBaseline="@id/txvPoliceDepartment"
+        android:id="@+id/txvErrorPoliceDepartment"/>
     <Spinner
         style="@style/MyMaterialTheme.MySpinner"
         android:layout_margin="0dp"
@@ -20,6 +45,16 @@
         android:layout_below="@id/spnPoliceDepartment"
         android:text="@string/rank"
         android:id="@+id/txvRank"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="3dp"
+        android:layout_marginEnd="3dp"
+        android:textColor="@color/red"
+        android:layout_toRightOf="@id/txvRank"
+        android:layout_toEndOf="@id/txvRank"
+        android:layout_alignBaseline="@id/txvRank"
+        android:id="@+id/txvErrorRank"/>
     <Spinner
         style="@style/MyMaterialTheme.MySpinner"
         android:layout_margin="0dp"
@@ -32,6 +67,16 @@
         android:layout_below="@id/spnRank"
         android:text="@string/position"
         android:id="@+id/txvPosition"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="3dp"
+        android:layout_marginEnd="3dp"
+        android:textColor="@color/red"
+        android:layout_toRightOf="@id/txvPosition"
+        android:layout_toEndOf="@id/txvPosition"
+        android:layout_alignBaseline="@id/txvPosition"
+        android:id="@+id/txvErrorPosition"/>
     <Spinner
         style="@style/MyMaterialTheme.MySpinner"
         android:layout_margin="0dp"
