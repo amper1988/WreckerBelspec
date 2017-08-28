@@ -13,7 +13,7 @@ public class TestResponseEnvelope {
     String header;
 
     @Element(name = "return")
-    @Path("Body/testResponse")
+    @Path("Body/TestConnectionsResponse")
     TestResponseData testResponseData;
 
     public TestResponseData getTestData() {

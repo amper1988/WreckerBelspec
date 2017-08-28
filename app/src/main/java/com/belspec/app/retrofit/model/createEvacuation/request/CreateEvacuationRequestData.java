@@ -4,7 +4,7 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.filter.StackFilter;
 
-@Root(name = "tes:Evacuation")
+@Root(name = "tes:CreateEvacuation")
 public class CreateEvacuationRequestData {
     @Element(name = "tes:Manufacture")
     private String manufacture;

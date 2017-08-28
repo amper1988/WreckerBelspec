@@ -13,7 +13,7 @@ public class CreateExtraditionResponseEnvelope {
     private String header;
 
     @Element(name = "return")
-    @Path("Body/ExtraditionResponse")
+    @Path("Body/CreateExtraditionResponse")
     private CreateEvacuationResponseData data;
 
     public CreateEvacuationResponseData getData() {

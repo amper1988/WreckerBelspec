@@ -32,54 +32,54 @@ public interface RetrofitService {
             "Content-Type: application/soap+xml",
             "Accept-Charset: utf-8"
     })
-    @POST("ws/testconnection")
+    @POST("ws/MobileAppWebServices")
     Call<TestResponseEnvelope> executeTestOperation(@Header("Authorization") String auth, @Body TestRequestEnvelope request);
 
     @Headers({
             "Content-Type: application/soap+xml",
             "Accept-Charset: utf-8"
     })
-    @POST("ws/getdata")
+    @POST("ws/MobileAppWebServices")
     Call<GetDefaultDataResponseEnvelope> executeGetDefaultData(@Header("Authorization") String auth, @Body GetDefaultDataRequestEnvelope request);
 
     @Headers({
             "Content-Type: application/soap+xml",
             "Accept-Charset: utf-8"
     })
-    @POST("ws/createdata")
+    @POST("ws/MobileAppWebServices")
     Call<CreateEvacuationResponseEnvelope> executeCreateEvacuation(@Header("Authorization") String auth, @Body CreateEvacuationRequestEnvelope request);
 
     @Headers({
             "Content-Type: application/soap+xml",
             "Accept-Charset: utf-8"
     })
-    @POST("ws/getdata")
+    @POST("ws/MobileAppWebServices")
     Call<GetCarOnEvacuationResponseEnvelope> executeGetCarOnEvacuation(@Header("Authorization") String auth, @Body GetCarOnEvacuationRequestEnvelope request);
 
-    @POST("ws/getdata")
+    @POST("ws/MobileAppWebServices")
     Call<GetRanksResponseEnvelope> executeGetRanks(@Header("Authorization") String auth, @Body GetRanksRequestEnvelope request);
 
-    @POST("ws/getdata")
+    @POST("ws/MobileAppWebServices")
     Call<GetPositionsResponseEnvelope> executeGetPositions(@Header("Authorization") String auth, @Body GetPositionsRequestEnvelope request);
 
-    @POST("ws/getdata")
+    @POST("ws/MobileAppWebServices")
     Call<GetPoliceDepartmentResponseEnvelope> executeGetPoliceDepartment(@Header("Authorization") String auth, @Body GetPoliceDepartmentRequestEnvelope request);
 
-    @POST("ws/getdata")
+    @POST("ws/MobileAppWebServices")
     Call<GetRoadLawPointResponseEnvelope> executeGetRoadLawPoints(@Header("Authorization") String auth, @Body GetRoadLawPointRequestEnvelope request);
 
     @Headers({
             "Content-Type: application/soap+xml",
             "Accept-Charset: utf-8"
     })
-    @POST("ws/createdata")
+    @POST("ws/MobileAppWebServices")
     Call<CreateExtraditionResponseEnvelope> executeCreateExtradition(@Header("Authorization") String auth, @Body CreateExtraditionRequestEnvelope request);
 
     @Headers({
             "Content-Type: application/soap+xml",
             "Accept-Charset: utf-8"
     })
-    @POST("ws/createdata")
+    @POST("ws/MobileAppWebServices")
     Call<CreatePolicemanResponseEnvelope> executeCreatePoliceman(@Header("Authorization") String auth, @Body CreatePolicemanRequestEnvelope request);
 
 }

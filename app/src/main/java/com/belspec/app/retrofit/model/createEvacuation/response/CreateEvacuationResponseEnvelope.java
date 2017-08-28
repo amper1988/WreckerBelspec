@@ -10,7 +10,7 @@ public class CreateEvacuationResponseEnvelope {
     private String header;
 
     @Element(name = "return")
-    @Path("Body/EvacuationResponse")
+    @Path("Body/CreateEvacuationResponse")
     private CreateEvacuationResponseData data;
 
     public CreateEvacuationResponseData getData() {

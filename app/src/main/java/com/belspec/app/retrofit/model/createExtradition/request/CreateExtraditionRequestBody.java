@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
 
 @Root(name = "soap12:Body")
 public class CreateExtraditionRequestBody {
-    @Element(name = "tes:Extradition")
+    @Element(name = "tes:CreateExtradition")
     private CreateExtraditionRequestData data;
 
     public CreateExtraditionRequestBody(int docId, String seriesRc, String numberRc, String lastNameRc, String addressRc,

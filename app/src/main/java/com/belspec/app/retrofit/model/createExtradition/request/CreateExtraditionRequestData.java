@@ -3,7 +3,7 @@ package com.belspec.app.retrofit.model.createExtradition.request;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
-@Root(name = "tes:Extradition")
+@Root(name = "tes:CreateExtradition")
 public class CreateExtraditionRequestData {
     @Element(name = "tes:DocID")
     private int docId;
