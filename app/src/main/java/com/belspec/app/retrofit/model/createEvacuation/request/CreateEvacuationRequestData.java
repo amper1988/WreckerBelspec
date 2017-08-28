@@ -34,12 +34,8 @@ public class CreateEvacuationRequestData {
     private String wrecker;
     @Element(name = "tes:Organization")
     private String organization;
-    @Element(name = "tes:EvacuationType")
-    private int evacuationType;
     @Element(name = "RegDevice")
     private String regDevice;
-    @Element(name = "tes:UserType")
-    private int userType;
     @Element(name = "tes:Code")
     private String code;
     @Element (name = "tes:Witness1Name")
@@ -205,16 +201,6 @@ public class CreateEvacuationRequestData {
         return this;
     }
 
-    public CreateEvacuationRequestData setEvacuationType(int evacuationType) {
-        this.evacuationType = evacuationType;
-        return this;
-    }
-
-    public CreateEvacuationRequestData setUserType(int userType) {
-        this.userType = userType;
-        return this;
-    }
-
     public CreateEvacuationRequestData setRegDevice(String regDevice){
         this.regDevice = regDevice;
         return this;
@@ -245,26 +231,20 @@ public class CreateEvacuationRequestData {
         this.policeman = "";
         this.wrecker = "";
         this.organization = "";
-        this.evacuationType = 0;
-
-        this.userType = 0;
         this.regDevice = "";
         this.code = "";
         this.witness1Name = "";
         this.witness1Address = "";
         this.witness1Contact = "";
         this.witness1Signature = "";
-
         this.witness2Name = "";
         this.witness2Address = "";
         this.witness2Contact = "";
         this.witness2Signature = "";
-
         this.policemanSignature = "";
         this.revisionResult = "";
         this.plea1 ="";
         this.plea2 = "";
-
         this.withoutEvacuation = false;
         this.parking = "";
         this.roadLawsPoints = "";
@@ -274,7 +254,7 @@ public class CreateEvacuationRequestData {
                                        String color, String photo1, String photo2,
                                        String photo3, String photo4, String address,
                                        String clause, String policeDepartment, String policeman,
-                                       String wrecker, String organization, int evacuationType, int userType, String regDevice, String code,
+                                       String wrecker, String organization, String regDevice, String code,
                                        String witness1Name, String witness1Address, String witness1Contact, String witness1Signature, String plea1,
                                        String witness2Name, String witness2Address, String witness2Contact, String witness2Signature, String plea2,
                                        String policemanSignature, String revisionResult, boolean withoutEvacuation, String parking, String roadLawsPoints){
@@ -292,31 +272,22 @@ public class CreateEvacuationRequestData {
         this.policeman = policeman;
         this.wrecker = wrecker;
         this.organization = organization;
-        this.evacuationType = evacuationType;
         this.regDevice = regDevice;
-
-        this.userType = userType;
         this.code = code;
-
         this.witness1Name = witness1Name;
         this.witness1Address = witness1Address;
         this.witness1Contact = witness1Contact;
         this.witness1Signature = witness1Signature;
-
         this.witness2Name = witness2Name;
         this.witness2Address = witness2Address;
         this.witness2Contact = witness2Contact;
         this.witness2Signature = witness2Signature;
-
         this.policemanSignature = policemanSignature;
         this.revisionResult = revisionResult;
-
         this.plea1 = plea1;
         this.plea2 = plea2;
-
         this.withoutEvacuation = withoutEvacuation;
         this.parking = parking;
-
         this.roadLawsPoints = roadLawsPoints;
     }
 }
