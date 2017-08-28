@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.belspec.app.R;
 import com.belspec.app.ui.control.create_policeman_dialog.DialogFragmentCreatePoliceman;
 import com.belspec.app.ui.main.MainActivity;
+import com.belspec.app.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +40,6 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
     private TextView navOrganization;
     ControlPresenter presenter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,20 +52,39 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
         navOrganization = (TextView)header.findViewById(R.id.txvOrganization);
         presenter = new ControlPresenter(this);
         presenter.onCreate(savedInstanceState);
+        initViews();
 
     }
+
+    @Override
+    protected void onResume() {
+        presenter.onResume();
+        super.onResume();
+
+    }
+
+    @Override
+    public FragmentManager getAppFragmentManager() {
+        return getSupportFragmentManager();
+    }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            presenter.onBackPressed();
-        }
-    }
+            Utils.showYesNoDialog(this, "Уже закончили работу?", new Utils.DialogYesNoListener() {
+                @Override
+                public void onNegativePress() {
 
-    @Override
-    public void initialize() {
-        initViews();
+                }
+
+                @Override
+                public void onPositivePress() {
+                    presenter.onCloseClick();
+                }
+            });
+        }
     }
 
     @Override
@@ -82,7 +102,6 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
         tabLayout.setupWithViewPager(viewPager);
     }
 
-
     private void initViews() {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -93,12 +112,11 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-        presenter.initializeViewPager(getSupportFragmentManager());
     }
 
     @Override
     public void close(){
-        super.onBackPressed();
+        finish();
     }
 
     @Override
@@ -118,12 +136,6 @@ public class ControlActivity extends AppCompatActivity implements NavigationView
                 return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.onResume();
     }
 
     @Override
