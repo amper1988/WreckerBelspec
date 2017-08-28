@@ -1,9 +1,10 @@
 package com.belspec.app.ui.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -16,7 +17,6 @@ import android.widget.TextView;
 import com.belspec.app.R;
 import com.belspec.app.ui.control.ControlActivity;
 import com.belspec.app.utils.UserManager;
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,22 +37,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_content);
-        presenter = new MainPresenter(this);
-        presenter.setApplicationContext(getApplicationContext());
         ButterKnife.bind(this);
+        presenter = new MainPresenter(this);
+        presenter.onCreate(savedInstanceState);
         initComponents();
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        presenter.startGPSTracker(this);
+        presenter.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        presenter.stopGPSTracker();
+        presenter.onPause();
     }
 
 
@@ -60,12 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnLogin.setOnClickListener(this);
         edtName.setOnClickListener(this);
         edtPwd.setOnClickListener(this);
-        edtName.setText(UserManager.getInstanse().getmLogin());
         edtPwd.setImeActionLabel("DONE", EditorInfo.IME_ACTION_DONE);
         edtName.setOnEditorActionListener(this);
         edtName.setImeActionLabel("NEXT", EditorInfo.IME_ACTION_NEXT);
         edtPwd.setOnEditorActionListener(this);
-        edtPwd.setText(UserManager.getInstanse().getmPassword());
         imvLoading.setBackgroundResource(R.drawable.pb_loading);
         imvLoading.setVisibility(View.GONE);
     }
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
-                presenter.login(edtName.getText().toString(), edtPwd.getText().toString());
+                presenter.login();
                 break;
         }
     }
@@ -107,6 +105,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public Context getContext() {
+        return getApplicationContext();
+    }
+
+    @Override
     public void showMessage(String message) {
         txvStatus.setText(message);
     }
@@ -119,6 +122,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, ControlActivity.class);
         startActivity(intent);
         this.finish();
+    }
+
+    @Override
+    public void setName(String name) {
+        edtName.setText(name);
+    }
+
+    @Override
+    public String getName() {
+        return edtName.getText().toString();
+    }
+
+    @Override
+    public void setPassword(String password) {
+        edtPwd.setText(password);
+    }
+
+    @Override
+    public String getPassword() {
+        return edtPwd.getText().toString();
     }
 
 }

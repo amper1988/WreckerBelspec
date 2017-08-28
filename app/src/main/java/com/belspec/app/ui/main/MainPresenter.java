@@ -1,7 +1,7 @@
 package com.belspec.app.ui.main;
 
-import android.content.Context;
 import android.location.Location;
+import android.os.Bundle;
 
 import com.belspec.app.gps.GPSTracker;
 import com.belspec.app.retrofit.Api;
@@ -22,10 +22,13 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
 
     MainPresenter(MainContract.View view){
         this.view = view;
+        AppHolder.getInstance().setmContext(view.getContext());
     }
 
     @Override
-    public void login(String login, String password) {
+    public void login() {
+        String login = view.getName();
+        String password = view.getPassword();
         UserManager.getInstanse().setmLogin(login);
         UserManager.getInstanse().setmPassword(password);
         view.setLoading(true);
@@ -57,7 +60,13 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
     }
 
     @Override
-    public void startGPSTracker(Context context) {
+    public void onCreate(Bundle bundle) {
+        view.setName(UserManager.getInstanse().getmLogin());
+        view.setPassword(UserManager.getInstanse().getmPassword());
+    }
+
+    @Override
+    public void onResume() {
         if(gpsTracker == null)
             gpsTracker = GPSTracker.getInstance();
         if(gpsTracker.canGetLocation())
@@ -68,15 +77,10 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
     }
 
     @Override
-    public void stopGPSTracker() {
+    public void onPause() {
         if(gpsTracker != null){
             gpsTracker.unsetDataChangeListener(this);
         }
-    }
-
-    @Override
-    public void setApplicationContext(Context context) {
-        AppHolder.getInstance().setmContext(context);
     }
 
     @Override
