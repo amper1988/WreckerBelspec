@@ -8,8 +8,14 @@ import android.util.Base64;
 
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
+import com.belspec.app.retrofit.model.DriverData;
+import com.belspec.app.retrofit.model.OwnerData;
 import com.belspec.app.retrofit.model.createExtradition.request.CreateExtraditionRequestEnvelope;
 import com.belspec.app.retrofit.model.createExtradition.response.CreateExtraditionResponseEnvelope;
+import com.belspec.app.retrofit.model.getDriverData.request.GetDriverDataRequestEnvelope;
+import com.belspec.app.retrofit.model.getDriverData.response.GetDriverDataResponseEnvelope;
+import com.belspec.app.retrofit.model.getOwnerData.request.GetOwnerDataRequestEnvelope;
+import com.belspec.app.retrofit.model.getOwnerData.response.GetOwnerDataResponseEnvelope;
 import com.belspec.app.utils.Converter;
 import com.belspec.app.utils.Encode;
 import com.belspec.app.utils.FileManager;
@@ -21,6 +27,8 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,12 +37,97 @@ import retrofit2.Response;
 public class OwnerDataPresenter implements OwnerDataContract.Presenter {
     private OwnerDataContract.View view;
     private Context context;
+    private List<OwnerData> ownerDataList = null;
+    private List<DriverData> driverDataList = null;
+    private boolean ownerDataReceive;
+    private boolean driverDataReceive;
 
     OwnerDataPresenter(OwnerDataContract.View view) {
         this.view = view;
         this.context = view.getContext();
     }
 
+
+    @Override
+    public void onCreate() {
+        view.setLoading(true);
+        Api.createRetrofitService().executeGetOwnerData(
+                Encode.getBasicAuthTemplate(
+                        UserManager.getInstanse().getmLogin(),
+                        UserManager.getInstanse().getmPassword()),
+                new GetOwnerDataRequestEnvelope(view.getCarId())
+        ).enqueue(new Callback<GetOwnerDataResponseEnvelope>() {
+            @Override
+            public void onResponse(Call<GetOwnerDataResponseEnvelope> call, Response<GetOwnerDataResponseEnvelope> response) {
+                if (response.code() == 200) {
+                    ownerDataList = response.body().getBody().getOwnerDataItems();
+                } else {
+                    view.showMessage(response.message());
+                }
+                ownerDataReceive = true;
+                showOwnerDriverData();
+            }
+
+            @Override
+            public void onFailure(Call<GetOwnerDataResponseEnvelope> call, Throwable t) {
+                ownerDataReceive = true;
+                showOwnerDriverData();
+            }
+        });
+        Api.createRetrofitService().executeGetDriverData(
+                Encode.getBasicAuthTemplate(
+                        UserManager.getInstanse().getmLogin(),
+                        UserManager.getInstanse().getmPassword()
+                ),
+                new GetDriverDataRequestEnvelope(view.getCarId())
+        ).enqueue(new Callback<GetDriverDataResponseEnvelope>() {
+            @Override
+            public void onResponse(Call<GetDriverDataResponseEnvelope> call, Response<GetDriverDataResponseEnvelope> response) {
+                if (response.code() == 200) {
+                    driverDataList = response.body().getBody().getDriverDataItems();
+                } else
+                    view.showMessage(response.message());
+                driverDataReceive = true;
+                showOwnerDriverData();
+            }
+
+            @Override
+            public void onFailure(Call<GetDriverDataResponseEnvelope> call, Throwable t) {
+                driverDataReceive = true;
+                showOwnerDriverData();
+            }
+        });
+    }
+
+    private void showOwnerDriverData() {
+        if (driverDataReceive && ownerDataReceive) {
+            view.setLoading(false);
+            if (driverDataList != null) {
+                if (driverDataList.size() == 1) {
+                    showDriverData(driverDataList.get(0));
+                } else if (driverDataList.size() > 0) {
+                    ArrayList<String> array = new ArrayList<>();
+                    array.add("");
+                    for (DriverData item : driverDataList) {
+                        array.add(item.getDriverLicenseNumber() + " " + item.getDriverLicenseSeries());
+                    }
+                    view.setDrivers(array);
+                }
+            }
+            if (ownerDataList != null) {
+                if (ownerDataList.size() == 1) {
+                    showOwnerData(ownerDataList.get(0));
+                } else if (ownerDataList.size() > 0) {
+                    ArrayList<String> array = new ArrayList<>();
+                    array.add("");
+                    for (OwnerData item : ownerDataList) {
+                        array.add(item.getTechCertSeries() + " " + item.getTechCertNumber());
+                    }
+                    view.setOwners(array);
+                }
+            }
+        }
+    }
 
     @Override
     public void onRegisterClick() {
@@ -103,4 +196,41 @@ public class OwnerDataPresenter implements OwnerDataContract.Presenter {
         view.setLoading(false);
         EventBus.getDefault().post(new OwnerDataSendEvent(-1));
     }
+
+    @Override
+    public void onOwnerSelected(int position) {
+        int index = position - 1;
+        if (index >= 0 && index < ownerDataList.size()) {
+            showOwnerData(ownerDataList.get(index));
+        }
+    }
+
+    @Override
+    public void onDriverSelected(int position) {
+        int index = position - 1;
+        if (index >= 0 && index < driverDataList.size()) {
+            showDriverData(driverDataList.get(index));
+        }
+    }
+
+    private void showOwnerData(OwnerData ownerData) {
+        if (ownerData != null) {
+            view.setNameRC(ownerData.getOwnerName());
+            view.setAddressRC(ownerData.getOwnerAddress());
+            view.setSeriesRC(ownerData.getTechCertSeries());
+            view.setNumberRC(ownerData.getTechCertNumber());
+        }
+    }
+
+    private void showDriverData(DriverData driverData) {
+        if (driverData != null) {
+            view.setNameDL(driverData.getDriverName());
+            view.setAddressDL(driverData.getDriverAddress());
+            view.setSeriesDL(driverData.getDriverLicenseSeries());
+            view.setNumberDL(driverData.getDriverLicenseNumber());
+            view.setContact(driverData.getDriverContact());
+        }
+    }
+
+
 }

@@ -10,22 +10,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.belspec.app.R;
 import com.belspec.app.utils.Converter;
 import com.belspec.app.utils.Utils;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class OwnerDataActivity extends AppCompatActivity implements View.OnClickListener, OwnerDataContract.View {
+    public static final String MANUFACTURE = "MANUFACTURE";
+    public static final String MODEL = "MODEL";
+    public static final String CAR_ID = "CAR_ID";
+    public static final String PHOTO = "PHOTO";
+    public static final String DOC_ID = "DOC_ID";
     @BindView(R.id.txvManufacture) TextView txvManufacture;
     @BindView(R.id.txvModel) TextView txvModel;
     @BindView(R.id.txvCarId) TextView txvCarId;
@@ -55,23 +65,22 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     @BindView(R.id.imvLoading) ImageView imvLoading;
     @BindView(R.id.btnCopy) Button btnCopy;
     @BindView(R.id.btnRegister) Button btnRegister;
-
+    @BindView(R.id.spnDriverLicense)
+    Spinner spnDriverLicense;
+    @BindView(R.id.spnRegCertificate)
+    Spinner spnRegCertificate;
     int docId;
     OwnerDataPresenter presenter;
-    public static final String MANUFACTURE = "MANUFACTURE";
-    public static final String MODEL = "MODEL";
-    public static final String CAR_ID = "CAR_ID";
-    public static final String PHOTO = "PHOTO";
-    public static final String DOC_ID = "DOC_ID";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.extradition_activity);
         ButterKnife.bind(this);
-        presenter = new OwnerDataPresenter(this);
         initViews();
         initComponents();
+        presenter = new OwnerDataPresenter(this);
+        presenter.onCreate();
     }
 
     private void initViews(){
@@ -90,6 +99,30 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
         btnCopy.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
         btnCopy.setOnClickListener(this);
+        spnDriverLicense.setVisibility(View.GONE);
+        spnRegCertificate.setVisibility(View.GONE);
+        spnRegCertificate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                presenter.onOwnerSelected(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spnDriverLicense.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                presenter.onDriverSelected(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null)
@@ -215,8 +248,31 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    public void setOwners(List<String> owners) {
+        if (owners != null) {
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, owners);
+            spnRegCertificate.setAdapter(arrayAdapter);
+            spnRegCertificate.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void setDrivers(List<String> drivers) {
+        if (drivers != null) {
+            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, drivers);
+            spnDriverLicense.setAdapter(arrayAdapter);
+            spnDriverLicense.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
     public String getSeriesDL() {
         return edtSeriesDL.getText().toString();
+    }
+
+    @Override
+    public void setSeriesDL(String seriesDL) {
+        edtSeriesDL.setText(seriesDL);
     }
 
     @Override
@@ -225,8 +281,18 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    public void setSeriesRC(String seriesRC) {
+        edtSeriesRC.setText(seriesRC);
+    }
+
+    @Override
     public String getNumberDL() {
         return edtNumberDL.getText().toString();
+    }
+
+    @Override
+    public void setNumberDL(String numberDL) {
+        edtNumberDL.setText(numberDL);
     }
 
     @Override
@@ -235,8 +301,18 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    public void setNumberRC(String numberRC) {
+        edtNumberRC.setText(numberRC);
+    }
+
+    @Override
     public String getNameRC() {
         return edtLastNameRC.getText().toString();
+    }
+
+    @Override
+    public void setNameRC(String nameRC) {
+        edtLastNameRC.setText(nameRC);
     }
 
     @Override
@@ -245,8 +321,18 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    public void setNameDL(String nameDL) {
+        edtLastNameDL.setText(nameDL);
+    }
+
+    @Override
     public String getAddressRC() {
         return edtAddressRC.getText().toString();
+    }
+
+    @Override
+    public void setAddressRC(String addressRC) {
+        edtAddressRC.setText(addressRC);
     }
 
     @Override
@@ -255,8 +341,18 @@ public class OwnerDataActivity extends AppCompatActivity implements View.OnClick
     }
 
     @Override
+    public void setAddressDL(String addressDL) {
+        edtAddressDL.setText(addressDL);
+    }
+
+    @Override
     public String getContact() {
         return edtContact.getText().toString();
+    }
+
+    @Override
+    public void setContact(String contact) {
+        edtContact.setText(contact);
     }
 
     @Override

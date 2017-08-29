@@ -12,6 +12,10 @@ import com.belspec.app.retrofit.model.getCarOnEvacuation.request.GetCarOnEvacuat
 import com.belspec.app.retrofit.model.getCarOnEvacuation.response.GetCarOnEvacuationResponseEnvelope;
 import com.belspec.app.retrofit.model.getDefaultData.request.GetDefaultDataRequestEnvelope;
 import com.belspec.app.retrofit.model.getDefaultData.response.GetDefaultDataResponseEnvelope;
+import com.belspec.app.retrofit.model.getDriverData.request.GetDriverDataRequestEnvelope;
+import com.belspec.app.retrofit.model.getDriverData.response.GetDriverDataResponseEnvelope;
+import com.belspec.app.retrofit.model.getOwnerData.request.GetOwnerDataRequestEnvelope;
+import com.belspec.app.retrofit.model.getOwnerData.response.GetOwnerDataResponseEnvelope;
 import com.belspec.app.retrofit.model.getPoliceDepartment.request.GetPoliceDepartmentRequestEnvelope;
 import com.belspec.app.retrofit.model.getPoliceDepartment.response.GetPoliceDepartmentResponseEnvelope;
 import com.belspec.app.retrofit.model.getPositions.request.GetPositionsRequestEnvelope;
@@ -90,5 +94,21 @@ public interface RetrofitService {
     })
     @POST("ws/MobileAppWebServices")
     Call<CheckUpdateResponseEnvelope> executeCheckUpdate(@Header("Authorization") String auth, @Body CheckUpdateRequestEnvelope request);
+
+    @Headers({
+            "Content-Type: application/soap+xml",
+            "Accept-Charset: utf-8"
+    })
+    @POST("ws/MobileAppWebServices")
+    Call<GetOwnerDataResponseEnvelope> executeGetOwnerData(@Header("Authorization") String auth, @Body GetOwnerDataRequestEnvelope request);
+
+    @Headers({
+            "Content-Type: application/soap+xml",
+            "Accept-Charset: utf-8"
+    })
+    @POST("ws/MobileAppWebServices")
+    Call<GetDriverDataResponseEnvelope> executeGetDriverData(@Header("Authorization") String auth, @Body GetDriverDataRequestEnvelope request);
+
+
 
 }
