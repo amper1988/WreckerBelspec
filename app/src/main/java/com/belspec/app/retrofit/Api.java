@@ -36,29 +36,11 @@ public class Api {
                 .connectTimeout(3600,  TimeUnit.SECONDS);
         httpClientBuilder.addInterceptor(interceptor);
         Retrofit restAdapter = new Retrofit.Builder()
-                .baseUrl("http://185.66.70.44:10101/stojanka/")
+                .baseUrl("http://185.66.69.93:10101/stojanka/")
                 .client(httpClientBuilder.build())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build();
         return restAdapter.create(com.belspec.app.retrofit.RetrofitService.class);
-    }
-
-    public static class LoggingInterceptor implements Interceptor {
-
-        private HttpLoggingInterceptor mInterceptor;
-
-        public LoggingInterceptor() {
-            mInterceptor = new HttpLoggingInterceptor();
-        }
-
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            return customIntercept(chain);
-        }
-
-        public void setLevel(HttpLoggingInterceptor.Level level) {
-            mInterceptor.setLevel(level);
-        }
     }
 
     public static Response customIntercept(Interceptor.Chain chain) throws IOException {
@@ -106,6 +88,24 @@ public class Api {
 
 
         return response;
+    }
+
+    public static class LoggingInterceptor implements Interceptor {
+
+        private HttpLoggingInterceptor mInterceptor;
+
+        public LoggingInterceptor() {
+            mInterceptor = new HttpLoggingInterceptor();
+        }
+
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            return customIntercept(chain);
+        }
+
+        public void setLevel(HttpLoggingInterceptor.Level level) {
+            mInterceptor.setLevel(level);
+        }
     }
 }
 
