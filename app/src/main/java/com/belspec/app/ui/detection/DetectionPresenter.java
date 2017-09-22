@@ -89,7 +89,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
     @Subscribe
     @SuppressWarnings("unused")
-    void onEvent(SignatureEvent event) {
+    public void onEvent(SignatureEvent event) {
 
         if (event.getSignature() != null && getSign) {
             view.setSignaturePol(event.getSignature());
@@ -115,7 +115,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
         if (gpsTracker.canGetLocation())
             gpsTracker.startUsingGPS();
         else
-            gpsTracker.showSettingsAlert();
+            view.showGPSAlert();
         gpsTracker.setDataChangeListener(this);
     }
 

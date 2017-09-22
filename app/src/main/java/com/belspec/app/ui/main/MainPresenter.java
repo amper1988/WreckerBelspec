@@ -123,7 +123,7 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
         if(gpsTracker.canGetLocation())
             gpsTracker.startUsingGPS();
         else
-            gpsTracker.showSettingsAlert();
+            view.showGPSAlert();
         gpsTracker.setDataChangeListener(this);
     }
 
@@ -138,7 +138,7 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
     public void onLocationDataChange(String locationAction, Location location) {
         if(locationAction.equals(GPSTracker.PROVIDER_DISABLED)){
             if(!gpsTracker.canGetLocation())
-                gpsTracker.showSettingsAlert();
+                view.showGPSAlert();
         }
     }
 }

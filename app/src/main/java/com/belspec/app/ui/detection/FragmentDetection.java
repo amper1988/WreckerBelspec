@@ -3,15 +3,19 @@ package com.belspec.app.ui.detection;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -102,11 +106,10 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     @BindView(R.id.llSpinersParking) LinearLayout llSpinersParking;
 
     View mView;
-    private String plea1;
-    private String plea2;
     int fragmentId;
     DetectionContract.Presenter presenter;
-
+    private String plea1;
+    private String plea2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -434,7 +437,6 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         });
     }
 
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -569,6 +571,9 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 presenter.onPhotoCancel();
             }
         }
+        if (requestCode == DetectionContract.REQUEST_SETTINGS) {
+            presenter.onResume();
+        }
     }
 
     @Override
@@ -640,9 +645,30 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void setManufacture(String manufacture) {
-        actvManufacture.setText(manufacture);
-        presenter.loadListModel(manufacture);
+    public void showGPSAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyMaterialTheme));
+
+        // Setting Dialog Title
+        alertDialog.setTitle("Настойте GPS");
+
+        // Setting Dialog Message
+        alertDialog.setMessage("Определение GPS-координат отключено. Хотите перейти в настройки?");
+
+        // On pressing the Settings button.
+        alertDialog.setPositiveButton("Настройки", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, DetectionContract.REQUEST_SETTINGS);
+            }
+        });
+        // On pressing the cancel button
+        alertDialog.setNegativeButton("Отмена", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        // Showing Alert Message
+        alertDialog.show();
     }
 
     @Override
@@ -651,8 +677,9 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void setModel(String model) {
-        actvModel.setText(model);
+    public void setManufacture(String manufacture) {
+        actvManufacture.setText(manufacture);
+        presenter.loadListModel(manufacture);
     }
 
     @Override
@@ -661,8 +688,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void setCarId(String carId) {
-        edtCarID.setText(carId);
+    public void setModel(String model) {
+        actvModel.setText(model);
     }
 
     @Override
@@ -671,13 +698,18 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void setColor(String color) {
-        actvColor.setText(color);
+    public void setCarId(String carId) {
+        edtCarID.setText(carId);
     }
 
     @Override
     public String getColor() {
         return actvColor.getText().toString();
+    }
+
+    @Override
+    public void setColor(String color) {
+        actvColor.setText(color);
     }
 
     @Override
@@ -796,6 +828,11 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
+    public String getOrganization() {
+        return (String) spnOrganization.getSelectedItem();
+    }
+
+    @Override
     public void setOrganization(String organization) {
         SpinnerAdapter adapter = spnOrganization.getAdapter();
         int count = adapter.getCount();
@@ -808,8 +845,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public String getOrganization() {
-        return (String)spnOrganization.getSelectedItem();
+    public String getPoliceDepartment() {
+        return (String) spnPoliceDepartment.getSelectedItem();
     }
 
     @Override
@@ -826,8 +863,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public String getPoliceDepartment() {
-        return (String)spnPoliceDepartment.getSelectedItem();
+    public String getPoliceman() {
+        return (String) spnPoliceman.getSelectedItem();
     }
 
     @Override
@@ -844,8 +881,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public String getPoliceman() {
-        return (String)spnPoliceman.getSelectedItem();
+    public Bitmap getSignaturePol() {
+        return presenter.getBitmap(imvPolicemanSignature);
     }
 
     @Override
@@ -854,8 +891,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public Bitmap getSignaturePol() {
-        return presenter.getBitmap(imvPolicemanSignature);
+    public String getRoadLawPoint() {
+        return edtRoadLawPoint.getText().toString();
     }
 
     @Override
@@ -864,8 +901,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public String getRoadLawPoint() {
-        return edtRoadLawPoint.getText().toString();
+    public String getRevisionResult() {
+        return edtRevisionResult.getText().toString();
     }
 
     @Override
@@ -874,8 +911,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public String getRevisionResult() {
-        return edtRevisionResult.getText().toString();
+    public String getParking() {
+        return (String) spnParking.getSelectedItem();
     }
 
     @Override
@@ -891,8 +928,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public String getParking() {
-        return (String)spnParking.getSelectedItem();
+    public String getStreet() {
+        return edtStreet.getText().toString();
     }
 
     @Override
@@ -901,8 +938,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public String getStreet() {
-        return edtStreet.getText().toString();
+    public boolean getWithoutEvacuation() {
+        return chbWithoutEvacuation.isSelected();
     }
 
     @Override
@@ -911,8 +948,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public boolean getWithoutEvacuation() {
-        return chbWithoutEvacuation.isSelected();
+    public String getClause() {
+        return (String) spnClause.getSelectedItem();
     }
 
     @Override
@@ -928,8 +965,8 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public String getClause() {
-        return (String)spnClause.getSelectedItem();
+    public String getWrecker() {
+        return (String) spnWrecker.getSelectedItem();
     }
 
     @Override
@@ -942,11 +979,6 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 position = i;
         }
         spnWrecker.setSelection(position != -1 && position < count? position : 0);
-    }
-
-    @Override
-    public String getWrecker() {
-        return (String)spnWrecker.getSelectedItem();
     }
 
     @Override

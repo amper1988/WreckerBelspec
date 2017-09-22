@@ -12,6 +12,7 @@ import java.util.List;
 
 abstract class DetectionContract {
     static final int REQUEST_CODE_PHOTO = 1;
+    static final int REQUEST_SETTINGS = 111;
 
     interface View{
         void initialize();
@@ -23,14 +24,24 @@ abstract class DetectionContract {
         void showPdfFile(Uri uri);
         void showMessageDialog(String message);
 
-        void setManufacture(String manufacture);
+        void showGPSAlert();
+
         String getManufacture();
-        void setModel(String model);
+
+        void setManufacture(String manufacture);
+
         String getModel();
-        void setCarId(String carId);
+
+        void setModel(String model);
+
         String getCarId();
-        void setColor(String color);
+
+        void setCarId(String carId);
+
         String getColor();
+
+        void setColor(String color);
+
         void setWitnessName(String name, int index);
         String getWitnessName(int index);
         void setWitnessAddress(String address,int index);
@@ -41,28 +52,51 @@ abstract class DetectionContract {
         Bitmap getWitnessSignature(int index);
         void setWitnessPlea(String plea,int index);
         String getWitnessPlea(int index);
-        void setOrganization(String organization);
+
         String getOrganization();
-        void setPoliceDepartment(String policeDepartment);
+
+        void setOrganization(String organization);
+
         String getPoliceDepartment();
-        void setPoliceman(String policeman);
+
+        void setPoliceDepartment(String policeDepartment);
+
         String getPoliceman();
-        void setSignaturePol(Bitmap signaturePol);
+
+        void setPoliceman(String policeman);
+
         Bitmap getSignaturePol();
-        void setRoadLawPoint(String roadLawPoint);
+
+        void setSignaturePol(Bitmap signaturePol);
+
         String getRoadLawPoint();
-        void setRevisionResult(String revisionResult);
+
+        void setRoadLawPoint(String roadLawPoint);
+
         String getRevisionResult();
-        void setParking(String parking);
+
+        void setRevisionResult(String revisionResult);
+
         String getParking();
-        void setStreet(String street);
+
+        void setParking(String parking);
+
         String getStreet();
-        void setWithoutEvacuation(boolean bool);
+
+        void setStreet(String street);
+
         boolean getWithoutEvacuation();
-        void setClause(String clause);
+
+        void setWithoutEvacuation(boolean bool);
+
         String getClause();
-        void setWrecker(String wrecker);
+
+        void setClause(String clause);
+
         String getWrecker();
+
+        void setWrecker(String wrecker);
+
         String getCode();
         void setCode(String code);
 
