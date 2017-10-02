@@ -6,14 +6,15 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 
+import com.belspec.app.R;
 import com.belspec.app.utils.AppHolder;
 
 import java.io.IOException;
@@ -22,11 +23,16 @@ import java.util.List;
 
 public class GPSTracker extends Service implements LocationListener {
 
-    private static GPSTracker instance;
     public static final String PROVIDER_DISABLED = "PROVIDER_DISABLED";
     public static final String PROVIDER_ENABLED = "PROVIDER_ENABLED";
     public static final String LOCATION_CHANGED = "LOCATION_CHANGED";
-
+    // The minimum distance to change Updates in meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // 10 meters
+    // The minimum time between updates in milliseconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 1; // 1 seconds
+    private static GPSTracker instance;
+    // Declaring a Location Manager
+    protected LocationManager locationManager;
     // Flag for GPS status
     boolean isGPSEnabled = false;
     // Flag for network status
@@ -39,23 +45,17 @@ public class GPSTracker extends Service implements LocationListener {
     double latitude; // Latitude
     double longitude; // Longitude
     List<LocationDataChangeListener> locationDataChangeListenerList;
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 1; // 10 seconds
-    // Declaring a Location Manager
-    protected LocationManager locationManager;
-
-    public static synchronized GPSTracker getInstance(){
-        if(instance == null)
-            instance = new GPSTracker();
-        return instance;
-    }
 
     private GPSTracker() {
         locationDataChangeListenerList = new ArrayList<>();
         locationManager = (LocationManager) AppHolder.getInstance().getContext()
                 .getSystemService(LOCATION_SERVICE);
+    }
+
+    public static synchronized GPSTracker getInstance() {
+        if (instance == null)
+            instance = new GPSTracker();
+        return instance;
     }
 
     public void setDataChangeListener(LocationDataChangeListener listener){
@@ -154,8 +154,8 @@ public class GPSTracker extends Service implements LocationListener {
      * On pressing the Settings button it will launch Settings Options.
      */
 
-    public void showSettingsAlert() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(AppHolder.getInstance().getContext());
+    private void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(new ContextThemeWrapper(AppHolder.getInstance().getContext(), R.style.MyMaterialTheme));
 
         // Setting Dialog Title
         alertDialog.setTitle("Настойте GPS");
@@ -167,7 +167,7 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.setPositiveButton("Настройки", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int which) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                getApplicationContext().startActivity(intent);
+                AppHolder.getInstance().getContext().startActivity(intent);
             }
         });
         // On pressing the cancel button
@@ -206,27 +206,28 @@ public class GPSTracker extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        if(location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
-            locationGPS = location;
-            gpsTime = location.getTime();
-        }
-        else if(location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) {
-            locationNetwork = location;
-            networkTime = location.getTime();
-        }
-        Location bestLocation = null;
-        if (locationGPS != null && gpsTime > networkTime)
-            bestLocation = locationGPS;
-        if(bestLocation == null && networkTime > gpsTime && Math.abs(networkTime - gpsTime) > 20000){
-            if(locationNetwork!= null)
-                bestLocation = locationNetwork;
-        }
-        if(bestLocation != null){
-            latitude = bestLocation.getLatitude();
-            longitude = bestLocation.getLongitude();
-        }
-        for(LocationDataChangeListener item: locationDataChangeListenerList){
-            item.onLocationDataChange(LOCATION_CHANGED, bestLocation);
+        if (location.getAccuracy() < 20) {
+            if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
+                locationGPS = location;
+                gpsTime = location.getTime();
+            } else if (location.getProvider().equals(LocationManager.NETWORK_PROVIDER)) {
+                locationNetwork = location;
+                networkTime = location.getTime();
+            }
+            Location bestLocation = null;
+            if (locationGPS != null && gpsTime > networkTime)
+                bestLocation = locationGPS;
+            if (bestLocation == null && networkTime > gpsTime && Math.abs(networkTime - gpsTime) > 20000) {
+                if (locationNetwork != null)
+                    bestLocation = locationNetwork;
+            }
+            if (bestLocation != null) {
+                latitude = bestLocation.getLatitude();
+                longitude = bestLocation.getLongitude();
+            }
+            for (LocationDataChangeListener item : locationDataChangeListenerList) {
+                item.onLocationDataChange(LOCATION_CHANGED, bestLocation);
+            }
         }
         Log.d("OnLocCh", location.getProvider() + " " + location.getLatitude() + " " + location.getLongitude());
     }

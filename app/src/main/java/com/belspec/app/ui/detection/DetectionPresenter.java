@@ -179,7 +179,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
     @Subscribe
     @SuppressWarnings("unused")
-    void OnEvent(WitnessSendEvent event) {
+    public void OnEvent(WitnessSendEvent event) {
         Witness witness = event.getWitness();
         if (witness == null)
             witnessIndex = -1;
