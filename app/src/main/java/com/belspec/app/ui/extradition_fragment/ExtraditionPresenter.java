@@ -153,7 +153,7 @@ class ExtraditionPresenter implements ExtraditionContract.Presenter, NetworkData
     }
 
     @Subscribe
-    void onEvent(OwnerDataSendEvent event){
+    public void onEvent(OwnerDataSendEvent event) {
         EventBus.getDefault().unregister(this);
         if(event.getDocId() != -1){
             int docId = event.getDocId();
