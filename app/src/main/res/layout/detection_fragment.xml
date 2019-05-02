@@ -304,13 +304,51 @@
                         android:layout_height="match_parent" />
                 </LinearLayout>
 
-
-
             </LinearLayout>
+            <!--  require frame-->
+            <FrameLayout
+                android:id="@+id/flRequire"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/llClauseStreet">
+                <Button
+                    style="@style/MyMaterialTheme.MyButton"
+                    android:id="@+id/btnRequireCall"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/required_call"
+                    android:visibility="gone" />
+                <LinearLayout
+                    android:id="@+id/llRequireTextContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <TextView
+                        android:id="@+id/tvRequire"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:layout_gravity="center"
+                        android:text="@string/require_message"/>
+                    <Button
+                        style="@style/MyMaterialTheme.MyButton"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:padding="0dp"
+                        android:layout_marginBottom="1dp"
+                        android:gravity="center"
+                        android:drawableTop="@drawable/ic_refresh_white_18dp"
+                        android:id="@+id/btnRefreshRequired"/>
+                </LinearLayout>
+
+            </FrameLayout>
+
             <!--RoadLawPoint-->
             <LinearLayout
                 android:id="@+id/llRoadLawPoint"
-                android:layout_below="@id/llClauseStreet"
+                android:layout_below="@id/flRequire"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

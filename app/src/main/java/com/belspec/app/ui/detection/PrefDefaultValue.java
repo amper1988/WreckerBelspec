@@ -34,6 +34,7 @@ class PrefDefaultValue {
     private static final String POLICEMAN_SIGNATURE = "POLICEMAN_SIGNATURE";
     private static final String STREET = "STREET";
     private static final String WITHOUT_EVACUATION = "WITHOUT_EVACUATION";
+    private static final String REQUIERED_ID = "REQUIERED_ID";
 
     private static SharedPreferences getPrefName(Context context, int docId){
         switch (docId){
@@ -53,6 +54,14 @@ class PrefDefaultValue {
         SharedPreferences sPref = getPrefName(context, docId);
         SharedPreferences.Editor ed = sPref.edit();
         ed.putString(CLAUSE, clause);
+        ed.apply();
+        return true;
+    }
+
+    static boolean saveRequiredId(Context context, int docId, Long requiered_id){
+        SharedPreferences sPref = getPrefName(context, docId);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString(REQUIERED_ID, requiered_id.toString());
         ed.apply();
         return true;
     }
@@ -228,6 +237,12 @@ class PrefDefaultValue {
     static String loadStreet(Context context, int docId){
         SharedPreferences sPref = getPrefName(context, docId);
         return sPref.getString(STREET, "");
+    }
+
+
+    static String loadRequiredId(Context context, int docId){
+        SharedPreferences sPref = getPrefName(context, docId);
+        return sPref.getString(REQUIERED_ID, "");
     }
 
     static String loadFilePath(Context context, int docId, int index){

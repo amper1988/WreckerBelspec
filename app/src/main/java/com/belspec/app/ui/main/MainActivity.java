@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnLogin:
                 try {
                     PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    presenter.login(info.versionName);
+                    presenter.login("1.0.0.4"); //todo вернуть обратно
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }

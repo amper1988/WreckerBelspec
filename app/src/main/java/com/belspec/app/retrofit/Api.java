@@ -2,6 +2,9 @@ package com.belspec.app.retrofit;
 
 import android.util.Log;
 
+import com.belspec.app.BuildConfig;
+import com.belspec.app.retrofit.aisDrive.AisDriveService;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
@@ -12,6 +15,7 @@ import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -19,11 +23,15 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import okio.Buffer;
 import okio.BufferedSource;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 public class Api {
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
+    private static final String POLICE_URL = "http://185.66.69.93:10101/stojanka/";
+    private static final String AIS_DRIVE_URL = "https://test.aisdrive.by/";
+    private static final String AIS_KEY = "aksdjlkjslkdjklajdAAKJSD";
 
 
     public static  RetrofitService createRetrofitService() {
@@ -36,11 +44,27 @@ public class Api {
                 .connectTimeout(3600,  TimeUnit.SECONDS);
         httpClientBuilder.addInterceptor(interceptor);
         Retrofit restAdapter = new Retrofit.Builder()
-                .baseUrl("http://185.66.69.93:10101/stojanka/")
+                .baseUrl(POLICE_URL)
                 .client(httpClientBuilder.build())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build();
         return restAdapter.create(com.belspec.app.retrofit.RetrofitService.class);
+    }
+
+    public static AisDriveService createAisDriveService(){
+
+        OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder()
+                .readTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(120, TimeUnit.SECONDS)
+                .connectTimeout(120,  TimeUnit.SECONDS)
+                .addInterceptor(new DefaultInterceptor());
+
+        Retrofit restAdapter = new Retrofit.Builder()
+                .baseUrl(AIS_DRIVE_URL)
+                .client(httpClientBuilder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return restAdapter.create(AisDriveService.class);
     }
 
     public static Response customIntercept(Interceptor.Chain chain) throws IOException {
@@ -105,6 +129,20 @@ public class Api {
 
         public void setLevel(HttpLoggingInterceptor.Level level) {
             mInterceptor.setLevel(level);
+        }
+    }
+
+    private static class DefaultInterceptor implements Interceptor {
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request original = chain.request();
+            Request.Builder requestBuilder = original.newBuilder()
+                    .addHeader("Content-Type", "application/json")
+                    .addHeader("Key", AIS_KEY)
+                    .addHeader("App", BuildConfig.APPLICATION_ID)
+                    .addHeader("cache-control", "no-cache")
+                    .method(original.method(), original.body());
+            return chain.proceed(requestBuilder.build());
         }
     }
 }

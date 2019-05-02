@@ -18,6 +18,9 @@ import com.belspec.app.gps.GPSTracker;
 import com.belspec.app.interfaces.NetworkDataUpdate;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
+import com.belspec.app.retrofit.aisDrive.AisDriveService;
+import com.belspec.app.retrofit.aisDrive.AisGps;
+import com.belspec.app.retrofit.aisDrive.AisResponse;
 import com.belspec.app.retrofit.model.createEvacuation.request.CreateEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.createEvacuation.response.CreateEvacuationResponseEnvelope;
 import com.belspec.app.ui.detection.signature_dialog.SignatureEvent;
@@ -28,6 +31,7 @@ import com.belspec.app.utils.FileManager;
 import com.belspec.app.utils.NetworkDataManager;
 import com.belspec.app.utils.UserManager;
 import com.belspec.app.utils.Utils;
+import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -42,6 +46,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.*;
+
 class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.LocationDataChangeListener, NetworkDataUpdate {
     private GPSTracker gpsTracker;
     private DetectionContract.View view;
@@ -51,6 +57,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     private int docId;
     private ImageListAdapter imageListAdapter;
     private boolean registerInProgress;
+    private double distanceCache;
 
     DetectionPresenter(DetectionContract.View view) {
         this.view = view;
@@ -184,16 +191,16 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
         if (witness == null)
             witnessIndex = -1;
         if (event.isForAll() && witnessIndex == -1) {
-            if(witness != null){
+            if (witness != null) {
                 if (view.canSetWitness(1)) {
                     saveWitnessBackup(1, witness);
-                    view.setWitnessAddress( witness.getAddress(), 1);
+                    view.setWitnessAddress(witness.getAddress(), 1);
                     view.setWitnessName(witness.getName(), 1);
                     view.setWitnessContact(witness.getContact(), 1);
                     view.setWitnessPlea(witness.getPlea(), 1);
                     view.setWitnessSignature(witness.getSignature(), 1);
                 } else if (view.canSetWitness(2)) {
-                    if(!(view.getWitnessName(1).equals(witness.getName()) && view.getWitnessName(1).equals(witness.getAddress()))){
+                    if (!(view.getWitnessName(1).equals(witness.getName()) && view.getWitnessName(1).equals(witness.getAddress()))) {
                         saveWitnessBackup(2, witness);
                         view.setWitnessAddress(witness.getAddress(), 2);
                         view.setWitnessName(witness.getName(), 2);
@@ -205,7 +212,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
             }
         }
         if (witnessIndex != -1) {
-            if(witness != null){
+            if (witness != null) {
                 saveWitnessBackup(witnessIndex, witness);
                 view.setWitnessName(witness.getName(), witnessIndex);
                 view.setWitnessAddress(witness.getAddress(), witnessIndex);
@@ -232,7 +239,20 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     @Override
     public void saveCarIdBackup(String carId) {
         PrefDefaultValue.saveCarId(context, docId, carId);
+        catchRequired();
+        view.showCallButton();
+    }
 
+    private void catchRequired(){
+        if(!view.getWithoutEvacuation() && !view.getCarId().isEmpty() && !view.getStreet().isEmpty()){
+            if(getRequiredId() > 0L){
+                view.showRequireDistance(distanceCache);
+            }else{
+                view.showCallButton();
+            }
+        }else{
+            view.disableCall();
+        }
     }
 
     @Override
@@ -243,6 +263,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     @Override
     public void saveWithoutEvacuationBackup(int checked) {
         PrefDefaultValue.saveWithoutEvacuation(context, docId, checked);
+        catchRequired();
     }
 
     @Override
@@ -297,6 +318,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     @Override
     public void saveStreetBackup(String street) {
         PrefDefaultValue.saveStreet(context, docId, street);
+        catchRequired();
     }
 
 
@@ -413,7 +435,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     public void sendEvacuation() {
         view.setLoading(true);
         registerInProgress = true;
-        Thread thread = new Thread(){
+        Thread thread = new Thread() {
             @Override
             public void run() {
                 RetrofitService createDataRetrofit = Api.createRetrofitService();
@@ -487,7 +509,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                 CreateEvacuationResponseEnvelope responseEnvelope = response.body();
                                 if (responseEnvelope != null) {
                                     if (responseEnvelope.getData().getCode() == 1) {
-                                        view.showMessageDialog("Зарегистрированы данные из протокола №" + (docId+1));
+                                        view.showMessageDialog("Зарегистрированы данные из протокола №" + (docId + 1));
                                         PrefDefaultValue.clear(context, docId);
                                         try {
                                             File tmpFile = FileManager.createPdfFile(context);
@@ -567,6 +589,116 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     }
 
     @Override
+    public void createCall(String address, String carNumber) {
+        view.setLoading(true);
+        AisDriveService.Companion.createRequest(
+                new AisGps(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude())),
+                carNumber, address, "35").enqueue(
+                new Callback<AisResponse>() {
+                    @Override
+                    public void onResponse(Call<AisResponse> call, Response<AisResponse> response) {
+
+                        if (response.body() != null && response.code() == 201) {
+                            PrefDefaultValue.saveRequiredId(context, docId, response.body().getId());
+                            distanceCache = response.body().getDistance();
+                            view.showRequireDistance(distanceCache);
+                        } else if (response.errorBody() != null && response.code() == 409) {
+                            AisResponse errorResponse = new Gson().fromJson(response.errorBody().charStream(), AisResponse.class);
+
+                            PrefDefaultValue.saveRequiredId(context, docId, (errorResponse.getId()));
+                            distanceCache = errorResponse.getDistance();
+                            view.showRequireDistance(distanceCache);
+                        } else {
+                            view.showMessageDialog("Что-то пошло не так :( \n" + response.message());
+                        }
+                        view.setLoading(false);
+                    }
+
+                    @Override
+                    public void onFailure(Call<AisResponse> call, Throwable t) {
+                        view.setLoading(false);
+                        view.showMessageDialog("Network fail" + t.getMessage());
+                    }
+                }
+        );
+    }
+
+    private Long getRequiredId(){
+        String savedId = PrefDefaultValue.loadRequiredId(context, docId);
+        long requiredId;
+        try {
+            requiredId = Long.parseLong(savedId);
+        } catch (Exception e) {
+            requiredId = 0L;
+        }
+        return requiredId;
+    }
+
+    @Override
+    public void getCall() {
+        final Long id = getRequiredId();
+        if (id > 0) {
+            view.setLoading(true);
+            AisDriveService.Companion.getRequest(id)
+                    .enqueue(new Callback<AisResponse>() {
+                        @Override
+                        public void onResponse(Call<AisResponse> call, Response<AisResponse> response) {
+                            if (response.body() != null && (response.code() == 200)) {
+                                int status = response.body().getActive();
+                                switch (status) {
+                                    case CANCELED:
+                                        PrefDefaultValue.saveRequiredId(context, docId, 0L);
+                                        view.showCallButton();
+                                        distanceCache = 0;
+                                        view.showMessageDialog("Заказ был отменен");
+                                        break;
+                                    case NOT_IN_PROGRESS:
+                                        distanceCache = response.body().getDistance();
+                                        view.showRequireDistance(distanceCache);
+                                        break;
+                                    case IN_PROGRESS:
+                                        distanceCache = response.body().getDistance();
+                                        view.showRequireDistance(distanceCache);
+                                        break;
+                                    case EVACUATED:
+                                        PrefDefaultValue.saveRequiredId(context, docId, 0L);
+                                        distanceCache = 0;
+                                        view.showCallButton();
+                                        break;
+                                    case PARKED:
+                                        PrefDefaultValue.saveRequiredId(context, docId, 0L);
+                                        distanceCache = 0;
+                                        view.showCallButton();
+                                        break;
+                                }
+                            } else {
+                                if (response.code() == 404) {
+                                    view.showMessageDialog("Заявки на эвакуацию № " + id + "из протокола" + docId + " не существует");
+                                    PrefDefaultValue.saveRequiredId(context, docId, 0L);
+                                    distanceCache = 0;
+                                    view.showCallButton();
+
+                                }else{
+                                    view.showCallButton();
+                                    view.showMessageDialog("Что-то пошло не так :((\n" + response.message());
+                                }
+                            }
+                            view.setLoading(false);
+                        }
+
+                        @Override
+                        public void onFailure(Call<AisResponse> call, Throwable t) {
+                            view.setLoading(false);
+                            view.showMessageDialog("Network fail " + t.getMessage());
+                        }
+                    });
+        }else{
+            view.showCallButton();
+        }
+
+    }
+
+    @Override
     public void initializeListsFromServer() {
         view.setLoading(true);
         NetworkDataManager.getInstance().getDefaultData();
@@ -605,6 +737,11 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     }
 
     @Override
+    public void loadRequiresId() {
+        getCall();
+    }
+
+    @Override
     public void loadOrganizationBackup() {
         view.setOrganization(PrefDefaultValue.loadOrganization(context, docId));
     }
@@ -636,7 +773,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
     @Override
     public void onDefaultDataUpdate(NetworkDataManager netDataManager) {
-        if(!registerInProgress)
+        if (!registerInProgress)
             view.setLoading(false);
         view.setListManufacture(netDataManager.getManufactureListAsString());
         if (UserManager.getInstanse().getUserType() != 1)
@@ -654,30 +791,31 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
         loadWitnessBackup(2);
         loadSignaturePolBackup();
         loadWithoutEvacuationBackup();
+        loadRequiresId();
         getImageListAdapterFromBackup();
     }
 
     @Override
     public void onRanksUpdate(NetworkDataManager netDataManager) {
-        if(!registerInProgress)
+        if (!registerInProgress)
             view.setLoading(false);
     }
 
     @Override
     public void onPositionsUpdate(NetworkDataManager netDataManager) {
-        if(!registerInProgress)
+        if (!registerInProgress)
             view.setLoading(false);
     }
 
     @Override
     public void onPoliceDepartmentUpdate(NetworkDataManager netDataManager) {
-        if(!registerInProgress)
+        if (!registerInProgress)
             view.setLoading(false);
     }
 
     @Override
     public void onRoadLowPointUpdate(NetworkDataManager netDataManager) {
-        if(!registerInProgress)
+        if (!registerInProgress)
             view.setLoading(false);
         ArrayList<String> roadLawPoints = new ArrayList<>();
         roadLawPoints.add("");

@@ -53,6 +53,10 @@ abstract class DetectionContract {
         void setWitnessPlea(String plea,int index);
         String getWitnessPlea(int index);
 
+        void showRequireDistance(double distance);
+        void showCallButton();
+        void disableCall();
+
         String getOrganization();
 
         void setOrganization(String organization);
@@ -159,6 +163,7 @@ abstract class DetectionContract {
         void loadRevisionResultBackup();
         void loadWitnessBackup(int index);
         void loadSignaturePolBackup();
+        void loadRequiresId();
         void loadOrganizationBackup();
         void loadWreckerBackup();
         void loadPoliceDepartmentBackup();
@@ -166,6 +171,8 @@ abstract class DetectionContract {
         void loadParkingBackup();
         void loadStreetBackup();
         void clearBackup();
+        void createCall(String address, String carNumber);
+        void getCall();
 
         void loadListPoliceman(String policeDepartment);
         void loadListModel(String manufacture);

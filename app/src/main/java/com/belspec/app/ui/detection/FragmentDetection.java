@@ -32,6 +32,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -104,6 +105,11 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     @BindView(R.id.llSpinersOrganization) LinearLayout llSpinersOrganization;
     @BindView(R.id.llSpinersPolicedata) LinearLayout llSpinersPolicedata;
     @BindView(R.id.llSpinersParking) LinearLayout llSpinersParking;
+    @BindView(R.id.flRequire) FrameLayout flRequire;
+    @BindView(R.id.btnRequireCall) Button btnRequire;
+    @BindView(R.id.tvRequire) TextView tvRequire;
+    @BindView(R.id.llRequireTextContainer) LinearLayout llRequireTextContainer;
+    @BindView(R.id.btnRefreshRequired) Button btnRefreshRequired;
 
     View mView;
     int fragmentId;
@@ -382,11 +388,21 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         btnPolicemanSignature.setOnClickListener(this);
         btnRegistrate.setOnClickListener(this);
         chbWithoutEvacuation.setOnClickListener(this);
+        btnRequire.setOnClickListener(this);
+        btnRefreshRequired.setOnClickListener(this);
         //init image loading
         imvLoading.setBackgroundResource(R.drawable.pb_loading);
         showHideOrganizationWrecker();
         showHideSpecialField();
         presenter.configureUserData();
+    }
+
+    private void initRequiredVisibility(){
+        if(edtCarID.getText().toString().isEmpty() || edtStreet.getText().toString().isEmpty()){
+            btnRequire.setVisibility(View.GONE);
+        }else{
+            btnRequire.setVisibility(View.VISIBLE);
+        }
     }
 
     private void confirmWrecker(){
@@ -522,6 +538,12 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
             case(R.id.btnCancel):
                 presenter.clearBackup();
+                break;
+            case(R.id.btnRequireCall):
+                presenter.createCall(edtStreet.getText().toString(), edtCarID.getText().toString());
+                break;
+            case (R.id.btnRefreshRequired):
+                presenter.getCall();
                 break;
         }
 
@@ -828,6 +850,30 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
+    public void showRequireDistance(double distance) {
+        btnRequire.setVisibility(View.GONE);
+        llRequireTextContainer.setVisibility(View.VISIBLE);
+        if(distance > 0){
+            tvRequire.setText(getString(R.string.require_message, String.valueOf(distance)));
+        }else{
+            tvRequire.setText(getString(R.string.required_ordered));
+        }
+    }
+
+    @Override
+    public void showCallButton() {
+        initRequiredVisibility();
+        llRequireTextContainer.setVisibility(View.GONE);
+        tvRequire.setText("");
+    }
+
+    @Override
+    public void disableCall(){
+        btnRequire.setVisibility(View.GONE);
+        llRequireTextContainer.setVisibility(View.GONE);
+    }
+
+    @Override
     public String getOrganization() {
         return (String) spnOrganization.getSelectedItem();
     }
@@ -939,7 +985,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
 
     @Override
     public boolean getWithoutEvacuation() {
-        return chbWithoutEvacuation.isSelected();
+        return chbWithoutEvacuation.isChecked();
     }
 
     @Override

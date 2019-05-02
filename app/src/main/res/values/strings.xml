@@ -76,6 +76,9 @@
     <string name="Welcome">Добро пожаловать</string>
     <string name="close">Close</string>
     <string name="title">Title</string>
+    <string name="require_message">Эвакуатор находится на расстоянии %s</string>
+    <string name="required_call">Вызвать эвакуатор</string>
+    <string name="required_ordered">Заявку по этому запросу еще никто не принял</string>
 
 
 </resources>
