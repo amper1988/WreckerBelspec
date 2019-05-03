@@ -4,10 +4,7 @@ import com.belspec.app.retrofit.Api
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface AisDriveService {
 
@@ -16,6 +13,9 @@ interface AisDriveService {
 
     @GET("movable/external/call/{id}")
     fun getRequest(@Path("id") id: Long): Call<AisResponse>
+
+    @DELETE("movable/external/call/{id}")
+    fun deleteRequest(@Path("id") id: Long): Call<Void>
 
     companion object {
         private fun create() : AisDriveService{
@@ -33,6 +33,10 @@ interface AisDriveService {
 
         fun getRequest(id: Long): Call<AisResponse>{
             return create().getRequest(id)
+        }
+
+        fun deleteRequest(id: Long): Call<Void>{
+            return create().deleteRequest(id)
         }
     }
 }

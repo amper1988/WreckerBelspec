@@ -58,6 +58,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     private ImageListAdapter imageListAdapter;
     private boolean registerInProgress;
     private double distanceCache;
+    private boolean requiresIdLoaded = false;
 
     DetectionPresenter(DetectionContract.View view) {
         this.view = view;
@@ -243,14 +244,14 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
         view.showCallButton();
     }
 
-    private void catchRequired(){
-        if(!view.getWithoutEvacuation() && !view.getCarId().isEmpty() && !view.getStreet().isEmpty()){
-            if(getRequiredId() > 0L){
+    private void catchRequired() {
+        if (!view.getWithoutEvacuation() && !view.getCarId().isEmpty() && !view.getStreet().isEmpty()) {
+            if (getRequiredId() > 0L) {
                 view.showRequireDistance(distanceCache);
-            }else{
+            } else {
                 view.showCallButton();
             }
-        }else{
+        } else {
             view.disableCall();
         }
     }
@@ -584,6 +585,31 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
     @Override
     public void clearBackup() {
+        view.setLoading(true);
+        final Long requiredId = getRequiredId();
+        if(requiredId > 0){
+            AisDriveService.Companion.deleteRequest(requiredId)
+                    .enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.code() == 200){
+                                PrefDefaultValue.saveRequiredId(context, docId, 0L);
+                                catchRequired();
+                            }else{
+                                PrefDefaultValue.saveRequiredId(context, docId, requiredId);
+                                catchRequired();
+                                view.showMessageDialog("Не удалось отклонить заявку на эвакуатор");
+                            }
+                            view.setLoading(false);
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            view.showMessageDialog("Не удалось отклонить заявку на эвакуатор");
+                            view.setLoading(false);
+                        }
+                    });
+        }
         PrefDefaultValue.clear(context, docId);
         initializeListsFromServer();
     }
@@ -623,7 +649,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
         );
     }
 
-    private Long getRequiredId(){
+    private Long getRequiredId() {
         String savedId = PrefDefaultValue.loadRequiredId(context, docId);
         long requiredId;
         try {
@@ -673,12 +699,12 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                 }
                             } else {
                                 if (response.code() == 404) {
-                                    view.showMessageDialog("Заявки на эвакуацию № " + id + "из протокола" + docId + " не существует");
+                                    view.showMessageDialog("Заявки на эвакуацию № " + id + " из протокола" + (docId + 1) + " не существует");
                                     PrefDefaultValue.saveRequiredId(context, docId, 0L);
                                     distanceCache = 0;
                                     view.showCallButton();
 
-                                }else{
+                                } else {
                                     view.showCallButton();
                                     view.showMessageDialog("Что-то пошло не так :((\n" + response.message());
                                 }
@@ -692,7 +718,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                             view.showMessageDialog("Network fail " + t.getMessage());
                         }
                     });
-        }else{
+        } else {
             view.showCallButton();
         }
 
@@ -791,7 +817,10 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
         loadWitnessBackup(2);
         loadSignaturePolBackup();
         loadWithoutEvacuationBackup();
-        loadRequiresId();
+        if (!requiresIdLoaded) {
+            loadRequiresId();
+            requiresIdLoaded = true;
+        }
         getImageListAdapterFromBackup();
     }
 
