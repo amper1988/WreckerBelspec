@@ -53,7 +53,7 @@ abstract class DetectionContract {
         void setWitnessPlea(String plea,int index);
         String getWitnessPlea(int index);
 
-        void showRequireDistance(double distance);
+        void showRequireDistance(int active);
         void showCallButton();
         void disableCall();
 

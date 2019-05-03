@@ -54,6 +54,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.CANCELED;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.EVACUATED;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.IN_PROGRESS;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.NOT_IN_PROGRESS;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.PARKED;
+
 public class FragmentDetection extends Fragment implements View.OnClickListener, DetectionContract.View {
     @BindView(R.id.actvManufacture) AutoCompleteTextView actvManufacture;
     @BindView(R.id.actvModel) AutoCompleteTextView actvModel;
@@ -850,13 +856,26 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void showRequireDistance(double distance) {
+    public void showRequireDistance(int active) {
         btnRequire.setVisibility(View.GONE);
         llRequireTextContainer.setVisibility(View.VISIBLE);
-        if(distance > 0){
-            tvRequire.setText(getString(R.string.require_message, String.valueOf(distance)));
-        }else{
-            tvRequire.setText(getString(R.string.required_ordered));
+        switch (active){
+            case IN_PROGRESS:
+                tvRequire.setText(getString(R.string.required_in_progress));
+                break;
+            case NOT_IN_PROGRESS:
+                tvRequire.setText(getString(R.string.required_not_in_progress));
+                break;
+            case CANCELED:
+                tvRequire.setText(getString(R.string.required_canceled));
+                break;
+            case EVACUATED:
+                tvRequire.setText(getString(R.string.required_evacuated));
+                break;
+            case PARKED:
+                tvRequire.setText(getString(R.string.required_parked));
+                break;
+
         }
     }
 

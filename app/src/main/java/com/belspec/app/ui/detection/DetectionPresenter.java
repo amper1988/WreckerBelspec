@@ -57,7 +57,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     private int docId;
     private ImageListAdapter imageListAdapter;
     private boolean registerInProgress;
-    private double distanceCache;
+    private int activeCache = -1;
     private boolean requiresIdLoaded = false;
 
     DetectionPresenter(DetectionContract.View view) {
@@ -247,7 +247,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     private void catchRequired() {
         if (!view.getWithoutEvacuation() && !view.getCarId().isEmpty() && !view.getStreet().isEmpty()) {
             if (getRequiredId() > 0L) {
-                view.showRequireDistance(distanceCache);
+                view.showRequireDistance(activeCache);
             } else {
                 view.showCallButton();
             }
@@ -626,14 +626,14 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
                         if (response.body() != null && response.code() == 201) {
                             PrefDefaultValue.saveRequiredId(context, docId, response.body().getId());
-                            distanceCache = response.body().getDistance();
-                            view.showRequireDistance(distanceCache);
+                            activeCache = response.body().getActive();
+                            view.showRequireDistance(activeCache);
                         } else if (response.errorBody() != null && response.code() == 409) {
                             AisResponse errorResponse = new Gson().fromJson(response.errorBody().charStream(), AisResponse.class);
 
                             PrefDefaultValue.saveRequiredId(context, docId, (errorResponse.getId()));
-                            distanceCache = errorResponse.getDistance();
-                            view.showRequireDistance(distanceCache);
+                            activeCache = errorResponse.getActive();
+                            view.showRequireDistance(activeCache);
                         } else {
                             view.showMessageDialog("Что-то пошло не так :( \n" + response.message());
                         }
@@ -675,25 +675,25 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                     case CANCELED:
                                         PrefDefaultValue.saveRequiredId(context, docId, 0L);
                                         view.showCallButton();
-                                        distanceCache = 0;
+                                        activeCache = -1;
                                         view.showMessageDialog("Заказ был отменен");
                                         break;
                                     case NOT_IN_PROGRESS:
-                                        distanceCache = response.body().getDistance();
-                                        view.showRequireDistance(distanceCache);
+                                        activeCache = response.body().getActive();
+                                        view.showRequireDistance(activeCache);
                                         break;
                                     case IN_PROGRESS:
-                                        distanceCache = response.body().getDistance();
-                                        view.showRequireDistance(distanceCache);
+                                        activeCache = response.body().getActive();
+                                        view.showRequireDistance(activeCache);
                                         break;
                                     case EVACUATED:
                                         PrefDefaultValue.saveRequiredId(context, docId, 0L);
-                                        distanceCache = 0;
+                                        activeCache = -1;
                                         view.showCallButton();
                                         break;
                                     case PARKED:
                                         PrefDefaultValue.saveRequiredId(context, docId, 0L);
-                                        distanceCache = 0;
+                                        activeCache = -1;
                                         view.showCallButton();
                                         break;
                                 }
@@ -701,7 +701,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                 if (response.code() == 404) {
                                     view.showMessageDialog("Заявки на эвакуацию № " + id + " из протокола" + (docId + 1) + " не существует");
                                     PrefDefaultValue.saveRequiredId(context, docId, 0L);
-                                    distanceCache = 0;
+                                    activeCache = -1;
                                     view.showCallButton();
 
                                 } else {
