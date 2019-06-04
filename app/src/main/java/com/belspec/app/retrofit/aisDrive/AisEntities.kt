@@ -15,6 +15,27 @@ data class Description(
         @Expose val address: String
 )
 
+data class AisAdministrator(
+//        @Expose val createdAt: String?,
+//        @Expose val updatedAt: String?,
+//        @Expose val id: Int?,
+//        @Expose val login: String?,
+//        @Expose val name: String,
+//        @Expose val"email": "test01@aisdrive.by",
+//"active": 1,
+//"workStart": "",
+//"workEnd": "",
+//"getNotification": 0,
+//"company": 7,
+//"object": 38,
+//"rights": "all",
+//"smsNotification": null,
+//"files": null,
+//"phone": "375336075741"
+        @Expose val  name: String?,
+        @Expose val phone: String?,
+        @Expose val active: Int
+)
 data class AisResponse(
         @Expose val createdAt: String,
         @Expose val updatedAt: String,
@@ -34,7 +55,7 @@ data class AisResponse(
         @Expose val distance: Double,
         @SerializedName("object")
         @Expose val _object: Any?,
-        @Expose val administrator: Any?,
+        @Expose val administrator: AisAdministrator?,
         @Expose val billing: Any?
 )
 

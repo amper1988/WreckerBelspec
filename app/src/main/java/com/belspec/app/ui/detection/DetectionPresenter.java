@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,6 +19,7 @@ import com.belspec.app.gps.GPSTracker;
 import com.belspec.app.interfaces.NetworkDataUpdate;
 import com.belspec.app.retrofit.Api;
 import com.belspec.app.retrofit.RetrofitService;
+import com.belspec.app.retrofit.aisDrive.AisAdministrator;
 import com.belspec.app.retrofit.aisDrive.AisDriveService;
 import com.belspec.app.retrofit.aisDrive.AisGps;
 import com.belspec.app.retrofit.aisDrive.AisResponse;
@@ -57,7 +59,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     private int docId;
     private ImageListAdapter imageListAdapter;
     private boolean registerInProgress;
-    private int activeCache = -1;
+    private AisAdministrator activeCache = new AisAdministrator("", "", -1);
     private boolean requiresIdLoaded = false;
 
     DetectionPresenter(DetectionContract.View view) {
@@ -626,13 +628,13 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
                         if (response.body() != null && response.code() == 201) {
                             PrefDefaultValue.saveRequiredId(context, docId, response.body().getId());
-                            activeCache = response.body().getActive();
+                            activeCache = new AisAdministrator("", "", NOT_IN_PROGRESS);
                             view.showRequireDistance(activeCache);
                         } else if (response.errorBody() != null && response.code() == 409) {
                             AisResponse errorResponse = new Gson().fromJson(response.errorBody().charStream(), AisResponse.class);
 
                             PrefDefaultValue.saveRequiredId(context, docId, (errorResponse.getId()));
-                            activeCache = errorResponse.getActive();
+                            activeCache = errorResponse.getAdministrator() == null ? errorResponse.getAdministrator() : new AisAdministrator("", "", NOT_IN_PROGRESS);
                             view.showRequireDistance(activeCache);
                         } else {
                             view.showMessageDialog("Что-то пошло не так :( \n" + response.message());
@@ -675,25 +677,25 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                     case CANCELED:
                                         PrefDefaultValue.saveRequiredId(context, docId, 0L);
                                         view.showCallButton();
-                                        activeCache = -1;
+                                        activeCache = new AisAdministrator("", "", CANCELED);
                                         view.showMessageDialog("Заказ был отменен");
                                         break;
                                     case NOT_IN_PROGRESS:
-                                        activeCache = response.body().getActive();
+                                        activeCache = new AisAdministrator("", "", NOT_IN_PROGRESS);
                                         view.showRequireDistance(activeCache);
                                         break;
                                     case IN_PROGRESS:
-                                        activeCache = response.body().getActive();
+                                        activeCache = response.body().getAdministrator();
                                         view.showRequireDistance(activeCache);
                                         break;
                                     case EVACUATED:
                                         PrefDefaultValue.saveRequiredId(context, docId, 0L);
-                                        activeCache = -1;
+                                        activeCache = new AisAdministrator("", "", CANCELED);
                                         view.showCallButton();
                                         break;
                                     case PARKED:
                                         PrefDefaultValue.saveRequiredId(context, docId, 0L);
-                                        activeCache = -1;
+                                        activeCache = new AisAdministrator("", "", CANCELED);
                                         view.showCallButton();
                                         break;
                                 }
@@ -701,7 +703,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                 if (response.code() == 404) {
                                     view.showMessageDialog("Заявки на эвакуацию № " + id + " из протокола" + (docId + 1) + " не существует");
                                     PrefDefaultValue.saveRequiredId(context, docId, 0L);
-                                    activeCache = -1;
+                                    activeCache = new AisAdministrator("", "", CANCELED);
                                     view.showCallButton();
 
                                 } else {

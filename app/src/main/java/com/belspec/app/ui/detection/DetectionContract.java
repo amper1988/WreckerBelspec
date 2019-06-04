@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.belspec.app.adapters.ImageListAdapter;
+import com.belspec.app.retrofit.aisDrive.AisAdministrator;
 
 import java.util.List;
 
@@ -53,7 +54,7 @@ abstract class DetectionContract {
         void setWitnessPlea(String plea,int index);
         String getWitnessPlea(int index);
 
-        void showRequireDistance(int active);
+        void showRequireDistance(AisAdministrator administrator);
         void showCallButton();
         void disableCall();
 

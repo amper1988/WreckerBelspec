@@ -45,6 +45,7 @@ import android.widget.Toast;
 
 import com.belspec.app.R;
 import com.belspec.app.adapters.ImageListAdapter;
+import com.belspec.app.retrofit.aisDrive.AisAdministrator;
 import com.belspec.app.ui.detection.signature_dialog.PolicemanSignatureDialogFragment;
 import com.belspec.app.ui.detection.witness_dialog.WitnessDialogFragment;
 import com.belspec.app.utils.Utils;
@@ -114,6 +115,7 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     @BindView(R.id.flRequire) FrameLayout flRequire;
     @BindView(R.id.btnRequireCall) Button btnRequire;
     @BindView(R.id.tvRequire) TextView tvRequire;
+    @BindView(R.id.btnCall) Button btnCall;
     @BindView(R.id.llRequireTextContainer) LinearLayout llRequireTextContainer;
     @BindView(R.id.btnRefreshRequired) Button btnRefreshRequired;
 
@@ -856,24 +858,35 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void showRequireDistance(int active) {
+    public void showRequireDistance(final AisAdministrator administrator) {
         btnRequire.setVisibility(View.GONE);
         llRequireTextContainer.setVisibility(View.VISIBLE);
-        switch (active){
+        switch (administrator.getActive()){
             case IN_PROGRESS:
-                tvRequire.setText(getString(R.string.required_in_progress));
+                tvRequire.setText(getString(R.string.required_in_progress, administrator.getName()));
+                btnCall.setVisibility(View.VISIBLE);
+                btnCall.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        makeCall(administrator.getPhone());
+                    }
+                });
                 break;
             case NOT_IN_PROGRESS:
                 tvRequire.setText(getString(R.string.required_not_in_progress));
+                btnCall.setVisibility(View.GONE);
                 break;
             case CANCELED:
                 tvRequire.setText(getString(R.string.required_canceled));
+                btnCall.setVisibility(View.GONE);
                 break;
             case EVACUATED:
                 tvRequire.setText(getString(R.string.required_evacuated));
+                btnCall.setVisibility(View.GONE);
                 break;
             case PARKED:
                 tvRequire.setText(getString(R.string.required_parked));
+                btnCall.setVisibility(View.GONE);
                 break;
 
         }
@@ -884,11 +897,13 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         initRequiredVisibility();
         llRequireTextContainer.setVisibility(View.GONE);
         tvRequire.setText("");
+        btnCall.setVisibility(View.GONE);
     }
 
     @Override
     public void disableCall(){
         btnRequire.setVisibility(View.GONE);
+        btnCall.setVisibility(View.GONE);
         llRequireTextContainer.setVisibility(View.GONE);
     }
 
@@ -1201,7 +1216,16 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         }
 
         return true;
-
     }
 
+    private void makeCall(String phone){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        if(!phone.isEmpty() && phone.length() > 2 && phone.startsWith("375")){
+            intent.setData(Uri.parse("tel:+"+ phone ));
+        }else{
+            intent.setData(Uri.parse("tel:"+ phone ));
+        }
+
+        startActivity(intent);
+    }
 }

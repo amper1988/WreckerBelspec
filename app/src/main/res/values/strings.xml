@@ -79,10 +79,11 @@
     <string name="require_message">Эвакуатор находится на расстоянии %s</string>
     <string name="required_call">Вызвать эвакуатор</string>
     <string name="required_not_in_progress">Заявку по этому запросу еще никто не принял</string>
-    <string name="required_in_progress">Заявка принята эвакуатором</string>
+    <string name="required_in_progress">Заявка принята водителем: %s</string>
     <string name="required_canceled">Заявка была отклонена</string>
     <string name="required_evacuated">Эвакуатор погрузил транспортное средство</string>
     <string name="required_parked">Эвакуатор доставил транспортное средство в место назначения</string>
+    <string name="require_call_title">Позвонить</string>
 
 
 </resources>

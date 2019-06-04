@@ -1,14 +1,25 @@
 package com.belspec.app.retrofit;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.belspec.app.BuildConfig;
 import com.belspec.app.retrofit.aisDrive.AisDriveService;
+import com.belspec.app.utils.Encode;
+import com.belspec.app.utils.UserManager;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import okhttp3.Connection;
 import okhttp3.Interceptor;
@@ -32,6 +43,7 @@ public class Api {
     private static final String POLICE_URL = "http://185.66.69.93:10101/stojanka/";
     private static final String AIS_DRIVE_URL = "https://test.aisdrive.by/";
     private static final String AIS_KEY = "aksdjlkjslkdjklajdAAKJSD";
+    private static final String AIS_CRYPTO_KEY = "aSn8LmyNnC3ZJktFpmEmXz5K";
 
 
     public static  RetrofitService createRetrofitService() {
@@ -141,9 +153,16 @@ public class Api {
                     .addHeader("Key", AIS_KEY)
                     .addHeader("App", BuildConfig.APPLICATION_ID)
                     .addHeader("cache-control", "no-cache")
+                    .addHeader("Authorization", getEncryptedLogin())
                     .method(original.method(), original.body());
             return chain.proceed(requestBuilder.build());
         }
     }
+
+    private static String getEncryptedLogin(){
+        return Base64.encodeToString(UserManager.getInstanse().getmLogin().getBytes(), Base64.NO_WRAP );
+    }
 }
+
+
 
