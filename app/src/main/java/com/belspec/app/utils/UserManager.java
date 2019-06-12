@@ -8,6 +8,7 @@ public class UserManager {
     private boolean mRegistered;
     private int mUserType;
     private String organization;
+    private String phone;
 
     private UserManager() {
         this.mLogin = "";
@@ -15,6 +16,7 @@ public class UserManager {
         this.mFullName = "";
         this.mUserType = 0;
         this.organization = "";
+        this.phone = "";
         this.mRegistered = false;
     }
 
@@ -32,6 +34,7 @@ public class UserManager {
         this.mPassword = "";
         this.mFullName = "";
         this.organization = "";
+        this.phone = "";
         this.mUserType = 0;
     }
 
@@ -55,13 +58,18 @@ public class UserManager {
         this.organization = organization;
     }
 
-    public void setUserData(String login, String pasword, String fullName, int userType, boolean registered, String organization){
+    public String getPhone(){
+        return this.phone;
+    }
+
+    public void setUserData(String login, String pasword, String fullName, int userType, boolean registered, String organization, String phone){
         this.mLogin = login;
         this.mPassword = pasword;
         this.mRegistered = registered;
         this.mFullName = fullName;
         this.mUserType = userType;
         this.organization = organization;
+        this.phone = phone;
     }
 
     public String getmLogin() {

@@ -621,7 +621,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
         view.setLoading(true);
         AisDriveService.Companion.createRequest(
                 new AisGps(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude())),
-                carNumber, address, "35").enqueue(
+                carNumber, address, UserManager.getInstanse().getPhone(), "35").enqueue(
                 new Callback<AisResponse>() {
                     @Override
                     public void onResponse(Call<AisResponse> call, Response<AisResponse> response) {

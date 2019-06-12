@@ -22,11 +22,12 @@ interface AisDriveService {
             return Api.createAisDriveService()
         }
 
-        fun createRequest(gps: AisGps, carNumber: String, address: String, categoriesGoods: String = "35"): Call<AisResponse>{
+        fun createRequest(gps: AisGps, carNumber: String, address: String, phone: String, categoriesGoods: String = "35"): Call<AisResponse>{
             val jsonObject = JsonObject()
             jsonObject.add("gps", Gson().toJsonTree(gps))
             jsonObject.addProperty("carNumber", carNumber)
             jsonObject.addProperty("address", address)
+            jsonObject.addProperty("phone", phone)
             jsonObject.addProperty("categoriesGoods", categoriesGoods)
             return create().createRequest(jsonObject)
         }

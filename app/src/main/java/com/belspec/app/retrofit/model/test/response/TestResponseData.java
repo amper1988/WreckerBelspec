@@ -14,6 +14,9 @@ public class TestResponseData {
     @Element(name = "Organization", required = false)
     private String organization;
 
+    @Element(name = "Phone", required = false)
+    private String phone;
+
     public String getFullName() {
         return fullName;
     }
@@ -24,5 +27,9 @@ public class TestResponseData {
 
     public String getOrganization(){
         return organization;
+    }
+
+    public String getPhone(){
+        return phone;
     }
 }

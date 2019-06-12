@@ -93,7 +93,13 @@ class MainPresenter implements MainContract.Presenter, GPSTracker.LocationDataCh
                             view.showMessage("Через мгновение все начнется...");
                             UserManager user = UserManager.getInstanse();
                             TestResponseEnvelope responseEnvelope = response.body();
-                            user.setUserData(user.getmLogin(), user.getmPassword(), responseEnvelope.getTestData().getFullName(), responseEnvelope.getTestData().getUserType(), true, responseEnvelope.getTestData().getOrganization());
+                            user.setUserData(user.getmLogin(),
+                                    user.getmPassword(),
+                                    responseEnvelope.getTestData().getFullName(),
+                                    responseEnvelope.getTestData().getUserType(),
+                                    true,
+                                    responseEnvelope.getTestData().getOrganization(),
+                                    responseEnvelope.getTestData().getPhone());
                             view.afterLogin();
                         }else{
                             UserManager.getInstanse().logout();
