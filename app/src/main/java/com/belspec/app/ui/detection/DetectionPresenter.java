@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Base64;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -48,7 +47,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.*;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.CANCELED;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.EVACUATED;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.IN_PROGRESS;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.NOT_IN_PROGRESS;
+import static com.belspec.app.retrofit.aisDrive.AisEntitiesKt.PARKED;
 
 class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.LocationDataChangeListener, NetworkDataUpdate {
     private GPSTracker gpsTracker;
@@ -589,15 +592,15 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     public void clearBackup() {
         view.setLoading(true);
         final Long requiredId = getRequiredId();
-        if(requiredId > 0){
+        if (requiredId > 0) {
             AisDriveService.Companion.deleteRequest(requiredId)
                     .enqueue(new Callback<Void>() {
                         @Override
                         public void onResponse(Call<Void> call, Response<Void> response) {
-                            if (response.code() == 200){
+                            if (response.code() == 200) {
                                 PrefDefaultValue.saveRequiredId(context, docId, 0L);
                                 catchRequired();
-                            }else{
+                            } else {
                                 PrefDefaultValue.saveRequiredId(context, docId, requiredId);
                                 catchRequired();
                                 view.showMessageDialog("Не удалось отклонить заявку на эвакуатор");
@@ -618,37 +621,42 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
     @Override
     public void createCall(String address, String carNumber) {
-        view.setLoading(true);
-        AisDriveService.Companion.createRequest(
-                new AisGps(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude())),
-                carNumber, address, UserManager.getInstanse().getPhone(), "35").enqueue(
-                new Callback<AisResponse>() {
-                    @Override
-                    public void onResponse(Call<AisResponse> call, Response<AisResponse> response) {
+        String phone = UserManager.getInstanse().getPhone();
+        if (phone != null) {
+            view.setLoading(true);
+            AisDriveService.Companion.createRequest(
+                    new AisGps(String.valueOf(gpsTracker.getLatitude()), String.valueOf(gpsTracker.getLongitude())),
+                    carNumber, address, UserManager.getInstanse().getPhone(), "35").enqueue(
+                    new Callback<AisResponse>() {
+                        @Override
+                        public void onResponse(Call<AisResponse> call, Response<AisResponse> response) {
 
-                        if (response.body() != null && response.code() == 201) {
-                            PrefDefaultValue.saveRequiredId(context, docId, response.body().getId());
-                            activeCache = new AisAdministrator("", "", NOT_IN_PROGRESS);
-                            view.showRequireDistance(activeCache);
-                        } else if (response.errorBody() != null && response.code() == 409) {
-                            AisResponse errorResponse = new Gson().fromJson(response.errorBody().charStream(), AisResponse.class);
+                            if (response.body() != null && response.code() == 201) {
+                                PrefDefaultValue.saveRequiredId(context, docId, response.body().getId());
+                                activeCache = new AisAdministrator("", "", NOT_IN_PROGRESS);
+                                view.showRequireDistance(activeCache);
+                            } else if (response.errorBody() != null && response.code() == 409) {
+                                AisResponse errorResponse = new Gson().fromJson(response.errorBody().charStream(), AisResponse.class);
 
-                            PrefDefaultValue.saveRequiredId(context, docId, (errorResponse.getId()));
-                            activeCache = errorResponse.getAdministrator() == null ? errorResponse.getAdministrator() : new AisAdministrator("", "", NOT_IN_PROGRESS);
-                            view.showRequireDistance(activeCache);
-                        } else {
-                            view.showMessageDialog("Что-то пошло не так :( \n" + response.message());
+                                PrefDefaultValue.saveRequiredId(context, docId, (errorResponse.getId()));
+                                activeCache = errorResponse.getAdministrator() == null ? errorResponse.getAdministrator() : new AisAdministrator("", "", NOT_IN_PROGRESS);
+                                view.showRequireDistance(activeCache);
+                            } else {
+                                view.showMessageDialog("Что-то пошло не так :( \n" + response.message());
+                            }
+                            view.setLoading(false);
                         }
-                        view.setLoading(false);
-                    }
 
-                    @Override
-                    public void onFailure(Call<AisResponse> call, Throwable t) {
-                        view.setLoading(false);
-                        view.showMessageDialog("Network fail" + t.getMessage());
+                        @Override
+                        public void onFailure(Call<AisResponse> call, Throwable t) {
+                            view.setLoading(false);
+                            view.showMessageDialog("Network fail" + t.getMessage());
+                        }
                     }
-                }
-        );
+            );
+        } else {
+            view.showMessageDialog("Необходимо указать номер телефона в вашей учетной записи.");
+        }
     }
 
     private Long getRequiredId() {
