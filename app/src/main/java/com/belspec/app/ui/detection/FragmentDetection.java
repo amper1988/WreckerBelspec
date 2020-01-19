@@ -117,7 +117,6 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
     @BindView(R.id.tvRequire) TextView tvRequire;
     @BindView(R.id.btnCall) Button btnCall;
     @BindView(R.id.llRequireTextContainer) LinearLayout llRequireTextContainer;
-    @BindView(R.id.btnRefreshRequired) Button btnRefreshRequired;
 
     View mView;
     int fragmentId;
@@ -397,7 +396,6 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
         btnRegistrate.setOnClickListener(this);
         chbWithoutEvacuation.setOnClickListener(this);
         btnRequire.setOnClickListener(this);
-        btnRefreshRequired.setOnClickListener(this);
         //init image loading
         imvLoading.setBackgroundResource(R.drawable.pb_loading);
         showHideOrganizationWrecker();
@@ -549,9 +547,6 @@ public class FragmentDetection extends Fragment implements View.OnClickListener,
                 break;
             case(R.id.btnRequireCall):
                 presenter.createCall(edtStreet.getText().toString(), edtCarID.getText().toString());
-                break;
-            case (R.id.btnRefreshRequired):
-                presenter.getCall();
                 break;
         }
 

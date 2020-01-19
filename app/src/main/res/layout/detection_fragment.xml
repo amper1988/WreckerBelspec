@@ -1,134 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/side_nav_bar">
+
     <ScrollView
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:id="@+id/svDetection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/svDetection"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:padding="5dp"
         android:paddingBottom="30dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp">
+
             <Button
-                style="@style/MyMaterialTheme.MyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/btnAddImage"
-                android:text="@string/photo"
-                android:drawableLeft="@drawable/ic_add_a_photo_white_24dp"
-                android:drawableStart="@drawable/ic_add_a_photo_white_24dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
-            <Button
                 style="@style/MyMaterialTheme.MyButton"
-                android:id="@+id/btnClear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/clear"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:drawableStart="@drawable/ic_add_a_photo_white_24dp"
+                android:drawableLeft="@drawable/ic_add_a_photo_white_24dp"
+                android:text="@string/photo" />
+
+            <Button
+                android:id="@+id/btnClear"
+                style="@style/MyMaterialTheme.MyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/btnAddImage"
+                android:layout_toRightOf="@id/btnAddImage"
                 android:drawableStart="@drawable/ic_delete_sweep_white_24dp"
                 android:drawableLeft="@drawable/ic_delete_sweep_white_24dp"
-                android:layout_toEndOf="@id/btnAddImage"
-                android:layout_toRightOf="@id/btnAddImage"/>
+                android:text="@string/clear" />
+
             <android.support.v7.widget.RecyclerView
-                style="@style/MyMaterialTheme.MyRecyclerView"
                 android:id="@+id/rvImageList"
-                android:layout_below="@id/btnAddImage"/>
+                style="@style/MyMaterialTheme.MyRecyclerView"
+                android:layout_below="@id/btnAddImage" />
             <!--inspection result-->
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilResultInspection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tilResultInspection"
                 android:layout_below="@id/rvImageList">
+
                 <EditText
+                    android:id="@+id/edtResultInspection"
                     style="@style/MyMaterialTheme.MyEditText"
                     android:layout_height="match_parent"
                     android:hint="@string/inspection_result"
-                    android:id="@+id/edtResultInspection"
-                    android:inputType="textCapSentences|textMultiLine"
                     android:imeOptions="actionNext"
-                    android:minLines="3"/>
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="3" />
             </android.support.design.widget.TextInputLayout>
+
             <RadioGroup
-                style="@style/MyMaterialTheme.MyRadioGroup"
                 android:id="@+id/rgType"
-                android:checkedButton="@+id/rbCarTypeLight"
+                style="@style/MyMaterialTheme.MyRadioGroup"
                 android:layout_below="@+id/tilResultInspection"
                 android:layout_centerHorizontal="true"
+                android:checkedButton="@+id/rbCarTypeLight"
                 android:visibility="gone">
+
                 <RadioButton
-                    style="@style/MyMaterialTheme.MyRadioButton"
                     android:id="@+id/rbCarTypeStrong"
-                    android:text="@string/car_type_strong"/>
-                <RadioButton
                     style="@style/MyMaterialTheme.MyRadioButton"
+                    android:text="@string/car_type_strong" />
+
+                <RadioButton
                     android:id="@+id/rbCarTypeLight"
-                    android:text="@string/car_type_light"/>
+                    style="@style/MyMaterialTheme.MyRadioButton"
+                    android:text="@string/car_type_light" />
 
             </RadioGroup>
             <!--witnes-->
             <LinearLayout
+                android:id="@+id/llWitness"
+                style="@style/MyMaterialTheme.MyEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/llWitness"
-                android:orientation="vertical"
-                style="@style/MyMaterialTheme.MyEditText"
-                android:layout_below="@id/rgType">
+                android:layout_below="@id/rgType"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/witness"/>
+                    android:text="@string/witness" />
+
                 <LinearLayout
-                    android:baselineAligned="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:baselineAligned="false"
                     android:orientation="horizontal">
+
                     <LinearLayout
                         style="@style/MyMaterialTheme.MyEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
                         android:layout_weight="1"
+                        android:orientation="vertical"
                         android:weightSum="1">
+
                         <Button
+                            android:id="@+id/btnAddWitness1"
                             style="@style/MyMaterialTheme.MyButton"
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
-                            android:padding="2dp"
-                            android:id="@+id/btnAddWitness1"
-                            android:drawableTop="@drawable/ic_person_add_white_18dp" />
+                            android:drawableTop="@drawable/ic_person_add_white_18dp"
+                            android:padding="2dp" />
+
                         <TextView
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:id="@+id/txvWtns1Name"
-                            android:hint="@string/first_last_name"/>
-                        <TextView
                             style="@style/MyMaterialTheme.MyEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@string/first_last_name" />
+
+                        <TextView
                             android:id="@+id/txvWtns1Address"
-                            android:hint="@string/address"/>
-                        <TextView
                             style="@style/MyMaterialTheme.MyEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@string/address" />
+
+                        <TextView
                             android:id="@+id/txvWtns1Contact"
-                            android:hint="@string/contact"/>
+                            style="@style/MyMaterialTheme.MyEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/contact" />
+
                         <ImageView
+                            android:id="@+id/imvWtns1Signature"
                             android:layout_width="120dp"
                             android:layout_height="120dp"
-                            android:contentDescription="@string/signature"
-                            android:id="@+id/imvWtns1Signature"/>
+                            android:contentDescription="@string/signature" />
 
                     </LinearLayout>
 
@@ -136,172 +152,191 @@
                         style="@style/MyMaterialTheme.MyEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
                         <Button
+                            android:id="@+id/btnAddWitness2"
                             style="@style/MyMaterialTheme.MyButton"
                             android:layout_width="match_parent"
                             android:layout_height="20dp"
-                            android:padding="2dp"
-                            android:id="@+id/btnAddWitness2"
-                            android:drawableTop="@drawable/ic_person_add_white_18dp"/>
+                            android:drawableTop="@drawable/ic_person_add_white_18dp"
+                            android:padding="2dp" />
+
                         <TextView
-                            style="@style/MyMaterialTheme.MyEditText"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:id="@+id/txvWtns2Name"
-                            android:hint="@string/first_last_name"/>
-
-
-                        <TextView
                             style="@style/MyMaterialTheme.MyEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@string/first_last_name" />
+
+
+                        <TextView
                             android:id="@+id/txvWtns2Address"
-                            android:hint="@string/address"/>
-                        <TextView
                             style="@style/MyMaterialTheme.MyEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="@string/address" />
+
+                        <TextView
                             android:id="@+id/txvWtns2Contact"
-                            android:hint="@string/contact"/>
+                            style="@style/MyMaterialTheme.MyEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/contact" />
+
                         <ImageView
+                            android:id="@+id/imvWtns2Signature"
                             android:layout_width="120dp"
                             android:layout_height="120dp"
-                            android:contentDescription="@string/signature"
-                            android:id="@+id/imvWtns2Signature"/>
+                            android:contentDescription="@string/signature" />
 
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
             <!--manuf model-->
             <LinearLayout
-                android:baselineAligned="false"
+                android:id="@+id/llManufModel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/llManufModel"
-                android:layout_below="@id/llWitness">
+                android:layout_below="@id/llWitness"
+                android:baselineAligned="false">
+
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilManuf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tilManuf"
                     android:layout_weight="1">
+
                     <AutoCompleteTextView
+                        android:id="@+id/actvManufacture"
                         style="@style/MyMaterialTheme.MyEditText"
                         android:hint="@string/manufacture"
-                        android:id="@+id/actvManufacture"
-                        android:inputType="textCapCharacters|textMultiLine"
-                        android:imeOptions="actionNext" />
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapCharacters|textMultiLine" />
                 </android.support.design.widget.TextInputLayout>
+
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilModel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tilModel"
                     android:layout_weight="1">
+
                     <AutoCompleteTextView
+                        android:id="@+id/actvModel"
                         style="@style/MyMaterialTheme.MyEditText"
                         android:hint="@string/model"
-                        android:id="@+id/actvModel"
-                        android:inputType="textCapCharacters|textMultiLine"
-                        android:imeOptions="actionNext" />
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapCharacters|textMultiLine" />
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <!--carid color-->
             <LinearLayout
-                android:baselineAligned="false"
+                android:id="@+id/llCarIDColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/llCarIDColor"
-                android:layout_below="@+id/llManufModel">
+                android:layout_below="@+id/llManufModel"
+                android:baselineAligned="false">
+
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilCarID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tilCarID"
                     android:layout_weight="1">
+
                     <EditText
+                        android:id="@+id/edtCarID"
                         style="@style/MyMaterialTheme.MyEditText"
                         android:hint="@string/car_id"
-                        android:id="@+id/edtCarID"
-                        android:inputType="textCapCharacters|textMultiLine"
-                        android:imeOptions="actionNext" />
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapCharacters|textMultiLine" />
                 </android.support.design.widget.TextInputLayout>
+
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/tilColor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tilColor"
                     android:layout_weight="1">
+
                     <AutoCompleteTextView
+                        android:id="@+id/actvColor"
                         style="@style/MyMaterialTheme.MyEditText"
                         android:hint="@string/color"
-                        android:id="@+id/actvColor"
-                        android:inputType="textCapCharacters|textMultiLine"
-                        android:imeOptions="actionNext" />
+                        android:imeOptions="actionNext"
+                        android:inputType="textCapCharacters|textMultiLine" />
 
 
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
             <!--clause-street-->
             <LinearLayout
-                android:baselineAligned="false"
+                android:id="@+id/llClauseStreet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/llClauseStreet"
-                android:layout_below="@+id/llCarIDColor">
+                android:layout_below="@+id/llCarIDColor"
+                android:baselineAligned="false">
+
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
                     <Button
+                        android:id="@+id/btnRefreshStreet"
                         style="@style/MyMaterialTheme.MyButton"
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
-                        android:padding="0dp"
                         android:layout_marginBottom="1dp"
-                        android:gravity="center"
                         android:drawableTop="@drawable/ic_refresh_white_18dp"
-                        android:id="@+id/btnRefreshStreet"/>
+                        android:gravity="center"
+                        android:padding="0dp" />
+
                     <android.support.design.widget.TextInputLayout
+                        android:id="@+id/tilStreet"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/tilStreet">
+                        android:layout_height="match_parent">
+
                         <EditText
+                            android:id="@+id/edtStreet"
                             style="@style/MyMaterialTheme.MyEditText"
                             android:layout_height="match_parent"
                             android:layout_marginTop="1dp"
                             android:hint="@string/street"
-                            android:id="@+id/edtStreet"
-                            android:minLines="3"
                             android:imeOptions="actionNext"
                             android:inputType="textCapCharacters|textMultiLine"
-                            />
+                            android:minLines="3" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1" >
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
                     <CheckBox
-                        style="@style/MyMaterialTheme.MyCheckBox"
-                        android:padding="8dp"
-                        android:layout_margin="1dp"
                         android:id="@+id/chbWithoutEvacuation"
-                        android:textColor="@color/textColorPrimary"
+                        style="@style/MyMaterialTheme.MyCheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/without_evacuation"/>
+                        android:layout_margin="1dp"
+                        android:padding="8dp"
+                        android:text="@string/without_evacuation"
+                        android:textColor="@color/textColorPrimary" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/clause"
                         android:layout_marginBottom="0dp"
-                        android:textSize="12sp"/>
+                        android:text="@string/clause"
+                        android:textSize="12sp" />
+
                     <Spinner
-                        style="@style/MyMaterialTheme.MySpinner"
-                        android:layout_margin="0dp"
                         android:id="@+id/spnClause"
-                        android:layout_height="match_parent" />
+                        style="@style/MyMaterialTheme.MySpinner"
+                        android:layout_height="match_parent"
+                        android:layout_margin="0dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -311,47 +346,41 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/llClauseStreet">
+
                 <Button
-                    style="@style/MyMaterialTheme.MyButton"
                     android:id="@+id/btnRequireCall"
+                    style="@style/MyMaterialTheme.MyButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/required_call"
                     android:visibility="gone" />
+
                 <LinearLayout
                     android:id="@+id/llRequireTextContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="center"
+                    android:orientation="horizontal"
                     android:visibility="visible">
+
                     <TextView
                         android:id="@+id/tvRequire"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:padding="12dp"
                         android:layout_gravity="center"
-                        android:text="@string/require_message"/>
+                        android:layout_weight="1"
+                        android:padding="12dp"
+                        android:text="@string/require_message" />
+
                     <Button
+                        android:id="@+id/btnCall"
                         style="@style/MyMaterialTheme.MyButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="0dp"
                         android:layout_marginBottom="1dp"
                         android:gravity="center"
-                        android:text="@string/require_call_title"
-                        android:id="@+id/btnCall"/>
-                    <Button
-                        style="@style/MyMaterialTheme.MyButton"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
                         android:padding="0dp"
-                        android:layout_marginBottom="1dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:drawableTop="@drawable/ic_refresh_white_18dp"
-                        android:id="@+id/btnRefreshRequired"/>
+                        android:text="@string/require_call_title" />
                 </LinearLayout>
 
             </FrameLayout>
@@ -359,73 +388,80 @@
             <!--RoadLawPoint-->
             <LinearLayout
                 android:id="@+id/llRoadLawPoint"
-                android:layout_below="@id/flRequire"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/flRequire"
+                android:orientation="horizontal">
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="0.25">
+
                     <EditText
+                        android:id="@+id/edtRoadLawPoint"
                         style="@style/MyMaterialTheme.MyEditText"
-                        android:hint="@string/road_law_point"
-                        android:id="@+id/edtRoadLawPoint"/>
+                        android:hint="@string/road_law_point" />
                 </android.support.design.widget.TextInputLayout>
+
                 <Spinner
-                    style="@style/MyMaterialTheme.MySpinner"
                     android:id="@+id/spnRoadLawPoint"
-                    android:layout_marginTop="10dp"
+                    style="@style/MyMaterialTheme.MySpinner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="0.75">
-                </Spinner>
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="0.75"/>
 
             </LinearLayout>
             <!--organization-wrecker-->
             <LinearLayout
-                android:baselineAligned="false"
+                android:id="@+id/llSpinersOrganization"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/llRoadLawPoint"
                 android:layout_marginTop="12dp"
-                android:id="@+id/llSpinersOrganization"
-                android:layout_below="@+id/llRoadLawPoint">
+                android:baselineAligned="false">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:layout_marginBottom="10dp"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/txvOrganization"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/organization"
-                        android:textSize="12sp"
-                        android:id="@+id/txvOrganization"/>
+                        android:textSize="12sp" />
+
                     <Spinner
-                        style="@style/MyMaterialTheme.MySpinner"
                         android:id="@+id/spnOrganization"
-                        android:layout_margin="0dp"
-                        android:layout_height="wrap_content" />
+                        style="@style/MyMaterialTheme.MySpinner"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/txvWrecker"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/wrecker"
-                        android:textSize="12sp"
-                        android:id="@+id/txvWrecker"/>
-                    <Spinner
-                        style="@style/MyMaterialTheme.MySpinner"
-                        android:id="@+id/spnWrecker"
-                        android:layout_margin="0dp"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
+                        android:textSize="12sp" />
 
+                    <Spinner
+                        android:id="@+id/spnWrecker"
+                        style="@style/MyMaterialTheme.MySpinner"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp" />
+                </LinearLayout>
 
 
             </LinearLayout>
@@ -436,149 +472,162 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/llSpinersOrganization"
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/txvParkingTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/parking_title"/>
+                    android:text="@string/parking_title" />
+
                 <Spinner
                     android:id="@+id/spnParking"
-                    android:layout_margin="0dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </Spinner>
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"/>
             </LinearLayout>
-
 
 
             <!--policedata-->
             <LinearLayout
-                android:baselineAligned="false"
+                android:id="@+id/llSpinersPolicedata"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/llSpinersParking"
                 android:layout_marginTop="12dp"
-                android:id="@+id/llSpinersPolicedata"
-                android:layout_below="@+id/llSpinersParking">
+                android:baselineAligned="false">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/txvPoliceDepartment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/police_department"
-                        android:textSize="12sp"
-                        android:id="@+id/txvPoliceDepartment"/>
+                        android:textSize="12sp" />
+
                     <Spinner
+                        android:id="@+id/spnPoliceDepartment"
                         style="@style/MyMaterialTheme.MySpinner"
                         android:layout_width="match_parent"
-                        android:layout_margin="0dp"
-                        android:id="@+id/spnPoliceDepartment"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/txvPoliceman"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/policeman"
-                        android:textSize="12sp"
-                        android:id="@+id/txvPoliceman"/>
+                        android:textSize="12sp" />
+
                     <Spinner
-                        style="@style/MyMaterialTheme.MySpinner"
-                        android:layout_margin="0dp"
                         android:id="@+id/spnPoliceman"
-                        android:layout_height="wrap_content" />
+                        style="@style/MyMaterialTheme.MySpinner"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp" />
                 </LinearLayout>
             </LinearLayout>
 
             <!--policeman signature-->
             <LinearLayout
+                android:id="@+id/llPolicemanSignature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:id="@+id/llPolicemanSignature"
-                android:layout_below="@id/llSpinersPolicedata">
+                android:layout_below="@id/llSpinersPolicedata"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/policeman_signature"/>
+                    android:text="@string/policeman_signature" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <ImageView
+                        android:id="@+id/imvPolicemanSignature"
                         android:layout_width="120dp"
                         android:layout_height="120dp"
-                        android:maxHeight="120dp"
-                        android:maxWidth="120dp"
-                        android:id="@+id/imvPolicemanSignature"
+                        android:layout_weight="1"
                         android:contentDescription="@string/signature"
-                        android:layout_weight="1"/>
+                        android:maxWidth="120dp"
+                        android:maxHeight="120dp" />
+
                     <Button
+                        android:id="@+id/btnPolicemanSignature"
                         style="@style/MyMaterialTheme.MyButton"
                         android:layout_width="wrap_content"
                         android:layout_height="25dp"
-                        android:padding="1dp"
-                        android:layout_margin="10dp"
-                        android:text="@string/signature"
-                        android:id="@+id/btnPolicemanSignature"
                         android:layout_gravity="center"
-                        android:layout_weight="1"/>
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:padding="1dp"
+                        android:text="@string/signature" />
                 </LinearLayout>
             </LinearLayout>
 
             <!--secure code-->
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/tilCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tilCode"
                 android:layout_below="@id/llPolicemanSignature">
+
                 <EditText
-                    style="@style/MyMaterialTheme.MyEditText"
                     android:id="@+id/edtCode"
+                    style="@style/MyMaterialTheme.MyEditText"
                     android:hint="@string/code"
-                    android:inputType="textPassword"
-                    android:imeOptions="actionGo" />
+                    android:imeOptions="actionGo"
+                    android:inputType="textPassword" />
 
             </android.support.design.widget.TextInputLayout>
-            <Button
-                style="@style/MyMaterialTheme.MyButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel"
-                android:drawableLeft="@drawable/ic_delete_white_24dp"
-                android:drawableStart="@drawable/ic_delete_white_24dp"
-                android:id="@+id/btnCancel"
-                android:layout_below="@id/tilCode"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"/>
 
             <Button
+                android:id="@+id/btnCancel"
                 style="@style/MyMaterialTheme.MyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register"
-                android:drawableLeft="@drawable/ic_send_white_24dp"
-                android:drawableStart="@drawable/ic_send_white_24dp"
+                android:layout_below="@id/tilCode"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:drawableStart="@drawable/ic_delete_white_24dp"
+                android:drawableLeft="@drawable/ic_delete_white_24dp"
+                android:text="@string/cancel" />
+
+            <Button
                 android:id="@+id/btnRegister"
+                style="@style/MyMaterialTheme.MyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tilCode"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="70dp"/>
-         </RelativeLayout>
+                android:layout_marginBottom="70dp"
+                android:drawableStart="@drawable/ic_send_white_24dp"
+                android:drawableLeft="@drawable/ic_send_white_24dp"
+                android:text="@string/register" />
+        </RelativeLayout>
     </ScrollView>
+
     <ImageView
-        android:layout_below="@id/svDetection"
-        android:background="@drawable/pb_loading"
+        android:id="@+id/imvLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imvLoading"
+        android:layout_below="@id/svDetection"
+        android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:contentDescription="@string/loading"
-        android:layout_centerInParent="true" />
+        android:background="@drawable/pb_loading"
+        android:contentDescription="@string/loading" />
 </RelativeLayout>

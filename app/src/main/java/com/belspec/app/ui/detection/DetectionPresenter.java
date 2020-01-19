@@ -8,8 +8,11 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -64,6 +67,15 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     private boolean registerInProgress;
     private AisAdministrator activeCache = new AisAdministrator("", "", -1);
     private boolean requiresIdLoaded = false;
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
+    private long UPDATE_PERIOD = 15_000L;
+    private Runnable statusUpdater = new Runnable() {
+        @Override
+        public void run() {
+            getCall();
+            uiHandler.postDelayed(statusUpdater, UPDATE_PERIOD);
+        }
+    };
 
     DetectionPresenter(DetectionContract.View view) {
         this.view = view;
@@ -84,15 +96,12 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
 
     @Override
     public void onResume() {
-//        startGPSTracker();
-//        stopNetworkDataUpdate();
-
+        uiHandler.post(statusUpdater);
     }
 
     @Override
     public void onPause() {
-//        stopGPSTracker();
-//        stopNetworkDataUpdate();
+        uiHandler.removeCallbacks(statusUpdater);
     }
 
     @Override
@@ -591,6 +600,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     @Override
     public void clearBackup() {
         view.setLoading(true);
+        uiHandler.removeCallbacks(statusUpdater);
         final Long requiredId = getRequiredId();
         if (requiredId > 0) {
             AisDriveService.Companion.deleteRequest(requiredId)
@@ -645,6 +655,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                 view.showMessageDialog("Что-то пошло не так :( \n" + response.message());
                             }
                             view.setLoading(false);
+                            uiHandler.post(statusUpdater);
                         }
 
                         @Override
@@ -674,7 +685,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
     public void getCall() {
         final Long id = getRequiredId();
         if (id > 0) {
-            view.setLoading(true);
+            Log.d("STATUS_UPDATER", "getCall: start" + this.getClass().toString());
             AisDriveService.Companion.getRequest(id)
                     .enqueue(new Callback<AisResponse>() {
                         @Override
@@ -713,13 +724,14 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                     PrefDefaultValue.saveRequiredId(context, docId, 0L);
                                     activeCache = new AisAdministrator("", "", CANCELED);
                                     view.showCallButton();
+                                    uiHandler.removeCallbacks(statusUpdater);
 
                                 } else {
                                     view.showCallButton();
                                     view.showMessageDialog("Что-то пошло не так :((\n" + response.message());
+                                    uiHandler.removeCallbacks(statusUpdater);
                                 }
                             }
-                            view.setLoading(false);
                         }
 
                         @Override
@@ -728,6 +740,7 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                             view.showMessageDialog("Network fail " + t.getMessage());
                         }
                     });
+            Log.d("STATUS_UPDATER", "getCall: finish update" + this.getClass().toString());
         } else {
             view.showCallButton();
         }

@@ -136,9 +136,7 @@ abstract class DetectionContract {
         void onAddPhoto();
         void onPhotoCancel();
         void sendEvacuation();
-
         void configureUserData();
-
         void saveManufactureBackup(String manufacture);
         void saveModelBackup(String model);
         void saveCarIdBackup(String carId);
@@ -174,18 +172,11 @@ abstract class DetectionContract {
         void clearBackup();
         void createCall(String address, String carNumber);
         void getCall();
-
         void loadListPoliceman(String policeDepartment);
         void loadListModel(String manufacture);
         void loadListWrecker(String organization);
         void initializeListsFromServer();
         void startNetworkDataUpdate();
         void stopNetworkDataUpdate();
-
-
-
-
-
-
     }
 }
