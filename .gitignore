@@ -8,3 +8,5 @@
 .externalNativeBuild
 /.idea
 app/build
+/app/release
+app/debug
