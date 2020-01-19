@@ -17,7 +17,7 @@ android {
         applicationId "com.belspec.app"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 8
+        versionCode 9
         versionName "1.0.0.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

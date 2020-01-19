@@ -25,6 +25,8 @@ import com.belspec.app.retrofit.aisDrive.AisAdministrator;
 import com.belspec.app.retrofit.aisDrive.AisDriveService;
 import com.belspec.app.retrofit.aisDrive.AisGps;
 import com.belspec.app.retrofit.aisDrive.AisResponse;
+import com.belspec.app.retrofit.model.Organization;
+import com.belspec.app.retrofit.model.Wrecker;
 import com.belspec.app.retrofit.model.createEvacuation.request.CreateEvacuationRequestEnvelope;
 import com.belspec.app.retrofit.model.createEvacuation.response.CreateEvacuationResponseEnvelope;
 import com.belspec.app.ui.detection.signature_dialog.SignatureEvent;
@@ -45,6 +47,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -705,6 +708,11 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
                                         break;
                                     case IN_PROGRESS:
                                         activeCache = response.body().getAdministrator();
+                                        try {
+                                            searchAndSetWreckerAndOrganization(activeCache.getName());
+                                        } catch (Throwable e) {
+                                            e.printStackTrace();
+                                        }
                                         view.showRequireDistance(activeCache);
                                         break;
                                     case EVACUATED:
@@ -745,6 +753,20 @@ class DetectionPresenter implements DetectionContract.Presenter, GPSTracker.Loca
             view.showCallButton();
         }
 
+    }
+
+    private void searchAndSetWreckerAndOrganization(@Nullable String wreckerName) {
+        List<Organization> orgList = NetworkDataManager.getInstance().getOrganizationList();
+        for (Organization org : orgList) {
+            List<Wrecker> wreckerList = org.getWreckerItemList().getWreckerList();
+            for (Wrecker wrecker : wreckerList) {
+                if (wrecker.getName().equalsIgnoreCase(wreckerName)) {
+                    view.setOrganization(org.getName());
+                    view.setWrecker(wrecker.getName());
+                    return;
+                }
+            }
+        }
     }
 
     @Override

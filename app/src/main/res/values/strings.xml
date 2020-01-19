@@ -84,6 +84,7 @@
     <string name="required_evacuated">Эвакуатор погрузил транспортное средство</string>
     <string name="required_parked">Эвакуатор доставил транспортное средство в место назначения</string>
     <string name="require_call_title">Позвонить</string>
+    <string name="version_place_holder">Version : %s</string>
 
 
 </resources>

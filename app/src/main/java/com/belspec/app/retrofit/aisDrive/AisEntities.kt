@@ -16,22 +16,6 @@ data class Description(
 )
 
 data class AisAdministrator(
-//        @Expose val createdAt: String?,
-//        @Expose val updatedAt: String?,
-//        @Expose val id: Int?,
-//        @Expose val login: String?,
-//        @Expose val name: String,
-//        @Expose val"email": "test01@aisdrive.by",
-//"active": 1,
-//"workStart": "",
-//"workEnd": "",
-//"getNotification": 0,
-//"company": 7,
-//"object": 38,
-//"rights": "all",
-//"smsNotification": null,
-//"files": null,
-//"phone": "375336075741"
         @Expose val  name: String?,
         @Expose val phone: String?,
         @Expose val active: Int

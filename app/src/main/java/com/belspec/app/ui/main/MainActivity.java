@@ -30,15 +30,23 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener, MainContract.View {
 
     private final int REQUEST_SETTINGS = 111;
-    @BindView(R.id.btnLogin) Button btnLogin;
-    @BindView(R.id.edtName) EditText edtName;
-    @BindView(R.id.edtPwd) EditText edtPwd;
-    @BindView(R.id.response) TextView txvStatus;
-    @BindView(R.id.imvLoading) ImageView imvLoading;
-    @BindView(R.id.rllContent) RelativeLayout rllContent;
-    @BindView(R.id.txvLoadingData) TextView txvLoadingData;
+    @BindView(R.id.btnLogin)
+    Button btnLogin;
+    @BindView(R.id.edtName)
+    EditText edtName;
+    @BindView(R.id.edtPwd)
+    EditText edtPwd;
+    @BindView(R.id.response)
+    TextView txvStatus;
+    @BindView(R.id.imvLoading)
+    ImageView imvLoading;
+    @BindView(R.id.rllContent)
+    RelativeLayout rllContent;
+    @BindView(R.id.txvLoadingData)
+    TextView txvLoadingData;
+    @BindView(R.id.version)
+    TextView txvVersion;
     MainContract.Presenter presenter;
-
 
 
     @Override
@@ -68,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnLogin.setOnClickListener(this);
         edtName.setOnClickListener(this);
         edtPwd.setOnClickListener(this);
+        txvVersion.setText(getString(R.string.version_place_holder,  getVersionName()));
         edtPwd.setImeActionLabel("DONE", EditorInfo.IME_ACTION_DONE);
         edtName.setOnEditorActionListener(this);
         edtName.setImeActionLabel("NEXT", EditorInfo.IME_ACTION_NEXT);
@@ -81,13 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnLogin:
-                try {
-                    PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    presenter.login(info.versionName); //todo вернуть обратно
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
-
+                presenter.login(getVersionName());
                 break;
         }
     }
@@ -201,6 +204,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SETTINGS) {
             presenter.onResume();
+        }
+    }
+
+    private String getVersionName() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
+            return info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
